@@ -1,0 +1,27 @@
+{
+  "element": "fire",
+  "color": "#ff7a1a",
+  "auraColor": "#ff5a0a",
+  "augments": [
+    { "id": "fire_explosion", "tier": "core", "values": { "dmgPct": 0.3 }, "bonusKeys": ["dmgPct"] },
+    { "id": "fire_burn", "tier": "core", "values": { "dmgPct": 0.3, "turns": 3, "maxStacks": 5 }, "bonusKeys": ["dmgPct"] },
+    { "id": "fire_fireball", "tier": "core", "values": { "dmgPct": 0.8, "sizePct": 0.35 }, "bonusKeys": ["dmgPct"] },
+
+    { "id": "fire_chainExplosion", "tier": "exclusive", "requires": "fire_explosion",
+      "values": { "powerPct": 1.0 }, "gradeKeys": ["powerPct"], "bonusKeys": ["powerPct"] },
+    { "id": "fire_wildfire", "tier": "exclusive", "requires": "fire_burn",
+      "values": { "spreadStacks": 1 }, "gradeKeys": ["spreadStacks"], "intKeys": ["spreadStacks"] },
+    { "id": "fire_scorch", "tier": "exclusive", "requires": "fire_fireball",
+      "values": { "critChancePct": 0.2, "critDamagePct": 0.5 },
+      "gradeKeys": ["critChancePct", "critDamagePct"], "bonusKeys": ["critChancePct", "critDamagePct"] },
+
+    { "id": "fire_overheat", "tier": "common", "values": { "perHitPct": 0.03 },
+      "gradeKeys": ["perHitPct"], "bonusKeys": ["perHitPct"] },
+    { "id": "fire_giantHunt", "tier": "common", "feature": "specialBlocks", "values": { "dmgPct": 0.5 },
+      "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
+    { "id": "fire_flameReturn", "tier": "common", "values": { "dmgPct": 1.0 },
+      "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
+    { "id": "fire_emberHarvest", "tier": "common", "feature": "currency", "values": { "currencyPct": 0.5 },
+      "gradeKeys": ["currencyPct"], "bonusKeys": ["currencyPct"] }
+  ]
+}

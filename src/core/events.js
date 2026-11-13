@@ -4,17 +4,25 @@ import Phaser from 'phaser';
  * 게임 이벤트 이름. 증강(src/augments/*)은 여기에만 붙는다.
  *
  * onHit       { cell, damage, source }   ← 리스너가 ctx.damage 를 바꾸면 실제 피해가 바뀜
- * onKill      { cell, source, overkill }
+ * onAfterHit  { cell, damage, source, killed }  ← 피해 적용 후. 폭발·연쇄 같은 "타격 시 발동"은 여기에
+ * onKill      { cell, source, overkill, currencyBonus }
  * onTurnStart { stage }
  * onTurnEnd   { stage }
  * onWallBounce{ ball, side: 'left'|'right'|'top' }
  * onOrbCollect{ cell, ball, gain }        ← ctx.gain 수정 가능
  * onLaunch    { ball }
- * onBallReturn{ ball, first }
+ * onBallReturn{ ball, first, last }
+ * onLevelUp   { level }
+ * onAugment   { aug }                    ← 증강을 고른 직후
  * onGameOver  { stage, best, newBest }
+ *
+ * source 형식: { type:'ball'|'fire'|'lightning', ball?, crit?, aug?, depth? }
  */
 export const EV = Object.freeze({
   HIT: 'onHit',
+  AFTER_HIT: 'onAfterHit',
+  LEVEL_UP: 'onLevelUp',
+  AUGMENT: 'onAugment',
   KILL: 'onKill',
   TURN_START: 'onTurnStart',
   TURN_END: 'onTurnEnd',

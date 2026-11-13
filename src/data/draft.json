@@ -1,0 +1,19 @@
+{
+  "choices": 3,
+  "elementBonus": 0.3,
+  "grades": {
+    "silver": { "mul": 1, "color": "#c9d3e6" },
+    "gold": { "mul": 1.6, "color": "#ffd54a" },
+    "prism": { "mul": 2.6, "color": "#ff7cf5" }
+  },
+  "luck": 0,
+  "luckTable": [
+    { "luck": 0, "silver": 0.6, "gold": 0.32, "prism": 0.08, "pity": 6 }
+  ],
+  "categoryWeights": [
+    { "fromLevel": 2, "main": 0.4, "sub": 0, "other": 0.4, "neutral": 0.2 },
+    { "fromLevel": 7, "main": 0.35, "sub": 0.3, "other": 0.2, "neutral": 0.15 }
+  ],
+  "features": { "currency": false, "specialBlocks": false },
+  "cardInputDelayMs": 300
+}

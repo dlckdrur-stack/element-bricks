@@ -8,6 +8,15 @@
     "maxOnScreen": 30,
     "trailEverySteps": 3
   },
+  "stats": {
+    "critChance": 0.05,
+    "critDamage": 1.5,
+    "ballDamageMul": 1,
+    "ballScale": 1,
+    "pierce": 0,
+    "pierceBonus": 0,
+    "pierceRefillOnWall": 0
+  },
   "turn": {
     "autoSpeedAfterSec": 10,
     "autoSpeedMultiplier": 2

@@ -44,6 +44,22 @@ export class ParticleFx {
     }
   }
 
+  /** 선분을 따라 입자를 찍음 (연쇄 번개·레일건). jitter: 수직 방향 흔들림(px) */
+  line(name, x0, y0, x1, y1, color, spacing, jitter = 0) {
+    const dx = x1 - x0;
+    const dy = y1 - y0;
+    const len = Math.hypot(dx, dy);
+    if (len < 1) return;
+    const nx = -dy / len;
+    const ny = dx / len;
+    const steps = Math.max(1, Math.floor(len / spacing));
+    for (let i = 0; i <= steps; i++) {
+      const t = i / steps;
+      const j = jitter ? (Math.random() * 2 - 1) * jitter : 0;
+      this.emit(name, x0 + dx * t + nx * j, y0 + dy * t + ny * j, color);
+    }
+  }
+
   /** 매 프레임 1회 (dt: 초) */
   update(dt) {
     this.spawned = 0;

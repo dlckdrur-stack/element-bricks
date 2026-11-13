@@ -1,0 +1,8 @@
+{
+  "xpPerBlock": 1,
+  "xpToNext": [4, 8, 12, 20, 28, 36, 48, 60, 76, 92, 110],
+  "maxLevel": 10,
+  "afterMaxXpPerDamage": 100,
+  "afterMaxDamageGain": 1,
+  "coreLevels": { "1": "main", "6": "sub" }
+}

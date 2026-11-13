@@ -113,14 +113,69 @@ export class Grid {
     this.bus.emit(EV.HIT, ctx);
     const dmg = Math.max(0, ctx.damage);
     cell.hp -= dmg;
-    if (cell.hp <= 0.0001) {
+    const killed = cell.hp <= 0.0001;
+    if (killed) {
       cell.dead = true;
-      this.bus.emit(EV.KILL, { cell, source, overkill: -cell.hp });
       this.remove(cell, true);
     } else {
       this.refreshBlock(cell);
     }
+    this.bus.emit(EV.AFTER_HIT, { cell, damage: dmg, source, killed });
+    if (killed) this.bus.emit(EV.KILL, { cell, source, overkill: -cell.hp, currencyBonus: 0 });
     return dmg;
+  }
+
+  // ---------- 증강용 조회 ----------
+  blocks() {
+    const out = [];
+    this.forEachCell((c) => { if (c.kind === 'block') out.push(c); });
+    return out;
+  }
+
+  blockAt(col, row) {
+    if (col < 0 || col >= this.cols || row < 0 || row >= this.rows) return null;
+    const c = this.cells[row][col];
+    return c && c.kind === 'block' ? c : null;
+  }
+
+  /** (col,row) 주변 (2r+1)² 칸의 블록. 가운데 칸 제외 */
+  around(col, row, r = 1) {
+    const out = [];
+    for (let dr = -r; dr <= r; dr++) {
+      for (let dc = -r; dc <= r; dc++) {
+        if (!dr && !dc) continue;
+        const b = this.blockAt(col + dc, row + dr);
+        if (b) out.push(b);
+      }
+    }
+    return out;
+  }
+
+  /** 가장 아래에 블록이 있는 줄의 블록들 */
+  lowestRow() {
+    for (let r = this.rows - 1; r >= 0; r--) {
+      const row = this.cells[r].filter((c) => c && c.kind === 'block');
+      if (row.length) return row;
+    }
+    return [];
+  }
+
+  /** 반직선 (x,y)+t(dx,dy) 가 지나는 블록 (필드를 벗어날 때까지) */
+  lineBlocks(x, y, dx, dy) {
+    const len = Math.hypot(dx, dy) || 1;
+    const step = Math.min(this.cellW, this.cellH) / 4;
+    const sx = (dx / len) * step;
+    const sy = (dy / len) * step;
+    const out = [];
+    const seen = new Set();
+    const bottom = this.top + this.rows * this.cellH;
+    for (let i = 0; i < 400; i++) {
+      x += sx; y += sy;
+      if (x < 0 || x > this.cols * this.cellW || y < this.top || y > bottom) break;
+      const b = this.blockAt(Math.floor(x / this.cellW), Math.floor((y - this.top) / this.cellH));
+      if (b && !seen.has(b)) { seen.add(b); out.push(b); }
+    }
+    return { cells: out, endX: x, endY: y };
   }
 
   collectOrb(cell, ball, gain) {
@@ -170,6 +225,7 @@ export class Grid {
     v.rect.setFillStyle(cell.color, this.theme.blockFillAlpha);
     v.rect.setStrokeStyle(this.theme.blockStroke, cell.color, 1);
     v.label.setText(String(Math.ceil(cell.hp)));
+    v.label.setColor(cell.labelColor ?? this.theme.text); // 화상 등 상태 표시
   }
 
   showOrb(cell) {

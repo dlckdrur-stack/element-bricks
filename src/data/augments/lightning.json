@@ -1,0 +1,25 @@
+{
+  "element": "lightning",
+  "color": "#ffe600",
+  "auraColor": "#fff04a",
+  "augments": [
+    { "id": "lightning_chain", "tier": "core", "values": { "dmgPct": 0.3, "targets": 3 }, "bonusKeys": ["dmgPct"] },
+    { "id": "lightning_railgun", "tier": "core", "values": { "dmgPct": 0.6, "hitsNeeded": 3, "maxPerTurn": 20 }, "bonusKeys": ["dmgPct"] },
+    { "id": "lightning_pierce", "tier": "core", "values": { "count": 3, "bonusPct": 0.2, "refillOnWall": 1 }, "bonusKeys": ["bonusPct"] },
+
+    { "id": "lightning_overcharge", "tier": "exclusive", "requires": "lightning_chain",
+      "values": { "extraTargets": 2 }, "gradeKeys": ["extraTargets"], "intKeys": ["extraTargets"] },
+    { "id": "lightning_fastCharge", "tier": "exclusive", "requires": "lightning_railgun",
+      "values": { "hitsReduce": 1 } },
+    { "id": "lightning_plasma", "tier": "exclusive", "requires": "lightning_pierce",
+      "values": { "extraPierce": 2 }, "gradeKeys": ["extraPierce"], "intKeys": ["extraPierce"] },
+
+    { "id": "lightning_static", "tier": "common", "values": { "dmgPct": 0.3 },
+      "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
+    { "id": "lightning_storm", "tier": "common", "values": { "dmgPct": 0.5, "strikes": 5 },
+      "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
+    { "id": "lightning_capacitor", "tier": "common", "values": { "dmgPct": 0.5, "every": 20 },
+      "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
+    { "id": "lightning_conductive", "tier": "common", "feature": "specialBlocks", "values": {} }
+  ]
+}
