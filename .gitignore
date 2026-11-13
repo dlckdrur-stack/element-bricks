@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.vite/
+*.log
+.claude/
+# 기획 문서는 공개 저장소에 올리지 않음 (로컬 전용)
+docs/
+CLAUDE.md

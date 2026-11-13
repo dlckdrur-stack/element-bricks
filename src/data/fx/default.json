@@ -1,0 +1,14 @@
+{
+  "quality": "mid",
+  "budget": { "low": 100, "mid": 300, "high": 600, "ultra": 1000 },
+  "spawnPerFrame": 80,
+  "priorityCaps": [0.5, 0.85, 1.0],
+  "glow": { "enabled": true, "blurStrength": 1, "strength": 1.1, "steps": 4 },
+  "presets": {
+    "trail":      { "priority": 0, "count": 1,  "speed": [0, 10],    "life": [0.18, 0.28], "scale": [0.35, 0.5], "drag": 0 },
+    "wallBounce": { "priority": 0, "count": 3,  "speed": [40, 120],  "life": [0.12, 0.22], "scale": [0.2, 0.35], "drag": 3 },
+    "blockHit":   { "priority": 1, "count": 4,  "speed": [60, 180],  "life": [0.15, 0.3],  "scale": [0.25, 0.45], "drag": 4 },
+    "orb":        { "priority": 2, "count": 14, "speed": [80, 260],  "life": [0.3, 0.55], "scale": [0.3, 0.6], "drag": 3 },
+    "blockBreak": { "priority": 2, "count": 16, "speed": [80, 320],  "life": [0.3, 0.6],  "scale": [0.3, 0.7], "drag": 2.5 }
+  }
+}

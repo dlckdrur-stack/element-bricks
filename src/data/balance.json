@@ -1,0 +1,49 @@
+{
+  "ball": {
+    "startCount": 1,
+    "startDamage": 1,
+    "speed": 15,
+    "launchIntervalSteps": 5,
+    "minAngleDeg": 8,
+    "maxOnScreen": 30,
+    "trailEverySteps": 3
+  },
+  "turn": {
+    "autoSpeedAfterSec": 10,
+    "autoSpeedMultiplier": 2
+  },
+  "aim": {
+    "minDragPx": 24,
+    "guideLength": 460,
+    "guideDotGap": 22
+  },
+  "blocks": {
+    "countByStage": [
+      { "from": 1, "min": 2, "max": 4 },
+      { "from": 21, "min": 3, "max": 5 },
+      { "from": 61, "min": 4, "max": 6 }
+    ],
+    "doubleChance": 0.1,
+    "doubleMultiplier": 2
+  },
+  "hpScale": {
+    "flatUntil": 30,
+    "rampUntil": 60,
+    "rampTarget": 3,
+    "lateGrowth": 1.1
+  },
+  "orb": {
+    "chance": 0.9,
+    "damageGain": 1,
+    "radius": 13
+  },
+  "physics": {
+    "stepHz": 60,
+    "maxStepsPerFrame": 8
+  },
+  "anim": {
+    "shiftMs": 160,
+    "returnSlideMs": 140,
+    "gameOverInputDelayMs": 700
+  }
+}

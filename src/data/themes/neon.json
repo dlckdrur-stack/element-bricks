@@ -1,0 +1,15 @@
+{
+  "background": "#07070f",
+  "hudBackground": "#0d0d1c",
+  "floor": "#00e5ff",
+  "ball": "#ffffff",
+  "aim": "#9ff6ff",
+  "orb": "#ffd740",
+  "text": "#ffffff",
+  "hudText": "#a9b8ff",
+  "accent": "#ff4dff",
+  "blockFillAlpha": 0.22,
+  "blockStroke": 3,
+  "blockColors": ["#00e5ff", "#2979ff", "#39ff14", "#ffea00", "#ff9100", "#ff1744", "#ff4dff"],
+  "fontFamily": "system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans KR', sans-serif"
+}

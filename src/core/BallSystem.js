@@ -1,0 +1,198 @@
+import { EV } from './events.js';
+import { Pool } from './Pool.js';
+
+const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
+
+/**
+ * 공 이동·반사. 물리 엔진 없이 고정 스텝(step() 1회 = 1/60초)으로 계산.
+ * ball: { id, x, y, vx, vy, mul, age, sprite }
+ */
+export class BallSystem {
+  constructor(scene, { bus, grid, fx, layout, balance, state }) {
+    this.scene = scene;
+    this.bus = bus;
+    this.grid = grid;
+    this.fx = fx;
+    this.state = state;
+    this.cfg = balance.ball;
+    this.orbGain = balance.orb.damageGain;
+    this.slideMs = balance.anim.returnSlideMs;
+    this.r = layout.ballRadius;
+    this.width = layout.width;
+    this.top = layout.hudHeight;
+    this.floor = layout.floorY;
+    this.speed = this.cfg.speed;
+    this.minVy = this.speed * Math.sin((this.cfg.minAngleDeg * Math.PI) / 180);
+    this.substeps = Math.max(1, Math.ceil(this.speed / (this.r * 0.8)));
+
+    this.pool = new Pool(() => scene.add.image(0, 0, 'ball').setDepth(20), (s) => s.setVisible(false));
+    this.active = [];
+    this.queue = 0;
+    this.timer = 0;
+    this.nextId = 1;
+    this.firstReturnX = null;
+    this.originX = layout.width / 2;
+  }
+
+  get launchY() { return this.floor - this.r; }
+
+  /** 발사 시작. angle: 라디안(위쪽이 음수) */
+  launch(x, angle, count) {
+    this.originX = x;
+    this.dirX = Math.cos(angle);
+    this.dirY = Math.sin(angle);
+    this.queue = Math.min(count, this.cfg.maxOnScreen);
+    this.timer = 0;
+    this.firstReturnX = null;
+  }
+
+  isDone() { return this.queue === 0 && this.active.length === 0; }
+
+  get nextLaunchX() {
+    const x = this.firstReturnX ?? this.originX;
+    return clamp(x, this.r, this.width - this.r);
+  }
+
+  /** 고정 스텝 1회 */
+  step() {
+    if (this.queue > 0 && --this.timer <= 0) {
+      this.spawn();
+      this.queue--;
+      this.timer = this.cfg.launchIntervalSteps;
+    }
+    for (let i = this.active.length - 1; i >= 0; i--) {
+      const b = this.active[i];
+      b.age++;
+      if (this.move(b)) {
+        this.active[i] = this.active[this.active.length - 1];
+        this.active.pop();
+        this.returnBall(b);
+      } else if (b.age % this.cfg.trailEverySteps === 0) {
+        this.fx.emit('trail', b.x, b.y, 0xffffff);
+      }
+    }
+  }
+
+  /** 화면 표시 위치 동기화 (그리기는 프레임당 1번) */
+  sync() {
+    for (const b of this.active) b.sprite.setPosition(b.x, b.y);
+  }
+
+  spawn() {
+    const sprite = this.pool.get().setVisible(true).setPosition(this.originX, this.launchY);
+    const b = {
+      id: this.nextId++, x: this.originX, y: this.launchY,
+      vx: this.dirX * this.speed, vy: this.dirY * this.speed, mul: 1, age: 0, sprite,
+    };
+    this.active.push(b);
+    this.bus.emit(EV.LAUNCH, { ball: b });
+  }
+
+  /** @returns true = 바닥으로 돌아옴 */
+  move(b) {
+    const r = this.r;
+    const n = this.substeps;
+    for (let s = 0; s < n; s++) {
+      b.x += b.vx / n;
+      b.y += b.vy / n;
+
+      if (b.x < r) { b.x = r; b.vx = Math.abs(b.vx); this.wall(b, 'left'); }
+      else if (b.x > this.width - r) { b.x = this.width - r; b.vx = -Math.abs(b.vx); this.wall(b, 'right'); }
+      if (b.y < this.top + r) { b.y = this.top + r; b.vy = Math.abs(b.vy); this.wall(b, 'top'); }
+      if (b.vy > 0 && b.y >= this.launchY) { b.y = this.launchY; return true; }
+
+      this.collideBlocks(b);
+      this.collectOrbs(b);
+    }
+    return false;
+  }
+
+  wall(b, side) {
+    this.fixAngle(b);
+    this.fx.emit('wallBounce', b.x, b.y, 0xffffff);
+    this.bus.emit(EV.WALL_BOUNCE, { ball: b, side });
+  }
+
+  /** 수평에 가까운 궤도를 막아 무한 왕복 방지 */
+  fixAngle(b) {
+    if (Math.abs(b.vy) >= this.minVy) return;
+    b.vy = (b.vy >= 0 ? 1 : -1) * this.minVy;
+    b.vx = (b.vx >= 0 ? 1 : -1) * Math.sqrt(this.speed * this.speed - b.vy * b.vy);
+  }
+
+  collideBlocks(b) {
+    const r = this.r;
+    const g = this.grid;
+    let hit = null;
+    let best = 0;
+    let nx = 0;
+    let ny = 0;
+
+    g.query(b.x - r, b.y - r, b.x + r, b.y + r, (cell) => {
+      if (cell.kind !== 'block') return;
+      const { x, y, w, h } = g.bounds(cell);
+      const cx = clamp(b.x, x, x + w);
+      const cy = clamp(b.y, y, y + h);
+      const dx = b.x - cx;
+      const dy = b.y - cy;
+      const d2 = dx * dx + dy * dy;
+      if (d2 >= r * r) return;
+
+      let pen; let ux; let uy;
+      if (d2 > 1e-6) {
+        const d = Math.sqrt(d2);
+        pen = r - d; ux = dx / d; uy = dy / d;
+      } else { // 중심이 사각형 안: 가장 얕은 면으로 밀어냄
+        const l = b.x - x; const rt = x + w - b.x; const t = b.y - y; const bt = y + h - b.y;
+        const m = Math.min(l, rt, t, bt);
+        pen = r + m;
+        if (m === l) { ux = -1; uy = 0; } else if (m === rt) { ux = 1; uy = 0; }
+        else if (m === t) { ux = 0; uy = -1; } else { ux = 0; uy = 1; }
+      }
+      // 이웃 블록 이음매에서 법선을 합쳐 평평한 면처럼 반사
+      nx += ux * pen; ny += uy * pen;
+      if (pen > best) { best = pen; hit = cell; }
+    });
+    if (!hit) return;
+
+    const len = Math.hypot(nx, ny) || 1;
+    nx /= len; ny /= len;
+    b.x += nx * best;
+    b.y += ny * best;
+    const dot = b.vx * nx + b.vy * ny;
+    if (dot < 0) {
+      b.vx -= 2 * dot * nx;
+      b.vy -= 2 * dot * ny;
+      const sp = Math.hypot(b.vx, b.vy) || 1; // 속도 크기 유지
+      b.vx = (b.vx / sp) * this.speed;
+      b.vy = (b.vy / sp) * this.speed;
+    }
+    this.fixAngle(b);
+    g.damage(hit, this.state.damage * b.mul, { type: 'ball', ball: b });
+  }
+
+  collectOrbs(b) {
+    const reach = this.r + this.grid.orbR;
+    this.grid.query(b.x - reach, b.y - reach, b.x + reach, b.y + reach, (cell) => {
+      if (cell.kind !== 'orb') return;
+      const dx = b.x - this.grid.centerX(cell.col);
+      const dy = b.y - this.grid.centerY(cell.row);
+      if (dx * dx + dy * dy < reach * reach) {
+        const gain = this.grid.collectOrb(cell, b, this.orbGain);
+        if (gain) this.state.damage += gain;
+      }
+    });
+  }
+
+  returnBall(b) {
+    const first = this.firstReturnX === null;
+    if (first) this.firstReturnX = b.x;
+    this.bus.emit(EV.BALL_RETURN, { ball: b, first });
+    const sprite = b.sprite;
+    sprite.setPosition(b.x, b.y);
+    this.scene.tweens.add({
+      targets: sprite, x: this.nextLaunchX, duration: this.slideMs,
+      onComplete: () => this.pool.release(sprite),
+    });
+  }
+}

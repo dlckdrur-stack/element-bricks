@@ -1,0 +1,14 @@
+{
+  "hud.stage": "스테이지 {n}",
+  "hud.best": "최고 {n}",
+  "hud.damage": "데미지 {n}",
+  "hud.fps": "FPS {n} · 입자 {p}",
+  "hud.speed": "▶▶ x{n}",
+  "hud.ballCount": "x{n}",
+  "hint.aim": "아래로 끌어서 조준 · 손을 떼면 발사",
+  "gameover.title": "GAME OVER",
+  "gameover.stage": "도달 스테이지 {n}",
+  "gameover.best": "최고 기록 {n}",
+  "gameover.newBest": "신기록!",
+  "gameover.retry": "화면을 눌러 다시 시작"
+}

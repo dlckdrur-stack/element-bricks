@@ -1,0 +1,11 @@
+{
+  "width": 540,
+  "height": 960,
+  "hudHeight": 96,
+  "floorY": 886,
+  "cols": 7,
+  "rows": 10,
+  "blockPad": 3,
+  "ballRadius": 9,
+  "fontSize": { "hud": 26, "block": 26, "small": 16, "title": 56, "body": 28 }
+}
