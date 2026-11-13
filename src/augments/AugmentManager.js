@@ -2,6 +2,7 @@ import fireData from '../data/augments/fire.json';
 import lightningData from '../data/augments/lightning.json';
 import draftCfg from '../data/draft.json';
 import balance from '../data/balance.json';
+import { fxCfg } from '../fx/config.js';
 import { EV } from '../core/events.js';
 import { hex } from '../core/color.js';
 import * as fire from './fire.js';
@@ -93,10 +94,15 @@ export class AugmentManager {
     this.api.state.stats = s;
   }
 
-  /** 공 오라: 메인 속성 색 불꽃 */
+  /** 공 겉모습: 메인 속성 색 불꽃 + 보유 증강별 변화(fx default.json 의 ball.mods) */
   get ballFx() {
     if (!this.main) return null;
-    return { color: this.elements[this.main].aura, trail: 'flameTrail' };
+    const look = {
+      color: this.elements[this.main].aura, trail: fxCfg.ball.elementTrail,
+      armorColor: this.color('lightning'),
+    };
+    for (const id in fxCfg.ball.mods) if (this.has(id)) Object.assign(look, fxCfg.ball.mods[id]);
+    return look;
   }
 
   color(element) { return this.elements[element]?.color ?? 0xffffff; }

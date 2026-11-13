@@ -16,11 +16,7 @@ export function stats(aug, s, mgr) {
 
 /** 낙뢰 한 방 (위에서 떨어지는 선 + 충격) */
 function bolt(api, cell, pct, source) {
-  const color = api.mgr.color('lightning');
-  const x = cx(api, cell);
-  const y = cy(api, cell);
-  api.fx.line('chain', x, api.grid.top, x, y, color, api.fx.cfg.lineSpacing.chain * 2, 8);
-  api.fx.emit('strike', x, y, color);
+  api.fx.bolt(cx(api, cell), api.grid.top, cy(api, cell), api.mgr.color('lightning'));
   strike(api, cell, pct, source);
 }
 
@@ -33,7 +29,7 @@ export const handlers = {
       const x0 = cx(api, cell);
       const y0 = cy(api, cell);
       for (const b of nearest(api, cell, n)) {
-        api.fx.line('chain', x0, y0, cx(api, b), cy(api, b), color, api.fx.cfg.lineSpacing.chain, 6);
+        api.fx.chain(x0, y0, cx(api, b), cy(api, b), color);
         strike(api, b, aug.v.dmgPct, SRC('lightning_chain'));
       }
     });
@@ -48,18 +44,29 @@ export const handlers = {
     api.bus.on(EV.AFTER_HIT, ({ source }) => {
       if (!isBallHit(source)) return;
       const need = Math.max(1, aug.v.hitsNeeded - api.mgr.val('lightning_fastCharge', 'hitsReduce', 0));
-      if (++st.hits < need) return;
-      st.hits = 0;
-      if (st.fired >= aug.v.maxPerTurn) return;
-      st.fired++;
       const b = source.ball;
+      if (st.fired >= aug.v.maxPerTurn) { api.fx.lines.clearCharge(aug.def.id); return; }
+      if (++st.hits < need) {
+        // 충전 링: 맞힐 때마다 공 주위 링이 차오름
+        api.fx.railCharge(aug.def.id, b, api.layout.ballRadius * api.state.stats.ballScale, st.hits / need, color);
+        return;
+      }
+      st.hits = 0;
+      st.fired++;
       const { cells, endX, endY } = api.grid.lineBlocks(b.x, b.y, b.vx, b.vy);
-      api.fx.line('rail', b.x, b.y, endX, endY, color, api.fx.cfg.lineSpacing.rail, 0);
+      const hits = cells.map((c) => ({ x: cx(api, c), y: cy(api, c) }));
+      api.fx.railgun(aug.def.id, b.x, b.y, endX, endY, color, hits);
       for (const c of cells) strike(api, c, aug.v.dmgPct, SRC('lightning_railgun'));
     });
   },
 
-  // lightning_pierce: 공 관통은 stats() → BallSystem 에서 처리
+  // lightning_pierce: 공 관통은 stats() → BallSystem 에서 처리. 여기는 관통 순간 스파크 폭발만
+  lightning_pierce(api) {
+    const color = api.mgr.color('lightning');
+    api.bus.on(EV.AFTER_HIT, ({ source }) => {
+      if (isBallHit(source) && source.pierce) api.fx.pierce(source.ball.x, source.ball.y, color);
+    });
+  },
 
   lightning_static(api, aug) {
     api.bus.on(EV.WALL_BOUNCE, () => {

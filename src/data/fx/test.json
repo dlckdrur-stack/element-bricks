@@ -1,0 +1,20 @@
+{
+  "_doc": "개발용 이펙트 테스트 화면 (주소 뒤에 ?fxtest). 게임 밸런스와 무관.",
+  "blockRows": 5,
+  "blockHp": [20, 90],
+  "orbCount": 3,
+  "hitDamage": 3,
+  "startDamage": 5,
+  "chargeHits": 3,
+  "chargeInterval": 0.22,
+  "chainTargets": 3,
+  "boltCount": 3,
+  "pierceCount": 3,
+  "pierceInterval": 0.07,
+  "chainExplosionDelay": 0.12,
+  "orbCollectDelay": 0.5,
+  "railSpreadDeg": 25,
+  "ball": { "y": 575, "ampX": 150, "ampY": 30, "speed": 1.6, "speedY": 2.3 },
+  "panel": { "statsY": 622, "top": 652, "rowH": 50, "cols": 4, "btnW": 124, "btnH": 42, "gap": 8, "fontSize": 17, "pickLevel": 5 },
+  "colors": { "button": "#1a1a3a", "buttonOn": "#ff4dff", "buttonText": "#ffffff", "stroke": "#7cf8ff" }
+}

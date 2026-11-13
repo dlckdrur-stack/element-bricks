@@ -1,12 +1,12 @@
-import Phaser from 'phaser';
 import { EV } from './events.js';
 import { Pool } from './Pool.js';
+import { BallLook } from '../fx/BallLook.js';
 
 const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
 
 /**
  * 공 이동·반사. 물리 엔진 없이 고정 스텝(step() 1회 = 1/60초)으로 계산.
- * ball: { id, x, y, vx, vy, mul, age, pierce, pierceChain, passing[], view{sprite,aura} }
+ * ball: { id, x, y, vx, vy, mul, age, pierce, pierceChain, passing[], view (BallLook 4겹) }
  * 능력치(state.stats): ballScale·ballDamageMul·crit·pierce 는 발사 시점에 반영.
  */
 export class BallSystem {
@@ -17,7 +17,6 @@ export class BallSystem {
     this.fx = fx;
     this.state = state;
     this.cfg = balance.ball;
-    this.auraCfg = fxCfg.aura;
     this.orbGain = balance.orb.damageGain;
     this.slideMs = balance.anim.returnSlideMs;
     this.baseR = layout.ballRadius;
@@ -27,10 +26,8 @@ export class BallSystem {
     this.speed = this.cfg.speed;
     this.minVy = this.speed * Math.sin((this.cfg.minAngleDeg * Math.PI) / 180);
 
-    this.pool = new Pool(() => ({
-      aura: scene.add.image(0, 0, 'spark').setBlendMode(Phaser.BlendModes.ADD).setDepth(19),
-      sprite: scene.add.image(0, 0, 'ball').setDepth(20),
-    }), (v) => { v.sprite.setVisible(false); v.aura.setVisible(false); });
+    this.look = new BallLook(scene, fxCfg, fx, state);
+    this.pool = new Pool(() => this.look.make(), (v) => this.look.hide(v));
     this.active = [];
     this.queue = 0;
     this.timer = 0;
@@ -75,8 +72,6 @@ export class BallSystem {
       this.queue--;
       this.timer = this.cfg.launchIntervalSteps;
     }
-    const bfx = this.state.ballFx;
-    const every = bfx ? this.auraCfg.trailEverySteps : this.cfg.trailEverySteps;
     for (let i = this.active.length - 1; i >= 0; i--) {
       const b = this.active[i];
       b.age++;
@@ -84,9 +79,8 @@ export class BallSystem {
         this.active[i] = this.active[this.active.length - 1];
         this.active.pop();
         this.returnBall(b);
-      } else if (b.age % every === 0) {
-        if (bfx) this.fx.emit(bfx.trail, b.x, b.y, bfx.color);
-        else this.fx.emit('trail', b.x, b.y, 0xffffff);
+      } else {
+        this.look.tick(b);
       }
     }
   }
@@ -94,18 +88,19 @@ export class BallSystem {
   /** 화면 표시 위치 동기화 (그리기는 프레임당 1번) */
   sync() {
     for (const b of this.active) {
-      b.view.sprite.setPosition(b.x, b.y);
-      b.view.aura.setPosition(b.x, b.y);
+      this.look.place(b.view, b.x, b.y);
+      this.look.animate(b.view);
     }
   }
 
   /** 발사대·공 겉모습 (오라 = 메인 속성 색) */
   dress(view) {
-    const bfx = this.state.ballFx;
-    view.sprite.setVisible(true).setScale(this.scale);
-    view.aura.setVisible(!!bfx);
-    if (bfx) view.aura.setTint(bfx.color).setAlpha(this.auraCfg.alpha).setScale((this.r * this.auraCfg.scale) / 8);
-    return view;
+    return this.look.dress(view, this.r);
+  }
+
+  /** 증강을 고른 직후 날아다니는 공 겉모습도 갱신 */
+  redressAll() {
+    for (const b of this.active) this.look.dress(b.view, this.r);
   }
 
   spawn() {
@@ -116,8 +111,7 @@ export class BallSystem {
       vx: this.dirX * this.speed, vy: this.dirY * this.speed, mul: 1, age: 0, view,
       pierce: s.pierce, pierceChain: 0, passing: [],
     };
-    view.sprite.setPosition(b.x, b.y);
-    view.aura.setPosition(b.x, b.y);
+    this.look.place(view, b.x, b.y);
     this.active.push(b);
     this.bus.emit(EV.LAUNCH, { ball: b });
   }
@@ -157,12 +151,11 @@ export class BallSystem {
   }
 
   /** 공 타격 피해: 구슬 데미지 × 공 배율 × 치명타 × 관통 보너스 */
-  hit(b, cell, extraMul) {
+  hit(b, cell, extraMul, pierce = false) {
     const s = this.state.stats;
     const crit = Math.random() < s.critChance;
     const dmg = this.state.damage * s.ballDamageMul * b.mul * (crit ? s.critDamage : 1) * extraMul;
-    if (crit) this.fx.emit('crit', b.x, b.y, 0xffffff);
-    this.grid.damage(cell, dmg, { type: 'ball', ball: b, crit });
+    this.grid.damage(cell, dmg, { type: 'ball', ball: b, crit, pierce });
   }
 
   collideBlocks(b) {
@@ -190,7 +183,7 @@ export class BallSystem {
         b.pierce--;
         b.pierceChain++;
         b.passing.push(cell);
-        this.hit(b, cell, 1 + this.state.stats.pierceBonus * b.pierceChain);
+        this.hit(b, cell, 1 + this.state.stats.pierceBonus * b.pierceChain, true);
         return;
       }
 
@@ -246,11 +239,9 @@ export class BallSystem {
     if (first) this.firstReturnX = b.x;
     const last = this.isDone();
     this.bus.emit(EV.BALL_RETURN, { ball: b, first, last });
-    const { sprite, aura } = b.view;
-    sprite.setPosition(b.x, b.y);
-    aura.setPosition(b.x, b.y);
+    this.look.place(b.view, b.x, b.y);
     this.scene.tweens.add({
-      targets: [sprite, aura], x: this.nextLaunchX, duration: this.slideMs,
+      targets: this.look.layers(b.view), x: this.nextLaunchX, duration: this.slideMs,
       onComplete: () => this.pool.release(b.view),
     });
   }

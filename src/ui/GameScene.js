@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 import balance from '../data/balance.json';
 import layout from '../data/layout.json';
 import theme from '../data/themes/neon.json';
-import fxCfg from '../data/fx/default.json';
+import { fxCfg } from '../fx/config.js';
 import levelsCfg from '../data/levels.json';
 import draftCfg from '../data/draft.json';
 import { EV, GameEvents } from '../core/events.js';
@@ -11,7 +11,7 @@ import { BallSystem } from '../core/BallSystem.js';
 import { Leveling } from '../core/Leveling.js';
 import { buildStageRow, stageHp } from '../core/stageLayout.js';
 import { hex } from '../core/color.js';
-import { ParticleFx } from '../fx/ParticleFx.js';
+import { Fx } from '../fx/Fx.js';
 import { AugmentManager } from '../augments/AugmentManager.js';
 import { buildChoices } from '../augments/draft.js';
 import { loadSave, writeSave } from '../meta/save.js';
@@ -19,6 +19,7 @@ import { AimInput } from './AimInput.js';
 import { Hud } from './Hud.js';
 import { showGameOver } from './GameOverView.js';
 import { showAugmentPick } from './AugmentPickView.js';
+import { t } from './i18n.js';
 
 const STEP_MS = 1000 / balance.physics.stepHz;
 
@@ -31,12 +32,8 @@ export class GameScene extends Phaser.Scene {
   constructor() { super('Game'); }
 
   create() {
-    this.makeTextures();
     this.cameras.main.setBackgroundColor(theme.background);
-    const g = fxCfg.glow;
-    if (g.enabled && this.renderer.type === Phaser.WEBGL) {
-      this.cameras.main.postFX.addBloom(0xffffff, 1, 1, g.blurStrength, g.strength, g.steps);
-    }
+    this.fx = new Fx(this, fxCfg, { fontFamily: theme.fontFamily }); // 입자 텍스처·글로우(화면 1곳)도 여기서
 
     this.bus = new GameEvents();
     this.saveData = loadSave();
@@ -54,7 +51,6 @@ export class GameScene extends Phaser.Scene {
     };
 
     const deps = { scene: this, bus: this.bus, layout, theme, balance, fxCfg, state: this.state };
-    this.fx = new ParticleFx(this, fxCfg);
     this.grid = new Grid(this, deps);
     this.augments = new AugmentManager({ ...deps, grid: this.grid, fx: this.fx });
     this.balls = new BallSystem(this, { ...deps, grid: this.grid, fx: this.fx });
@@ -63,10 +59,8 @@ export class GameScene extends Phaser.Scene {
     this.aim = new AimInput(this, { ...deps, onFire: (a) => this.fire(a) });
 
     this.add.rectangle(layout.width / 2, layout.floorY + 1, layout.width, 2, hex(theme.floor), 0.8).setDepth(5);
-    this.launcher = {
-      aura: this.add.image(0, 0, 'spark').setBlendMode(Phaser.BlendModes.ADD).setDepth(20),
-      sprite: this.add.image(0, 0, 'ball').setDepth(21),
-    };
+    this.look = this.balls.look;
+    this.launcher = this.look.make();
 
     this.bindEvents();
     this.events.once('shutdown', () => this.bus.removeAllListeners());
@@ -77,28 +71,27 @@ export class GameScene extends Phaser.Scene {
     this.nextTurn();
   }
 
-  /** 이미지 파일 없이 텍스처를 코드로 한 번만 그림 */
-  makeTextures() {
-    if (this.textures.exists('ball')) return;
-    const r = layout.ballRadius;
-    const g = this.make.graphics({ x: 0, y: 0 }, false);
-    g.fillStyle(hex(theme.ball), 1).fillCircle(r, r, r);
-    g.generateTexture('ball', r * 2, r * 2);
-    g.clear();
-    for (let i = 8; i >= 1; i--) g.fillStyle(0xffffff, 0.14).fillCircle(8, 8, i);
-    g.generateTexture('spark', 16, 16);
-    g.destroy();
-  }
-
   bindEvents() {
     const { bus, fx, grid } = this;
     const cx = (c) => grid.centerX(c.col);
     const cy = (c) => grid.centerY(c.row);
-    bus.on(EV.AFTER_HIT, ({ cell, source }) => {
-      if (source?.type === 'ball') fx.emit('blockHit', cx(cell), cy(cell), cell.color);
+    bus.on(EV.AFTER_HIT, ({ cell, damage, source }) => {
+      fx.hit(cx(cell), cy(cell), cell.color, {
+        key: `${cell.col},${cell.row}`, amount: damage, crit: !!source?.crit, ball: source?.type === 'ball',
+      });
     });
-    bus.on(EV.KILL, ({ cell }) => { fx.emit('blockBreak', cx(cell), cy(cell), cell.color); this.hudDirty = true; });
-    bus.on(EV.ORB_COLLECT, ({ cell }) => { fx.emit('orb', cx(cell), cy(cell), cell.color); this.hudDirty = true; });
+    bus.on(EV.KILL, ({ cell }) => {
+      const b = grid.bounds(cell);
+      fx.blockBreak(cx(cell), cy(cell), b.w, b.h, cell.color);
+      this.hudDirty = true;
+    });
+    bus.on(EV.ORB_COLLECT, (ctx) => {
+      const { cell } = ctx;
+      fx.orbCollect(cx(cell), cy(cell), cell.color, t('orb.label', { n: ctx.gain }));
+      this.hud.popDamage(fxCfg.combat.orb.hudPop);
+      this.look.flareUp('orb');
+      this.hudDirty = true;
+    });
   }
 
   // ---------- 턴 ----------
@@ -176,27 +169,46 @@ export class GameScene extends Phaser.Scene {
     s.phase = 'pick';
     this.aim.disable();
     this.hud.showHint(false);
-    const deps = { layout, theme, draftCfg, mgr: this.augments };
-    showAugmentPick(this, deps, choice, level, (def) => {
-      this.augments.add(def.id, choice.grade);
-      s.ballFx = this.augments.ballFx;
-      s.phase = this.resumePhase;
-      this.acc = 0;
-      if (s.phase === 'aim') {
-        this.enterAim();
-        this.hud.showHint(s.stage === 1);
-      }
-      this.refreshHud();
+    if (this.resumePhase === 'fire') this.fx.juice.slowmo(fxCfg.ui.levelUp.slowmo.time, fxCfg.ui.levelUp.slowmo.scale);
+    const deps = {
+      layout, theme, draftCfg, mgr: this.augments, fx: this.fx, fxCfg, look: this.look,
+      ballPos: () => this.ballPos(),
+    };
+    showAugmentPick(this, deps, choice, level, {
+      onPick: (def) => { // 카드가 공에 닿는 순간: 증강 적용 → 공 불꽃이 바로 바뀜
+        this.augments.add(def.id, choice.grade);
+        s.ballFx = this.augments.ballFx;
+        if (this.resumePhase === 'aim') {
+          this.balls.applyStats();
+          this.placeLauncher(true);
+        } else this.balls.redressAll();
+        this.refreshHud();
+      },
+      onDone: () => {
+        s.phase = this.resumePhase;
+        this.acc = 0;
+        if (s.phase === 'aim') {
+          this.enterAim();
+          this.hud.showHint(s.stage === 1);
+        }
+        this.refreshHud();
+      },
     });
+  }
+
+  /** 카드가 빨려 들어갈 공 위치: 조준 중이면 발사대, 날아다니는 중이면 첫 공 */
+  ballPos() {
+    const b = this.resumePhase === 'fire' ? this.balls.active[0] : null;
+    return b ? { x: b.x, y: b.y } : { x: this.state.launchX, y: this.balls.launchY };
   }
 
   placeLauncher(visible) {
     const x = this.state.launchX;
     const y = this.balls.launchY;
-    const { sprite, aura } = this.launcher;
     this.balls.dress(this.launcher);
-    sprite.setVisible(visible).setPosition(x, y);
-    aura.setVisible(visible && !!this.state.ballFx).setPosition(x, y);
+    this.look.place(this.launcher, x, y);
+    this.look.setVisible(this.launcher, visible);
+    this.launcherOn = visible;
     this.hud.setBallCount(x, y + this.balls.r + 4, this.state.ballCount, visible);
   }
 
@@ -217,27 +229,35 @@ export class GameScene extends Phaser.Scene {
   update(_time, delta) {
     const dt = Math.min(delta, 100);
     this.fx.update(dt / 1000);
+    this.look.update(dt / 1000);
+    if (this.launcherOn) this.look.animate(this.launcher);
 
     const s = this.state;
     if (this.leveling.pending.length && (s.phase === 'aim' || s.phase === 'fire')) this.openPick();
 
-    if (s.phase === 'fire') {
-      s.turnMs += dt;
-      const t = balance.turn;
-      const speed = s.turnMs > t.autoSpeedAfterSec * 1000 ? t.autoSpeedMultiplier : 1;
-      if (speed !== s.speed) { s.speed = speed; this.hud.setSpeed(speed); }
+    // 레벨업 직후 슬로모션 동안은 선택 화면 뒤에서 공이 느리게 계속 움직임
+    const juice = this.fx.juice;
+    const slowPick = s.phase === 'pick' && this.resumePhase === 'fire' && juice.slowActive;
+    if (s.phase === 'fire' || slowPick) {
+      if (s.phase === 'fire') {
+        s.turnMs += dt;
+        const tc = balance.turn;
+        const speed = s.turnMs > tc.autoSpeedAfterSec * 1000 ? tc.autoSpeedMultiplier : 1;
+        if (speed !== s.speed) { s.speed = speed; this.hud.setSpeed(speed); }
+      }
 
-      // 고정 스텝. 배속은 계산만 여러 번 돌리고 그리기는 1번. 레벨업 시 그 자리에서 멈춤.
-      this.acc += dt;
+      // 고정 스텝. 배속은 계산만 여러 번 돌리고 그리기는 1번. 히트스톱이면 멈춤, 슬로모션이면 느리게.
+      // 레벨업이 생기면 그 자리에서 멈추고(다음 프레임에 선택 화면 + 슬로모션).
+      this.acc += dt * juice.timeScale;
       let n = 0;
-      while (this.acc >= STEP_MS && n < balance.physics.maxStepsPerFrame && !this.leveling.pending.length) {
+      while (this.acc >= STEP_MS && n < balance.physics.maxStepsPerFrame && (slowPick || !this.leveling.pending.length)) {
         for (let k = 0; k < s.speed; k++) this.balls.step();
         this.acc -= STEP_MS;
         n++;
       }
       if (n === balance.physics.maxStepsPerFrame) this.acc = 0;
       this.balls.sync();
-      if (this.balls.isDone()) this.endTurn();
+      if (s.phase === 'fire' && this.balls.isDone()) this.endTurn();
     }
     if (this.hudDirty) this.refreshHud();
 

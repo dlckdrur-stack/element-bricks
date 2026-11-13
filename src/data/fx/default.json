@@ -1,23 +1,86 @@
 {
-  "quality": "mid",
+  "quality": "high",
+  "size": 1,
+  "qualities": ["low", "mid", "high", "ultra"],
+  "sizeRange": { "min": 0.5, "max": 1.5, "step": 0.25 },
+
   "budget": { "low": 100, "mid": 300, "high": 600, "ultra": 1000 },
-  "spawnPerFrame": 80,
+  "countMul": { "low": 0.45, "mid": 0.75, "high": 1, "ultra": 1.35 },
+  "spawnPerFrame": { "low": 40, "mid": 90, "high": 150, "ultra": 220 },
   "priorityCaps": [0.5, 0.85, 1.0],
-  "glow": { "enabled": true, "blurStrength": 1, "strength": 1.1, "steps": 4 },
-  "aura": { "scale": 2.6, "alpha": 0.75, "trailEverySteps": 1 },
-  "lineSpacing": { "chain": 16, "rail": 14 },
-  "presets": {
-    "trail":      { "priority": 0, "count": 1,  "speed": [0, 10],    "life": [0.18, 0.28], "scale": [0.35, 0.5], "drag": 0 },
-    "flameTrail": { "priority": 0, "count": 2,  "speed": [10, 50],   "life": [0.18, 0.32], "scale": [0.45, 0.8], "drag": 2 },
-    "wallBounce": { "priority": 0, "count": 3,  "speed": [40, 120],  "life": [0.12, 0.22], "scale": [0.2, 0.35], "drag": 3 },
-    "blockHit":   { "priority": 1, "count": 4,  "speed": [60, 180],  "life": [0.15, 0.3],  "scale": [0.25, 0.45], "drag": 4 },
-    "crit":       { "priority": 1, "count": 8,  "speed": [160, 300], "life": [0.15, 0.3],  "scale": [0.3, 0.55], "drag": 4 },
-    "burn":       { "priority": 1, "count": 4,  "speed": [20, 70],   "life": [0.3, 0.5],   "scale": [0.35, 0.6], "drag": 2 },
-    "chain":      { "priority": 1, "count": 1,  "speed": [0, 25],    "life": [0.14, 0.24], "scale": [0.3, 0.45], "drag": 2 },
-    "rail":       { "priority": 2, "count": 1,  "speed": [0, 30],    "life": [0.22, 0.36], "scale": [0.55, 0.85], "drag": 2 },
-    "strike":     { "priority": 2, "count": 8,  "speed": [60, 200],  "life": [0.2, 0.35],  "scale": [0.35, 0.6], "drag": 3 },
-    "explosion":  { "priority": 2, "count": 18, "speed": [190, 250], "life": [0.22, 0.36], "scale": [0.45, 0.75], "drag": 4 },
-    "orb":        { "priority": 2, "count": 14, "speed": [80, 260],  "life": [0.3, 0.55], "scale": [0.3, 0.6], "drag": 3 },
-    "blockBreak": { "priority": 2, "count": 16, "speed": [80, 320],  "life": [0.3, 0.6],  "scale": [0.3, 0.7], "drag": 2.5 }
+  "spriteBudget": { "low": 24, "mid": 48, "high": 80, "ultra": 120 },
+  "lineBudget": { "low": 10, "mid": 20, "high": 32, "ultra": 48 },
+
+  "glow": { "offQualities": ["low"], "blurStrength": 1.15, "strength": 1.3, "steps": 4 },
+
+  "juice": {
+    "hitstop": { "big": 0.05, "railgun": 0.06, "awaken": 0.08 },
+    "hitstopCooldown": 0.2,
+    "frozenFxScale": 0.15,
+    "shakeEnabled": true,
+    "flashEnabled": true,
+    "shake": {
+      "small": [70, 0.0025],
+      "mid": [120, 0.006],
+      "big": [170, 0.012],
+      "huge": [240, 0.02]
+    },
+    "flash": {
+      "white": [70, 255, 255, 255],
+      "rail": [60, 255, 255, 235],
+      "prism": [180, 255, 220, 255],
+      "awaken": [260, 255, 255, 255]
+    },
+    "sounds": {
+      "railgun": "sfx_railgun",
+      "explosion": "sfx_explosion",
+      "levelUp": "sfx_levelup",
+      "cardFlip": "sfx_card_flip",
+      "prismAppear": "sfx_prism_appear_big",
+      "cardPick": "sfx_card_pick",
+      "awaken": "sfx_awaken",
+      "orb": "sfx_orb"
+    }
+  },
+
+  "numbers": {
+    "mode": "all",
+    "max": 30,
+    "life": 0.6,
+    "rise": 38,
+    "popFrom": 0.3,
+    "popScale": 1.55,
+    "popTime": 0.09,
+    "settleTime": 0.1,
+    "fadeFrom": 0.55,
+    "fontSize": 22,
+    "critFontSize": 30,
+    "color": "#ffffff",
+    "critColor": "#ffd740",
+    "stroke": "#05050c",
+    "strokeWidth": 5,
+    "spreadX": 10,
+    "depth": 45
+  },
+
+  "ball": {
+    "coreHalo": { "scale": 1.7, "alpha": 0.95 },
+    "aura": { "scale": 3.0, "alpha": 0.8, "flicker": 0.14, "defaultColor": "#7fe9ff", "defaultAlpha": 0.38 },
+    "trail": "trail",
+    "elementTrail": "flameTrail",
+    "trailEverySteps": 1,
+    "spark": "ballSpark",
+    "sparkEverySteps": 4,
+    "growth": { "perDamage": 0.012, "max": 0.6 },
+    "flare": {
+      "orb": { "scale": 1.7, "time": 0.32 },
+      "pick": { "scale": 2.3, "time": 0.55 },
+      "awaken": { "scale": 3.2, "time": 0.9 }
+    },
+    "armor": { "scale": 2.4, "alpha": 0.9, "flicker": 0.45, "spark": "armorSpark", "sparkEverySteps": 5 },
+    "mods": {
+      "fire_fireball": { "trail": "fireballTail", "auraScale": 1.35, "spark": "fireballSpark", "sparkEverySteps": 2 },
+      "lightning_pierce": { "armor": true }
+    }
   }
 }

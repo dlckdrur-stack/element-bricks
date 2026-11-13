@@ -23,7 +23,7 @@ export function stats(aug, s) {
 
 function explode(api, col, row, pct, depth) {
   const color = api.mgr.color('fire');
-  api.fx.emit('explosion', api.grid.centerX(col), api.grid.centerY(row), color);
+  api.fx.explosion(api.grid.centerX(col), api.grid.centerY(row), color, depth, `${col},${row},${depth}`);
   for (const b of api.grid.around(col, row, 1)) {
     strike(api, b, pct, SRC('fire_explosion', { depth }));
   }
@@ -56,6 +56,8 @@ export const handlers = {
 
   fire_burn(api) {
     const color = api.mgr.color('fire');
+    // 화상 블록 위에 작은 불꽃이 계속 일렁임
+    api.fx.burnAmbient(() => api.grid.blocks().filter((b) => b.burn).map((b) => ({ x: cx(api, b), y: cy(api, b) })), color);
     api.bus.on(EV.AFTER_HIT, ({ cell, source, killed }) => {
       if (isBallHit(source) && !killed) addBurn(api, cell, 1);
     });
@@ -66,7 +68,7 @@ export const handlers = {
         const { stacks } = b.burn;
         b.burn.turns--;
         if (b.burn.turns <= 0) { b.burn = null; b.labelColor = null; }
-        api.fx.emit('burn', cx(api, b), cy(api, b), color);
+        api.fx.burnTick(cx(api, b), cy(api, b), color);
         strike(api, b, v.dmgPct * stacks, SRC('fire_burn')); // 살아남으면 표시도 갱신됨
       }
     });
@@ -98,7 +100,7 @@ export const handlers = {
     api.bus.on(EV.BALL_RETURN, ({ last }) => {
       if (!last) return;
       for (const b of api.grid.lowestRow()) {
-        api.fx.emit('explosion', cx(api, b), cy(api, b), color);
+        api.fx.explosion(cx(api, b), cy(api, b), color);
         strike(api, b, aug.v.dmgPct, SRC('fire_flameReturn'));
       }
     });

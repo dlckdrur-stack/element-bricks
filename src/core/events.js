@@ -16,7 +16,7 @@ import Phaser from 'phaser';
  * onAugment   { aug }                    ← 증강을 고른 직후
  * onGameOver  { stage, best, newBest }
  *
- * source 형식: { type:'ball'|'fire'|'lightning', ball?, crit?, aug?, depth? }
+ * source 형식: { type:'ball'|'fire'|'lightning', ball?, crit?, pierce?, aug?, depth? }
  */
 export const EV = Object.freeze({
   HIT: 'onHit',

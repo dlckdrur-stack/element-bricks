@@ -1,6 +1,8 @@
 import { EV } from './events.js';
 import { Pool } from './Pool.js';
 import { hex } from './color.js';
+import { OrbLook } from '../fx/OrbLook.js';
+import { t } from '../ui/i18n.js';
 
 /**
  * 7열 격자. 칸 = null | cell
@@ -8,7 +10,7 @@ import { hex } from './color.js';
  * 충돌 검사는 query()로 공 근처 칸만 본다.
  */
 export class Grid {
-  constructor(scene, { bus, layout, theme, balance }) {
+  constructor(scene, { bus, layout, theme, balance, fxCfg }) {
     this.scene = scene;
     this.bus = bus;
     this.theme = theme;
@@ -32,10 +34,10 @@ export class Grid {
       rect: scene.add.rectangle(0, 0, this.cellW - this.pad * 2, this.cellH - this.pad * 2).setDepth(10),
       label: scene.add.text(0, 0, '', fontStyle).setOrigin(0.5).setDepth(11),
     }), (v) => { v.rect.setVisible(false); v.label.setVisible(false); });
-    this.orbPool = new Pool(
-      () => scene.add.circle(0, 0, this.orbR).setDepth(12),
-      (o) => o.setVisible(false),
-    );
+    this.orbLook = new OrbLook(scene, {
+      cfg: fxCfg.ui.orb, color: hex(theme.orb), radius: this.orbR, fontFamily: theme.fontFamily,
+      label: t('orb.label', { n: balance.orb.damageGain }),
+    });
   }
 
   // ---------- 좌표 ----------
@@ -192,7 +194,7 @@ export class Grid {
     if (!cell.view) return;
     this.scene.tweens.killTweensOf(this.viewTargets(cell));
     if (cell.kind === 'block') this.blockPool.release(cell.view);
-    else this.orbPool.release(cell.view);
+    else this.orbLook.release(cell.view);
     cell.view = null;
   }
 
@@ -229,17 +231,15 @@ export class Grid {
   }
 
   showOrb(cell) {
-    const o = this.orbPool.get();
+    const o = this.orbLook.get();
     cell.view = o;
     cell.color = hex(this.theme.orb);
-    o.setVisible(true).setAlpha(1).setScale(1);
-    o.setFillStyle(cell.color, 0.25).setStrokeStyle(3, cell.color, 1);
-    o.setPosition(this.centerX(cell.col), this.centerY(cell.row));
+    o.root.setPosition(this.centerX(cell.col), this.centerY(cell.row));
   }
 
   viewTargets(cell) {
     if (!cell.view) return [];
-    return cell.kind === 'block' ? [cell.view.rect, cell.view.label] : [cell.view];
+    return cell.kind === 'block' ? [cell.view.rect, cell.view.label] : [cell.view.root];
   }
 
   moveView(cell) {

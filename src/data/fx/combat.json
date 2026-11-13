@@ -1,0 +1,76 @@
+{
+  "_doc": "스프라이트 효과 {frame, from, to(64px 기준 배율), life(초), alpha, ease: out|in|linear}. 선 굵기는 px. shake: small|mid|big|huge. hitstop: default.json juice.hitstop 키.",
+
+  "blockHit": { "particles": "blockHit" },
+  "crit": { "particles": "crit", "shake": "small", "hitstop": "big" },
+  "blockBreak": {
+    "particles": "shard",
+    "outline": { "frame": "box", "color": "#ffffff", "from": 1.0, "to": 1.22, "life": 0.17, "alpha": 1, "ease": "out" },
+    "glow": { "frame": "glow", "from": 1.2, "to": 2.0, "life": 0.16, "alpha": 0.7, "ease": "out" }
+  },
+
+  "explosion": {
+    "ring": { "frame": "ring", "color": "#ff9a3c", "from": 0.4, "to": 3.6, "life": 0.34, "alpha": 1, "ease": "out" },
+    "ring2": { "frame": "ring", "color": "#ffd28a", "from": 0.2, "to": 2.4, "life": 0.22, "alpha": 0.8, "ease": "out" },
+    "core": { "frame": "glow", "color": "#ffe1a8", "from": 1.0, "to": 3.0, "life": 0.2, "alpha": 0.95, "ease": "out" },
+    "particles": ["explosionCore", "ember", "smoke"],
+    "shake": "small",
+    "chainShake": "mid"
+  },
+  "burn": { "interval": 0.11, "particle": "burnFlame", "chance": 0.55, "tick": "burnTick" },
+  "fireball": { "trail": "fireballTail" },
+
+  "chain": {
+    "life": 0.1, "redraw": 0.025, "segLen": 16, "jitter": 9,
+    "coreWidth": 2, "coreColor": "#ffffff",
+    "outerWidth": 6, "outerAlpha": 0.9,
+    "glowWidth": 15, "glowAlpha": 0.22,
+    "dimAlpha": 0.35, "dimChance": 0.35,
+    "spark": "chainSpark"
+  },
+  "bolt": {
+    "life": 0.14, "redraw": 0.03, "segLen": 22, "jitter": 14,
+    "coreWidth": 3, "coreColor": "#ffffff",
+    "outerWidth": 8, "outerAlpha": 0.9,
+    "glowWidth": 20, "glowAlpha": 0.25,
+    "dimAlpha": 0.35, "dimChance": 0.3,
+    "particles": "strike",
+    "ring": { "frame": "ring", "from": 0.3, "to": 1.8, "life": 0.22, "alpha": 0.9, "ease": "out" }
+  },
+  "pierce": {
+    "particles": "pierceBurst",
+    "ring": { "frame": "ring", "from": 0.3, "to": 1.2, "life": 0.14, "alpha": 0.9, "ease": "out" },
+    "core": { "frame": "glow", "color": "#ffffff", "from": 0.8, "to": 1.6, "life": 0.1, "alpha": 0.9, "ease": "out" }
+  },
+
+  "railCharge": {
+    "radius": 2.3, "width": 3, "backAlpha": 0.18, "linger": 0.9, "glowWidth": 8, "glowAlpha": 0.3,
+    "full": { "frame": "ring", "color": "#ffffff", "from": 0.6, "to": 2.2, "life": 0.18, "alpha": 1, "ease": "out" }
+  },
+  "railgun": {
+    "hitstop": "railgun", "flash": "rail", "shake": "big", "sound": "railgun",
+    "hold": 0.08, "fade": 0.2,
+    "coreWidth": 4, "coreColor": "#ffffff",
+    "midWidth": 12, "midAlpha": 1,
+    "outerWidth": 34, "outerAlpha": 0.32, "outerColor": "#ffc400",
+    "edgeJitter": 3.5, "segLen": 12,
+    "crackles": 4, "crackleLen": 46, "crackleJitter": 10,
+    "spark": "railSpark", "sparkSpacing": 16,
+    "muzzle": { "particles": "railMuzzle", "glow": { "frame": "glow", "color": "#ffffff", "from": 1.4, "to": 3.2, "life": 0.18, "alpha": 1, "ease": "out" } },
+    "hit": {
+      "particles": "railHit",
+      "ring": { "frame": "ring", "from": 0.3, "to": 1.9, "life": 0.26, "alpha": 1, "ease": "out" },
+      "core": { "frame": "glow", "color": "#fff6b0", "from": 0.8, "to": 2.0, "life": 0.16, "alpha": 0.9, "ease": "out" }
+    },
+    "focusLines": { "life": 0.15, "count": 30, "inner": 0.6, "width": 7, "alpha": 0.75, "color": "#ffffff", "redraw": 0.03 }
+  },
+
+  "orb": {
+    "ring": { "frame": "ring", "from": 0.5, "to": 2.6, "life": 0.32, "alpha": 1, "ease": "out" },
+    "core": { "frame": "glow", "from": 1.0, "to": 2.2, "life": 0.18, "alpha": 0.9, "ease": "out" },
+    "particles": "orbBurst",
+    "text": { "fontSize": 34, "color": "#ffd740", "rise": 70, "life": 0.6, "popScale": 1.7 },
+    "hudPop": { "scale": 1.5, "time": 110 },
+    "sound": "orb"
+  }
+}

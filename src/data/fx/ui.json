@@ -1,0 +1,52 @@
+{
+  "_doc": "레벨업·증강 카드·각성·데미지 구슬 연출. 시간은 초, 각도는 도.",
+
+  "levelUp": {
+    "slowmo": { "time": 0.3, "scale": 0.2 },
+    "dimAlpha": 0.72, "dimTime": 0.25,
+    "blur": { "offQualities": ["low"], "quality": 1, "x": 2, "y": 2, "strength": 1.6, "steps": 4, "time": 0.3 },
+    "text": { "y": 300, "fontSize": 84, "color": "#ffffff", "stroke": "#7cf8ff", "strokeWidth": 6,
+              "popFrom": 0.2, "popTo": 1.3, "popTime": 0.16, "settleTime": 0.1, "hold": 0.22, "rise": 140, "fadeTime": 0.34 },
+    "titleDelay": 0.3, "titleFadeTime": 0.2
+  },
+
+  "cards": {
+    "startDelay": 0.25, "stagger": 0.08, "flyTime": 0.32, "flyFrom": 600, "flipTime": 0.14, "flipDelay": 0.04,
+    "radius": 12, "borderWidth": 4, "glowPad": 26, "backColor": "#1a1840", "backMarkSize": 54,
+    "hoverScale": 1.05, "hoverTime": 0.1, "tilt": 3.5,
+    "glowAlpha": { "none": 0.3, "silver": 0.38, "gold": 0.55, "prism": 0.65 },
+    "glowPulse": { "speed": 2.2, "amount": 0.25 },
+    "silver": { "color": "#ffffff", "innerAlpha": 0.6 },
+    "gold": { "glintSpeed": 0.55, "glintLen": 0.1, "glintWidth": 7, "glintColor": "#fff6c8", "sparkleEvery": 0.18 },
+    "prism": { "segments": 56, "hueSpeed": 0.35, "saturation": 1, "lightness": 0.62, "sparkleEvery": 0.1,
+               "appearFlash": "prism", "appearStars": "prismStar", "appearShake": "mid", "sound": "prismAppear" },
+    "select": {
+      "centerTime": 0.22, "scale": 1.15, "centerY": 480,
+      "burstRing": { "frame": "ring", "from": 0.6, "to": 7.0, "life": 0.45, "alpha": 1, "ease": "out" },
+      "burstGlow": { "frame": "glow", "from": 3.0, "to": 9.0, "life": 0.35, "alpha": 0.85, "ease": "out" },
+      "stars": "cardStar",
+      "scatterTime": 0.32, "scatterDist": 420, "scatterAngle": 35,
+      "hold": 0.16, "absorbTime": 0.34, "absorbScale": 0.04, "trail": "cardTrail",
+      "arriveRing": { "frame": "ring", "from": 0.4, "to": 2.8, "life": 0.3, "alpha": 1, "ease": "out" },
+      "arriveFlame": "pickFlame",
+      "sound": "cardPick"
+    }
+  },
+
+  "awaken": {
+    "flash": "awaken", "hitstop": "awaken", "shake": "big", "sound": "awaken",
+    "burst": ["awakenBurst", "awakenGlow"],
+    "ring": { "frame": "ring", "from": 0.5, "to": 6.0, "life": 0.5, "alpha": 1, "ease": "out" },
+    "ring2": { "frame": "ring", "color": "#ffffff", "from": 0.3, "to": 3.5, "life": 0.35, "alpha": 1, "ease": "out" },
+    "cutin": { "y": 430, "bandH": 132, "bandAlpha": 0.78, "bandColor": "#05050c", "lineH": 4,
+               "fontSize": 66, "subSize": 22, "nameStroke": "#ffffff", "nameStrokeWidth": 3, "subColor": "#ffffff", "slideTime": 0.16, "time": 1.0, "depth": 80 }
+  },
+
+  "orb": {
+    "labelSize": 20, "labelColor": "#ffffff",
+    "bodyAlpha": 0.28, "stroke": 3,
+    "glowScale": 1.4, "glowAlpha": 0.35,
+    "bobAmp": 3.5, "bobTime": 900,
+    "ringFrom": 0.5, "ringTo": 0.68, "ringAlphaFrom": 0.9, "ringAlphaTo": 0.25, "pulseTime": 620
+  }
+}

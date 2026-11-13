@@ -4,6 +4,7 @@ import { hex } from '../core/color.js';
 /** 상단 정보(스테이지·데미지·최고·레벨·경험치 바)·발사대 공 개수·FPS·배속·조준 안내 */
 export class Hud {
   constructor(scene, { layout, theme }) {
+    this.scene = scene;
     const f = theme.fontFamily;
     const fs = layout.fontSize;
     const h = layout.hud;
@@ -41,6 +42,14 @@ export class Hud {
     this.stage.setText(t('hud.stage', { n: stage }));
     this.damage.setText(t('hud.damage', { n: Math.round(damage * 10) / 10 }));
     this.best.setText(t('hud.best', { n: best }));
+  }
+
+  /** 구슬을 먹었을 때 공 데미지 숫자가 통 튀며 커졌다 돌아옴. c = { scale, time(ms) } */
+  popDamage(c) {
+    const d = this.damage;
+    this.scene.tweens.killTweensOf(d);
+    d.setScale(1);
+    this.scene.tweens.add({ targets: d, scale: c.scale, duration: c.time, yoyo: true, ease: 'Back.easeOut' });
   }
 
   setLevel(level, progress, isMax, color) {
