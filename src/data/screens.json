@@ -1,10 +1,17 @@
 {
   "fadeMs": 220,
-  "button": { "fill": 0.16, "stroke": 3, "pressScale": 0.94, "pressMs": 70, "disabledAlpha": 0.35 },
+  "button": { "fill": 0.16, "stroke": 3, "pressScale": 0.94, "pressMs": 70, "disabledAlpha": 0.35, "glowPad": 10, "glowWidth": 6, "glowAlpha": 0.22, "shineInset": 6, "shineAlpha": 0.35, "cornerLen": 14, "cornerWidth": 3, "cornerAlpha": 0.9, "textGlow": 10 },
   "corner": { "pad": 20, "y": 34 },
   "menu": {
-    "titleY": 220,
-    "subtitleY": 284,
+    "titleY": 200,
+    "titleSize": 54,
+    "titleGlow": 22,
+    "subtitleY": 256,
+    "subtitleSize": 15,
+    "subtitleSpacing": 3,
+    "descY": 300,
+    "descSize": 15,
+    "ring": { "r": 150, "orb": 84, "hexR": 128, "spinSec": 24, "alpha": 0.55 },
     "buttonsY": 450,
     "buttonW": 340,
     "buttonH": 78,
@@ -14,7 +21,7 @@
     "introOffsetY": 60,
     "bgBall": { "element": "fire", "speed": 2.4, "radius": 16, "margin": 30 }
   },
-  "panel": { "titleY": 90, "backY": 890, "backW": 260, "backH": 70, "bodyY": 440 },
+  "panel": { "titleGlow": 14, "lineGap": 34, "lineW": 200, "titleY": 90, "backY": 890, "backW": 260, "backH": 70, "bodyY": 440 },
   "result": {
     "titleY": 230,
     "stageY": 350,

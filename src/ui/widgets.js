@@ -9,6 +9,11 @@ export function style(size, color = theme.text, bold = false) {
   return { fontFamily: theme.fontFamily, fontSize: `${size}px`, fontStyle: bold ? 'bold' : 'normal', color };
 }
 
+/** 굵은 제목용 글꼴 (한글 Black Han Sans, 영문·숫자 Orbitron 은 font: 'title') */
+export function styleD(size, color = theme.text, font = 'display') {
+  return { fontFamily: font === 'title' ? theme.titleFont : theme.displayFont, fontSize: `${size}px`, color };
+}
+
 /** 1234567 → "1,234,567" */
 export function fmtNum(n) {
   return Math.floor(n).toLocaleString();
@@ -27,9 +32,11 @@ export function fmtShort(n) {
 export function makeButton(scene, x, y, text, { w, h, color = theme.button, size = layout.fontSize.body, onClick, depth = 0 }) {
   const c = screens.button;
   const col = hex(color);
+  const glow = scene.add.rectangle(0, 0, w + c.glowPad, h + c.glowPad, col, 0).setStrokeStyle(c.glowWidth, col, c.glowAlpha);
   const bg = scene.add.rectangle(0, 0, w, h, col, c.fill).setStrokeStyle(c.stroke, col);
-  const label = scene.add.text(0, 0, text, style(size, theme.text, true)).setOrigin(0.5);
-  const box = scene.add.container(x, y, [bg, label]).setDepth(depth);
+  const shine = scene.add.rectangle(0, -h / 2 + c.shineInset, w - c.shineInset * 4, 2, 0xffffff, c.shineAlpha);
+  const label = scene.add.text(0, 0, text, styleD(size)).setOrigin(0.5).setShadow(0, 0, color, c.textGlow, false, true);
+  const box = scene.add.container(x, y, [glow, bg, shine, cornerMarks(scene, w, h, c), label]).setDepth(depth);
   box.bg = bg;
   box.label = label;
   box.enabled = true;
@@ -52,6 +59,19 @@ export function makeButton(scene, x, y, text, { w, h, color = theme.button, size
   return box;
 }
 
+/** 버튼 네 귀퉁이의 하얀 꺾쇠 */
+function cornerMarks(scene, w, h, c) {
+  const g = scene.add.graphics();
+  g.lineStyle(c.cornerWidth, 0xffffff, c.cornerAlpha);
+  const L = Math.min(c.cornerLen, h / 3);
+  for (const [sx, sy] of [[-1, -1], [1, -1], [1, 1], [-1, 1]]) {
+    const x = (sx * w) / 2;
+    const y = (sy * h) / 2;
+    g.beginPath(); g.moveTo(x - sx * L, y); g.lineTo(x, y); g.lineTo(x, y - sy * L); g.strokePath();
+  }
+  return g;
+}
+
 /** 화면 전환: 어둡게 사라졌다가 다음 씬 시작 */
 export function goTo(scene, key, data) {
   if (scene.leaving) return;
@@ -72,7 +92,11 @@ export function fadeIn(scene) {
 export function makePanel(scene, titleKey, backKey = 'Menu', onBack = null) {
   const p = screens.panel;
   const W = layout.width;
-  scene.add.text(W / 2, p.titleY, t(titleKey), style(layout.fontSize.title * 0.7, theme.accent, true)).setOrigin(0.5);
+  scene.add.text(W / 2, p.titleY, t(titleKey), styleD(layout.fontSize.title * 0.7, theme.text)).setOrigin(0.5)
+    .setShadow(0, 0, theme.accent, p.titleGlow, false, true);
+  const lineY = p.titleY + p.lineGap;
+  scene.add.rectangle(W / 2, lineY, p.lineW, 3, hex(theme.accent)); // 제목 밑줄 + 양끝 마름모
+  for (const s of [-1, 1]) scene.add.rectangle(W / 2 + (s * p.lineW) / 2, lineY, 9, 9, hex(theme.accent)).setAngle(45);
   makeButton(scene, W / 2, p.backY, t('common.back'), {
     w: p.backW, h: p.backH, color: theme.hudText, onClick: () => (onBack ? onBack() : goTo(scene, backKey)),
   });

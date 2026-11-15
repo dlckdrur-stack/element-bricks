@@ -25,8 +25,9 @@
   "common.comingSoon": "준비 중입니다",
   "meta.currency": "💰 {n}",
 
-  "menu.title": "원소 벽돌깨기",
-  "menu.subtitle": "원소를 깨우고 끝까지 버텨라",
+  "menu.title": "HEXASHARD",
+  "menu.subtitle": "SIX ELEMENTS · ONE BALL · BREAK IT ALL",
+  "menu.desc": "Awaken elemental powers, chain wild combos,\nand hold the line against the endless descent.",
   "menu.continue": "이어하기",
   "menu.start": "스테이지 시작",
   "menu.upgrade": "강화",

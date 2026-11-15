@@ -9,21 +9,22 @@ export class Hud {
     const f = theme.fontFamily;
     const fs = layout.fontSize;
     const h = layout.hud;
-    const big = { fontFamily: f, fontSize: `${fs.hud}px`, fontStyle: 'bold', color: theme.text };
-    const sub = { fontFamily: f, fontSize: `${fs.hud}px`, fontStyle: 'bold', color: theme.hudText };
+    const big = { fontFamily: theme.displayFont, fontSize: `${fs.hud}px`, color: theme.text };
+    const sub = { fontFamily: theme.displayFont, fontSize: `${fs.hud}px`, color: theme.hudText };
     const small = { fontFamily: f, fontSize: `${fs.small}px`, color: theme.hudText };
     const W = layout.width;
     const D = 40;
 
     scene.add.rectangle(W / 2, layout.hudHeight / 2, W, layout.hudHeight, hex(theme.hudBackground)).setDepth(D - 1);
-    scene.add.rectangle(W / 2, layout.hudHeight, W, 2, hex(theme.floor), 0.35).setDepth(D - 1);
+    scene.add.rectangle(W / 2, layout.hudHeight, W, 2, hex(theme.floor), 0.6).setDepth(D - 1);
+    scene.add.rectangle(W / 2, layout.hudHeight + 3, W, 6, hex(theme.floor), 0.12).setDepth(D - 1); // 아래 빛 번짐
 
     this.stage = scene.add.text(16, h.row1Y, '', big).setOrigin(0, 0.5).setDepth(D);
     this.damage = scene.add.text(W / 2, h.row1Y, '', { ...big, color: theme.orb }).setOrigin(0.5).setDepth(D);
     this.best = scene.add.text(W - 16, h.row1Y, '', sub).setOrigin(1, 0.5).setDepth(D);
 
     // 레벨 + 경험치 바
-    this.level = scene.add.text(16, h.row2Y, '', { ...small, fontStyle: 'bold', color: theme.text })
+    this.level = scene.add.text(16, h.row2Y, '', { ...small, fontFamily: theme.titleFont, fontStyle: 'bold', color: theme.text })
       .setOrigin(0, 0.5).setDepth(D);
     this.barX = h.barX;
     this.barW = W - h.barX - 24 - h.pauseW;
@@ -36,6 +37,8 @@ export class Hud {
     this.bar = scene.add.rectangle(this.barX, h.row2Y, this.barW, h.barH, hex(theme.xpBar))
       .setOrigin(0, 0.5).setDepth(D + 1);
     this.bar.scaleX = 0;
+    this.barShine = scene.add.rectangle(this.barX, h.row2Y - h.barH / 4, this.barW, 2, 0xffffff, 0.45).setOrigin(0, 0.5).setDepth(D + 2);
+    this.barShine.scaleX = 0;
 
     this.fps = scene.add.text(8, layout.height - 8, '', small).setOrigin(0, 1).setDepth(D);
     this.speed = scene.add.text(W - 8, layout.height - 8, '', { ...small, color: theme.accent }).setOrigin(1, 1).setDepth(D);
@@ -68,6 +71,7 @@ export class Hud {
   setLevel(level, progress, isMax, color) {
     this.level.setText(t(isMax ? 'hud.levelMax' : 'hud.level', { n: level }));
     this.bar.scaleX = progress;
+    this.barShine.scaleX = this.bar.scaleX;
     if (color !== undefined) this.bar.setFillStyle(color);
   }
 

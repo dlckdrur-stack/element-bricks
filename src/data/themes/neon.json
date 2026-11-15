@@ -21,6 +21,25 @@
   "frozen": "#bff4ff",
   "blockFillAlpha": 0.22,
   "blockStroke": 3,
-  "blockColors": ["#00e5ff", "#2979ff", "#39ff14", "#ffea00", "#ff9100", "#ff1744", "#ff4dff"],
-  "fontFamily": "system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans KR', sans-serif"
+  "blockColors": [
+    "#00e5ff",
+    "#2979ff",
+    "#39ff14",
+    "#ffea00",
+    "#ff9100",
+    "#ff1744",
+    "#ff4dff"
+  ],
+  "fontFamily": "system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans KR', sans-serif",
+  "displayFont": "'Black Han Sans', system-ui, 'Noto Sans KR', sans-serif",
+  "titleFont": "Orbitron, 'Black Han Sans', sans-serif",
+  "elementColors": [
+    "#ff7a1a",
+    "#ffe14a",
+    "#b45cff",
+    "#8fe9ff",
+    "#c98a4b",
+    "#5dff7a"
+  ],
+  "titleGlow": "#ff4dff"
 }

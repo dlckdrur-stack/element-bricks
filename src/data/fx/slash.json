@@ -1,0 +1,42 @@
+{
+  "note": "애니메이션풍 타격: 붓질 초승달 베기(slash) + 방사형 속도선(streak) + 불꽃 꽃잎(flame). follow = 한 번 뽑은 방향 기준 rot 만큼 돌림, count = 여러 장(follow 면 360도에 고르게), spin = 사는 동안 도는 각도",
+  "common": [
+    { "frame": "glow", "from": 0.6, "to": 1.8, "life": 0.1, "alpha": 0.9, "ease": "out", "hot": true },
+    { "frame": "slash", "w": 150, "h": 150, "from": 0.5, "to": 1.2, "life": 0.2, "alpha": 1, "ease": "out", "follow": true, "spin": 80 },
+    { "frame": "slash", "w": 122, "h": 122, "from": 0.5, "to": 1.15, "life": 0.13, "alpha": 1, "ease": "out", "follow": true, "spin": 80, "hot": true },
+    { "frame": "streak", "w": 120, "h": 14, "from": 0.3, "to": 1.3, "life": 0.14, "alpha": 1, "ease": "out", "randRot": true, "count": 4, "hot": true }
+  ],
+  "byElement": {
+    "fire": [
+      { "frame": "flame", "w": 84, "h": 124, "from": 0.4, "to": 1.4, "life": 0.3, "alpha": 0.95, "ease": "out" },
+      { "frame": "flame", "w": 50, "h": 80, "from": 0.4, "to": 1.3, "life": 0.22, "alpha": 1, "ease": "out", "hot": true },
+      { "frame": "flame", "w": 34, "h": 56, "from": 0.3, "to": 1.5, "life": 0.26, "alpha": 0.9, "ease": "out", "follow": true, "count": 5 }
+    ],
+    "lightning": [
+      { "frame": "streak", "w": 150, "h": 16, "from": 0.3, "to": 1.4, "life": 0.12, "alpha": 1, "ease": "out", "randRot": true, "count": 5 }
+    ],
+    "ice": [
+      { "frame": "slash", "w": 136, "h": 136, "from": 0.5, "to": 1.15, "life": 0.22, "alpha": 0.9, "ease": "out", "follow": true, "rot": 180, "spin": 80 },
+      { "frame": "shard", "w": 26, "h": 26, "from": 0.5, "to": 1.8, "life": 0.22, "alpha": 1, "ease": "out", "follow": true, "count": 6, "spin": 140, "hot": true }
+    ],
+    "dark": [
+      { "frame": "slash", "w": 166, "h": 166, "from": 0.5, "to": 1.2, "life": 0.22, "alpha": 1, "ease": "out", "follow": true, "rot": 90, "spin": -70 }
+    ],
+    "earth": [
+      { "frame": "ring", "from": 0.4, "to": 2.6, "life": 0.22, "alpha": 0.9, "ease": "out" },
+      { "frame": "rock", "w": 22, "h": 22, "from": 0.6, "to": 1.6, "life": 0.24, "alpha": 1, "ease": "out", "follow": true, "count": 5, "spin": 200 }
+    ],
+    "grass": [
+      { "frame": "leaf", "w": 42, "h": 24, "from": 0.5, "to": 1.7, "life": 0.3, "alpha": 0.95, "ease": "out", "follow": true, "count": 6, "spin": 140 }
+    ]
+  },
+  "crit": [
+    { "frame": "slash", "w": 210, "h": 210, "from": 0.5, "to": 1.3, "life": 0.22, "alpha": 1, "ease": "out", "follow": true, "spin": 100, "hot": true },
+    { "frame": "slash", "w": 210, "h": 210, "from": 0.5, "to": 1.3, "life": 0.22, "alpha": 1, "ease": "out", "follow": true, "rot": 180, "spin": 100 },
+    { "frame": "streak", "w": 180, "h": 18, "from": 0.3, "to": 1.4, "life": 0.16, "alpha": 1, "ease": "out", "follow": true, "count": 8, "hot": true }
+  ],
+  "kill": [
+    { "frame": "slash", "w": 124, "h": 124, "from": 0.6, "to": 1.3, "life": 0.18, "alpha": 1, "ease": "out", "follow": true, "spin": 60, "hot": true },
+    { "frame": "streak", "w": 104, "h": 12, "from": 0.3, "to": 1.3, "life": 0.14, "alpha": 0.9, "ease": "out", "randRot": true, "count": 5 }
+  ]
+}

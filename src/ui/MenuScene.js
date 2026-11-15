@@ -8,7 +8,8 @@ import { getProfile } from '../meta/save.js';
 import { hasRun } from '../meta/runSave.js';
 import { applyFxSettings } from '../meta/settings.js';
 import { MenuBall } from './MenuBall.js';
-import { makeButton, makeCorner, goTo, fadeIn, style } from './widgets.js';
+import { makeButton, makeCorner, goTo, fadeIn } from './widgets.js';
+import { makeMenuTitle } from './MenuTitle.js';
 import { t } from './i18n.js';
 
 /**
@@ -30,10 +31,7 @@ export class MenuScene extends Phaser.Scene {
     makeCorner(this, profile);
     const rb = screens.rankButton;
     makeButton(this, rb.x, rb.y, t('rank.icon'), { w: rb.w, h: rb.h, size: layout.fontSize.cardDesc, color: theme.currency, onClick: () => goTo(this, 'Ranking'), depth: 30 });
-    this.add.text(W / 2, m.titleY, t('menu.title'), style(layout.fontSize.title, theme.text, true))
-      .setOrigin(0.5).setDepth(30);
-    this.add.text(W / 2, m.subtitleY, t('menu.subtitle'), style(layout.fontSize.body, theme.hudText))
-      .setOrigin(0.5).setDepth(30);
+    makeMenuTitle(this, 30);
 
     const items = [];
     if (hasRun()) {

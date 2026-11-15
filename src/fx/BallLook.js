@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { hex } from '../core/color.js';
+import { hex, mix } from '../core/color.js';
 import { FRAME } from './atlas.js';
 
 const ADD = Phaser.BlendModes.ADD;
@@ -7,7 +7,7 @@ const HALF = FRAME / 2;
 const R2D = 180 / Math.PI;
 
 /**
- * 공 겉모습: 또렷한 흰 공(disc) + 속성색 빛(aura, 일렁임 없음) + 튀는 불티 + 꼬리 잔상.
+ * 공 겉모습: 메인 원소 색 공(disc) + 하얀 심지(hot) + 속성색 빛(aura, 일렁임 없음) + 튀는 불티 + 꼬리 잔상.
  * 뇌격 관통이 있으면 전기 갑옷 스파크가 계속 튐(링 테두리는 없음).
  * state.ballFx = AugmentManager.ballFx ({ color, trail, auraScale, spark, armor, armorColor … })
  * 수치는 default.json 의 ball.
@@ -28,18 +28,18 @@ export class BallLook {
     const s = this.scene;
     return {
       aura: s.add.image(0, 0, 'fx', 'glow').setBlendMode(ADD).setDepth(19), // 속성색 빛 (일렁임 없음)
-      core: s.add.image(0, 0, 'fx', 'disc').setDepth(20),                   // 또렷한 흰 공
+      core: s.add.image(0, 0, 'fx', 'disc').setDepth(20),                   // 메인 원소 색 공
+      hot: s.add.image(0, 0, 'fx', 'core').setDepth(21),                    // 하얀 심지
       r: 9,
     };
   }
 
-  layers(v) { return [v.aura, v.core]; }
+  layers(v) { return [v.aura, v.core, v.hot]; }
 
   hide(v) { for (const o of this.layers(v)) o.setVisible(false); }
 
   setVisible(v, on) {
-    v.core.setVisible(on);
-    v.aura.setVisible(on);
+    for (const o of this.layers(v)) o.setVisible(on);
   }
 
   /** 속성·크기 반영 (발사 때와 증강을 고른 직후) */
@@ -48,7 +48,8 @@ export class BallLook {
     v.r = r;
     this.setVisible(v, true);
     v.aura.setTint(bfx ? bfx.color : this.defaultColor);
-    v.core.setScale((r * 2 * this.c.core.scale) / (FRAME - 3)).setTint(0xffffff);
+    v.core.setScale((r * 2 * this.c.core.scale) / (FRAME - 3)).setTint(bfx ? mix(0xffffff, bfx.color, this.c.core.tint) : 0xffffff);
+    v.hot.setScale((r * 2 * this.c.core.hot) / (FRAME - 3)).setTint(0xffffff);
     this.animate(v);
     return v;
   }
@@ -56,6 +57,7 @@ export class BallLook {
   place(v, x, y) {
     v.aura.setPosition(x, y);
     v.core.setPosition(x, y);
+    v.hot.setPosition(x, y);
   }
 
   /** 구슬을 먹을수록 커지는 불꽃 */

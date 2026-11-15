@@ -4,7 +4,7 @@ import theme from '../data/themes/neon.json';
 import screens from '../data/screens.json';
 import { hex } from '../core/color.js';
 import { applyFxSettings, getSettings } from '../meta/settings.js';
-import { makeButton, style, fmtShort } from './widgets.js';
+import { makeButton, style, styleD, fmtShort } from './widgets.js';
 import { t } from './i18n.js';
 
 /**
@@ -19,7 +19,7 @@ export class PauseScene extends Phaser.Scene {
     const W = layout.width;
     const H = layout.height;
     this.add.rectangle(W / 2, H / 2, W, H, hex(theme.overlay), P.dim).setInteractive();
-    this.add.text(W / 2, P.titleY, t('pause.title'), style(layout.fontSize.title * 0.75, theme.text, true)).setOrigin(0.5);
+    this.add.text(W / 2, P.titleY, t('pause.title'), styleD(layout.fontSize.title * 0.75)).setOrigin(0.5).setShadow(0, 0, theme.accent, 14, false, true);
     this.showStats(P);
     const items = [
       { key: 'pause.resume', color: theme.buttonPrimary, go: () => this.resume() },

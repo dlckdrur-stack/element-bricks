@@ -1,3 +1,7 @@
+import slash from '../data/fx/slash.json';
+
+const TAU = Math.PI * 2;
+
 /**
  * 전투 연출 레시피. Fx 에 메서드로 붙는다 (this = Fx).
  * 무엇을 몇 개·어떤 크기로 그릴지는 전부 data/fx/combat.json.
@@ -13,6 +17,7 @@ export const combat = {
         const col = this.critColor ??= parseInt(c.crit.color.slice(1), 16);
         this.sprites.play(c.crit.flash, x, y, col);
         this.sprites.play(c.crit.star, x, y, col);
+        this.playSet(slash.crit, x, y, col, 0xffffff, 2); // X자 큰 베기 + 사방 속도선
       }
       this.juice.shake(c.crit.shake);
       this.juice.hitstop(c.crit.hitstop);
@@ -30,12 +35,27 @@ export const combat = {
     const color = this.colorOf(e.color);
     const hot = this.colorOf(e.hot);
     if (e.bolt) this.lines.bolt(x + (Math.random() - 0.5) * e.bolt.jitterX, y - e.bolt.height, x, y, color, e.bolt);
-    for (const sp of e.sprites) {
-      const rot = sp.randRot ? Math.random() * Math.PI : ((sp.rot ?? 0) * Math.PI) / 180;
-      this.sprites.play(sp, x, y, sp.hot ? hot : color, { priority: 1, rot, w: sp.w, h: sp.h });
-    }
+    this.playSet(slash.common, x, y, color, hot); // 붓질 베기 + 속도선
+    this.playSet(slash.byElement[element], x, y, color, hot);
+    this.playSet(e.sprites, x, y, color, hot);
     for (const name of e.particles) this.p.emit(name, x, y, color);
     if (e.shake) this.juice.shake(e.shake);
+  },
+
+  /**
+   * 스프라이트 묶음 재생. follow = 이번에 뽑은 방향 + rot, count = 여러 장(follow 면 고르게 펼침), randRot = 각자 무작위
+   */
+  playSet(list, x, y, color, hot, priority = 1) {
+    if (!list) return;
+    const base = Math.random() * TAU;
+    for (const sp of list) {
+      const n = sp.count ?? 1;
+      for (let i = 0; i < n; i++) {
+        const fixed = ((sp.rot ?? 0) * Math.PI) / 180;
+        const rot = sp.randRot ? Math.random() * TAU : sp.follow ? base + fixed + (i * TAU) / n : fixed;
+        this.sprites.play(sp, x, y, sp.hot ? hot : color, { priority, rot, w: sp.w, h: sp.h });
+      }
+    }
   },
 
   colorOf(hexStr) {
@@ -63,6 +83,7 @@ export const combat = {
     this.p.emit(c.particles, x, y, color);
     this.sprites.play(c.outline, x, y, 0xffffff, { w, h });
     this.sprites.play(c.glow, x, y, color, { priority: 1 });
+    this.playSet(slash.kill, x, y, color, 0xffffff); // 마무리 베기
   },
 
   /** 화염 폭발: 주황 충격파 + 솟는 불티 + 연기. depth>0 = 연쇄 폭발(더 세게 흔듦) */

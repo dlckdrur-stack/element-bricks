@@ -8,7 +8,7 @@
   "countMul": { "low": 0.5, "mid": 0.9, "high": 1.3, "ultra": 1.7 },
   "spawnPerFrame": { "low": 40, "mid": 90, "high": 150, "ultra": 220 },
   "priorityCaps": [0.5, 0.85, 1.0],
-  "spriteBudget": { "low": 24, "mid": 48, "high": 80, "ultra": 120 },
+  "spriteBudget": { "low": 40, "mid": 90, "high": 140, "ultra": 200 },
   "lineBudget": { "low": 10, "mid": 20, "high": 32, "ultra": 48 },
 
   "glow": { "offQualities": ["low"], "blurStrength": 1.15, "strength": 1.5, "steps": 4 },
@@ -68,7 +68,7 @@
   },
 
   "ball": {
-    "core": { "scale": 1.2 },
+    "core": { "scale": 1.2, "tint": 0.7, "hot": 0.42 },
     "aura": { "scale": 2.0, "alpha": 0.9, "defaultColor": "#7fe9ff", "defaultAlpha": 0.45 },
     "trail": "trail",
     "elementTrail": "flameTrail",

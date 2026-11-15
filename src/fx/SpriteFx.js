@@ -11,7 +11,7 @@ const EASE = {
 
 /**
  * 한 번 커졌다 사라지는 스프라이트(충격파 링·빛 번쩍·블록 테두리).
- * spec = { frame, color?, from, to, life, alpha, ease }  from/to 는 64px 기준 배율.
+ * spec = { frame, color?, from, to, life, alpha, ease, spin? }  from/to 는 64px 기준 배율.
  * 예산: spriteBudget[quality]. 큰 연출(priority 2)은 상한의 1.5배까지 유지.
  */
 export class SpriteFx {
@@ -44,6 +44,7 @@ export class SpriteFx {
     const e = {
       s, t: 0, life: spec.life ?? 0.2, from: spec.from ?? 1, to: spec.to ?? 2, a: spec.alpha ?? 1,
       ease: EASE[spec.ease] ?? EASE.out, w: (o.w ?? FRAME) * sz, h: (o.h ?? FRAME) * sz,
+      rot: o.rot ?? 0, spin: ((spec.spin ?? 0) * Math.PI) / 180, // spin: 사는 동안 도는 각도
     };
     this.apply(e, 0);
     this.live.push(e);
@@ -53,6 +54,7 @@ export class SpriteFx {
   apply(e, k) {
     const m = e.from + (e.to - e.from) * e.ease(k);
     e.s.setDisplaySize(e.w * m, e.h * m).setAlpha(e.a * (1 - k));
+    if (e.spin) e.s.setRotation(e.rot + e.spin * e.ease(k));
   }
 
   update(dt) {

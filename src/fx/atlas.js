@@ -1,10 +1,10 @@
 /**
  * 이미지 파일 없이 입자 그림을 코드로 그려 텍스처 한 장('fx')에 모은다.
  * 모든 프레임은 64×64, 흰색으로 그리고 tint 로 색을 입힌다(가산 혼합과 함께 사용).
- * 프레임: glow(빛 원) core(공 중심) disc(또렷한 흰 공) blade(칼날) rock(바위) leaf(잎) ember(불티) star(별) shard(파편) line(선) ring(링) box(블록 테두리)
+ * 프레임: slash(붓질 초승달 베기) flame(불꽃 꽃잎, 위가 뾰족) streak(가운데서 바깥으로 뻗는 속도선) glow(빛 원) core(공 중심) disc(또렷한 흰 공) blade(칼날) rock(바위) leaf(잎) ember(불티) star(별) shard(파편) line(선) ring(링) box(블록 테두리)
  */
 export const FRAME = 64;
-const NAMES = ['glow', 'core', 'disc', 'ember', 'star', 'shard', 'line', 'ring', 'box', 'blade', 'rock', 'leaf'];
+const NAMES = ['glow', 'core', 'disc', 'ember', 'star', 'shard', 'line', 'ring', 'box', 'blade', 'rock', 'leaf', 'slash', 'flame', 'streak'];
 
 export function makeFxAtlas(scene) {
   if (scene.textures.exists('fx')) return;
@@ -28,6 +28,50 @@ function radial(ctx, x, y, r, stops) {
 }
 
 const DRAW = {
+  /** 붓으로 그은 초승달 베기 (오른쪽으로 볼록). 한쪽 끝은 옅어지고, 붓결 줄무늬가 있음 */
+  slash(out, S) {
+    const h = S / 2;
+    const cv = document.createElement('canvas'); // 지우기 합성은 시트 전체에 번지므로 따로 그려서 붙임
+    cv.width = S;
+    cv.height = S;
+    const ctx = cv.getContext('2d');
+    ctx.fillStyle = '#fff';
+    ctx.beginPath(); ctx.arc(h, h, h - 2, 0, Math.PI * 2); ctx.fill();
+    ctx.globalCompositeOperation = 'destination-out';
+    ctx.beginPath(); ctx.arc(h - S * 0.17, h, h - 3, 0, Math.PI * 2); ctx.fill();
+    ctx.lineWidth = 1.2;
+    for (let i = 0; i < 5; i++) { // 붓결
+      ctx.strokeStyle = `rgba(0,0,0,${0.35 + (i % 2) * 0.25})`;
+      ctx.beginPath(); ctx.arc(h - S * 0.02 * i, h, h - 4 - i * 1.6, -1.2, 1.2); ctx.stroke();
+    }
+    ctx.globalCompositeOperation = 'destination-in'; // 위쪽 꼬리는 옅게 → 휘두른 느낌
+    const g = ctx.createLinearGradient(0, 0, 0, S);
+    g.addColorStop(0, 'rgba(255,255,255,0.05)');
+    g.addColorStop(0.55, 'rgba(255,255,255,1)');
+    g.addColorStop(1, 'rgba(255,255,255,0.75)');
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, S, S);
+    out.drawImage(cv, 0, 0);
+  },
+  /** 불꽃 꽃잎 (아래가 둥글고 위가 뾰족, 가운데가 밝음) */
+  flame(ctx, S) {
+    const h = S / 2;
+    ctx.beginPath();
+    ctx.moveTo(h, 2);
+    ctx.bezierCurveTo(h + S * 0.12, S * 0.3, h + S * 0.36, S * 0.5, h + S * 0.3, S * 0.74);
+    ctx.bezierCurveTo(h + S * 0.24, S * 0.96, h - S * 0.24, S * 0.96, h - S * 0.3, S * 0.74);
+    ctx.bezierCurveTo(h - S * 0.36, S * 0.5, h - S * 0.12, S * 0.3, h, 2);
+    ctx.fillStyle = radial(ctx, h, S * 0.7, S * 0.5, [[0, 1], [0.5, 0.85], [1, 0.25]]);
+    ctx.fill();
+  },
+  /** 가운데에서 오른쪽 끝으로 뻗는 날카로운 속도선 */
+  streak(ctx, S) {
+    const h = S / 2;
+    ctx.fillStyle = '#fff';
+    ctx.beginPath();
+    ctx.moveTo(h + 4, h); ctx.lineTo(S * 0.8, h - S * 0.05); ctx.lineTo(S - 1, h); ctx.lineTo(S * 0.8, h + S * 0.05);
+    ctx.closePath(); ctx.fill();
+  },
   /** 오른쪽을 향한 칼날: 날 끝이 뾰족하고 손잡이 쪽은 짧은 막대 */
   blade(ctx, S) {
     const h = S / 2;
