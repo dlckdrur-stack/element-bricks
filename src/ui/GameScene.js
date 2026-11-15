@@ -215,6 +215,11 @@ export class GameScene extends Phaser.Scene {
     const color = s.ballFx ? s.ballFx.color : undefined;
     this.hud.setLevel(lv.level, lv.progress, lv.isMax, color);
     this.refreshUlt();
+    const m = this.augments;
+    const pct = m.main ? Math.round(m.focusPct(m.main) * 100) : 0;
+    const pure = Math.round(m.purePct * 100);
+    const txt = !pct ? '' : pure ? t('hud.focusPure', { el: t(`element.${m.main}`), n: pct, p: pure }) : t('hud.focus', { el: t(`element.${m.main}`), n: pct });
+    this.hud.setFocus(txt, m.main ? `#${m.color(m.main).toString(16).padStart(6, '0')}` : null);
   }
 
   /** 필살기 게이지 배지 (타격 수 게이지는 자주 바뀌어서 0.5초마다도 갱신) */

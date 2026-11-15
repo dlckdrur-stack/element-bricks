@@ -36,6 +36,8 @@ export class Hud {
     this.speed = scene.add.text(W - 8, layout.height - 8, '', { ...small, color: theme.accent }).setOrigin(1, 1).setDepth(D);
     this.hint = scene.add.text(W / 2, layout.floorY + 40, t('hint.aim'), small).setOrigin(0.5).setDepth(D);
     this.ballCount = scene.add.text(0, 0, '', small).setOrigin(0.5, 0).setDepth(D);
+    this.focus = scene.add.text(W - 14, fxCfg.ult.badge.y, '', { ...small, fontSize: `${fxCfg.ult.badge.fontSize}px`, fontStyle: 'bold' })
+      .setOrigin(1, 0.5).setDepth(D); // 속성 집중
     const ub = fxCfg.ult.badge; // 필살기 남은 턴 배지
     this.ultCfg = ub;
     this.ult = scene.add.text(ub.x, ub.y, '', { ...small, fontSize: `${ub.fontSize}px`, fontStyle: 'bold' })
@@ -72,6 +74,12 @@ export class Hud {
     const ready = list.some(near);
     this.ult.setColor(ready ? theme.currency : theme.hudText);
     this.ult.setScale(ready ? this.ultCfg.readyScale : 1);
+  }
+
+  /** 속성 집중 표시: 메인 속성 효과 +N%, 순수면 공 +M% */
+  setFocus(text, color) {
+    this.focus.setText(text);
+    if (color) this.focus.setColor(color);
   }
 
   /** 개발용 FPS 표시 (환경설정에서 켜고 끔) */

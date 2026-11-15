@@ -3,6 +3,7 @@
   "maxChoices": 5,
   "awakenNeed": 4,
   "elementBonus": 0.3,
+  "focus": { "perAugPct": 0.04, "maxPct": 0.6, "purePerAugPct": 0.025, "pureMaxPct": 0.4 },
   "grades": {
     "silver": { "mul": 1, "color": "#c9d3e6" },
     "gold": { "mul": 1.6, "color": "#ffd54a" },

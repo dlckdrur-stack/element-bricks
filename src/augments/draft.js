@@ -28,9 +28,10 @@ function categoryOf(def, mgr) {
   return mgr.elementStatus(def.element) ?? 'other';
 }
 
-function weightsFor(level) {
+function weightsFor(level, mgr) {
   let w = draftCfg.categoryWeights[0];
   for (const x of draftCfg.categoryWeights) if (level >= x.fromLevel) w = x;
+  if (!mgr.sub) w = { ...w, main: w.main + w.sub, sub: 0 }; // 서브 없이 집중하면 메인 속성이 더 자주
   return w;
 }
 
@@ -46,9 +47,14 @@ export function buildChoices(kind, level, mgr, rng = Math.random) {
   const n = Math.min(draftCfg.maxChoices, mgr.choices ?? draftCfg.choices);
   const all = [...mgr.defs.values()].filter((d) => mgr.isAvailable(d) && !mgr.has(d.id));
 
-  if (kind === 'main' || kind === 'sub') {
-    const cores = all.filter((d) => d.tier === 'core' && (kind === 'main' || d.element !== mgr.main));
-    return { kind, grade: null, options: sample(cores, n, rng) };
+  if (kind === 'main') {
+    return { kind, grade: null, options: sample(all.filter((d) => d.tier === 'core'), n, rng) };
+  }
+  if (kind === 'sub') { // 다른 속성 핵심 + 메인 속성 핵심 1장(고르면 한 속성 집중)
+    const cores = all.filter((d) => d.tier === 'core');
+    const mine = sample(cores.filter((d) => d.element === mgr.main), 1, rng);
+    const others = sample(cores.filter((d) => d.element !== mgr.main), n - mine.length, rng);
+    return { kind, grade: null, options: sample([...others, ...mine], others.length + mine.length, rng) };
   }
 
   if (kind === 'duo') { // 듀오: 만렙 확장 레벨에서만. 내 핵심 조합에 맞는 것만, 등급 배율 적용
@@ -63,7 +69,7 @@ export function buildChoices(kind, level, mgr, rng = Math.random) {
 
   const byCat = { main: [], sub: [], other: [], neutral: [] };
   for (const d of pool) byCat[categoryOf(d, mgr)].push(d);
-  const weights = weightsFor(level);
+  const weights = weightsFor(level, mgr);
   const picked = [];
 
   while (picked.length < n) {

@@ -36,6 +36,13 @@ export class AugmentManager {
     this.main = null;
     this.sub = null;
     this.noPrism = 0; // 프리즘 천장 카운터
+    this.counts = {};  // 속성별 보유 증강 수 (속성 집중)
+    this.pure = false; // 한 속성만 가졌는가
+    // 속성 집중: 그 속성 효과(불·번개·어둠 피해)는 같은 속성 증강 수만큼 강해짐
+    api.bus.on(EV.HIT, (ctx) => {
+      const el = ctx.source?.type;
+      if (this.counts[el]) ctx.damage *= 1 + this.focusPct(el);
+    });
     this.luck = api.bonus?.luck ?? draftCfg.luck;               // 영구 강화: 행운 단계
     this.choices = draftCfg.choices + (api.bonus?.choices ?? 0); // 영구 강화: 선택지 추가
     this.recompute();
@@ -96,7 +103,25 @@ export class AugmentManager {
     }
     const s = { ...(this.api.baseStats ?? balance.stats) }; // 영구 강화가 반영된 기본 능력치
     for (const aug of this.owned.values()) MODULES[aug.def.element].stats?.(aug, s, this);
+    this.counts = {};
+    for (const aug of this.owned.values()) this.counts[aug.def.element] = (this.counts[aug.def.element] ?? 0) + 1;
+    const els = Object.keys(this.counts);
+    this.pure = els.length === 1;
+    s.ballDamageMul *= 1 + this.purePct; // 순수: 공 데미지도 증가
     this.api.state.stats = s;
+  }
+
+  /** 속성 집중: 같은 속성 증강 1개당 그 속성 효과 +perAugPct (최대 maxPct) */
+  focusPct(el) {
+    const f = draftCfg.focus;
+    return Math.min(f.maxPct, f.perAugPct * (this.counts[el] ?? 0));
+  }
+
+  /** 순수(한 속성만): 공 데미지 +purePerAugPct × 개수 (최대 pureMaxPct) */
+  get purePct() {
+    if (!this.pure) return 0;
+    const f = draftCfg.focus;
+    return Math.min(f.pureMaxPct, f.purePerAugPct * this.owned.size);
   }
 
   /** 공 겉모습: 메인 속성 색 불꽃 + 보유 증강별 변화(fx default.json 의 ball.mods) */

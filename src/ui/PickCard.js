@@ -63,7 +63,8 @@ export function makePickCard(o) {
   const back = scene.add.container(0, 0, [backRect, backMark]);
 
   // 앞면 (이전 카드 내용과 같음)
-  const status = choice.kind === 'main' ? 'main' : choice.kind === 'sub' ? 'sub' : mgr.elementStatus(def.element);
+  const subFocus = choice.kind === 'sub' && def.element === mgr.main; // 서브 자리에 메인 속성 = 집중
+  const status = choice.kind === 'main' || subFocus ? 'main' : choice.kind === 'sub' ? 'sub' : mgr.elementStatus(def.element);
   const v = displayValues(mgr.valuesFor(def, choice.grade, status !== null));
   // 카드가 낮아지면(선택지 4~5장) 글씨도 같은 비율로 작게. 설명이 넘치면 들어갈 때까지 더 줄임
   const k = Math.max(cfg.text.minScale, Math.min(1, H / cfg.text.baseH));
