@@ -104,9 +104,10 @@ export class GameScene extends Phaser.Scene {
     const cx = (c) => grid.centerX(c.col);
     const cy = (c) => grid.centerY(c.row);
     bus.on(EV.AFTER_HIT, ({ cell, damage, source }) => {
-      fx.hit(cx(cell), cy(cell), cell.color, {
-        key: `${cell.col},${cell.row}`, amount: damage, crit: !!source?.crit, ball: source?.type === 'ball',
-      });
+      const key = `${cell.col},${cell.row}`;
+      const ball = source?.type === 'ball';
+      fx.hit(cx(cell), cy(cell), cell.color, { key, amount: damage, crit: !!source?.crit, ball });
+      if (ball && this.augments.main) fx.elementHit(cx(cell), cy(cell), this.augments.main, key);
     });
     bus.on(EV.KILL, ({ cell }) => {
       const b = grid.bounds(cell);

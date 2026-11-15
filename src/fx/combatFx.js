@@ -20,6 +20,30 @@ export const combat = {
     this.nums.add(key, x, y - 6, amount, crit);
   },
 
+  /**
+   * 속성 타격: 공이 블록을 칠 때마다 메인 속성 손맛 (칸당 프레임 1회).
+   * 불=작은 폭발, 번개=위에서 내려치는 낙뢰, 얼음=파편, 어둠=X자 베기, 땅=돌 부스러기, 풀=잎. 수치는 combat.json 의 elementHit
+   */
+  elementHit(x, y, element, key) {
+    const e = this.cfg.combat.elementHit[element];
+    if (!e || !this.once(`e${key}`)) return;
+    const color = this.colorOf(e.color);
+    const hot = this.colorOf(e.hot);
+    if (e.bolt) this.lines.bolt(x + (Math.random() - 0.5) * e.bolt.jitterX, y - e.bolt.height, x, y, color, e.bolt);
+    for (const sp of e.sprites) {
+      const rot = sp.randRot ? Math.random() * Math.PI : ((sp.rot ?? 0) * Math.PI) / 180;
+      this.sprites.play(sp, x, y, sp.hot ? hot : color, { priority: 1, rot, w: sp.w, h: sp.h });
+    }
+    for (const name of e.particles) this.p.emit(name, x, y, color);
+    if (e.shake) this.juice.shake(e.shake);
+  },
+
+  colorOf(hexStr) {
+    this.colorCache ??= new Map();
+    if (!this.colorCache.has(hexStr)) this.colorCache.set(hexStr, parseInt(hexStr.slice(1), 16));
+    return this.colorCache.get(hexStr);
+  },
+
   /** 블록 파괴: 블록 색 파편 + 하얀 테두리 번쩍 */
   blockBreak(x, y, w, h, color) {
     const c = this.cfg.combat.blockBreak;

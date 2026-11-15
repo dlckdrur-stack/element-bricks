@@ -20,6 +20,7 @@
     "shakeEnabled": true,
     "flashEnabled": true,
     "shake": {
+      "micro": [45, 0.0016],
       "small": [70, 0.0025],
       "mid": [120, 0.006],
       "big": [170, 0.012],
