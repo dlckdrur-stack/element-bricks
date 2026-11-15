@@ -123,7 +123,11 @@ export class Grid {
       this.refreshBlock(cell);
     }
     this.bus.emit(EV.AFTER_HIT, { cell, damage: dmg, source, killed });
-    if (killed) this.bus.emit(EV.KILL, { cell, source, overkill: -cell.hp, currencyBonus: 0 });
+    if (killed) {
+      const kctx = { cell, source, overkill: -cell.hp, currencyBonus: 0 };
+      this.bus.emit(EV.KILL, kctx);
+      this.bus.emit(EV.LOOT, kctx);
+    }
     return dmg;
   }
 

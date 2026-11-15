@@ -50,9 +50,11 @@
     "stepHz": 60,
     "maxStepsPerFrame": 8
   },
+  "currency": {
+    "perBaseHp": 1
+  },
   "anim": {
     "shiftMs": 160,
-    "returnSlideMs": 140,
-    "gameOverInputDelayMs": 700
+    "returnSlideMs": 140
   }
 }

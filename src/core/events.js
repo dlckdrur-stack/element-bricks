@@ -5,7 +5,8 @@ import Phaser from 'phaser';
  *
  * onHit       { cell, damage, source }   ← 리스너가 ctx.damage 를 바꾸면 실제 피해가 바뀜
  * onAfterHit  { cell, damage, source, killed }  ← 피해 적용 후. 폭발·연쇄 같은 "타격 시 발동"은 여기에
- * onKill      { cell, source, overkill, currencyBonus }
+ * onKill      { cell, source, overkill, currencyBonus }  ← currencyBonus(비율) 더하기 가능
+ * onLoot      { cell, source, overkill, currencyBonus }  ← onKill 리스너가 다 돈 뒤. 재화 계산용
  * onTurnStart { stage }
  * onTurnEnd   { stage }
  * onWallBounce{ ball, side: 'left'|'right'|'top' }
@@ -24,6 +25,7 @@ export const EV = Object.freeze({
   LEVEL_UP: 'onLevelUp',
   AUGMENT: 'onAugment',
   KILL: 'onKill',
+  LOOT: 'onLoot',
   TURN_START: 'onTurnStart',
   TURN_END: 'onTurnEnd',
   WALL_BOUNCE: 'onWallBounce',

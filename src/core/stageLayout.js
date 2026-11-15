@@ -50,7 +50,8 @@ export function buildStageRow(stage, cols, rng = Math.random) {
 
   for (let i = 0; i < count; i++) {
     const double = rng() < cfg.doubleChance;
-    row[order[i]] = { kind: 'block', hp: double ? hp * cfg.doubleMultiplier : hp, double };
+    // base = 기본 체력(스테이지 숫자). 깨면 이만큼 재화
+    row[order[i]] = { kind: 'block', hp: double ? hp * cfg.doubleMultiplier : hp, double, base: stage };
   }
   if (rng() < balance.orb.chance) row[order[count]] = { kind: 'orb' };
   return row;

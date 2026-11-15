@@ -17,7 +17,9 @@ import { buildChoices } from '../augments/draft.js';
 import { getProfile, commitProfile } from '../meta/save.js';
 import { AimInput } from './AimInput.js';
 import { Hud } from './Hud.js';
-import { showGameOver } from './GameOverView.js';
+import { showResult } from './ResultView.js';
+import { RunWallet } from '../meta/RunWallet.js';
+import { goTo, fadeIn } from './widgets.js';
 import { showAugmentPick } from './AugmentPickView.js';
 import { t } from './i18n.js';
 
@@ -32,7 +34,7 @@ export class GameScene extends Phaser.Scene {
   constructor() { super('Game'); }
 
   create() {
-    this.cameras.main.setBackgroundColor(theme.background);
+    fadeIn(this);
     this.fx = new Fx(this, fxCfg, { fontFamily: theme.fontFamily }); // 입자 텍스처·글로우(화면 1곳)도 여기서
 
     this.bus = new GameEvents();
@@ -55,6 +57,7 @@ export class GameScene extends Phaser.Scene {
     this.augments = new AugmentManager({ ...deps, grid: this.grid, fx: this.fx });
     this.balls = new BallSystem(this, { ...deps, grid: this.grid, fx: this.fx });
     this.leveling = new Leveling(this.bus, levelsCfg, this.state);
+    this.wallet = new RunWallet(this.bus, balance.currency);
     this.hud = new Hud(this, deps);
     this.aim = new AimInput(this, { ...deps, onFire: (a) => this.fire(a) });
 
@@ -152,9 +155,15 @@ export class GameScene extends Phaser.Scene {
     const best = Math.max(this.saveData.bestStage, s.stage);
     this.saveData.bestStage = best;
     commitProfile();
-    const info = { stage: s.stage, best, newBest: s.stage > this.startBest };
+    const w = this.wallet;
+    const info = { stage: s.stage, best, newBest: s.stage > this.startBest, total: w.total, bonusPct: w.bonusPct };
+    this.saveData.currency += info.total; // 재화는 연출 전에 바로 저장
+    commitProfile();
     this.bus.emit(EV.GAME_OVER, info);
-    showGameOver(this, { layout, theme, balance }, info, () => this.scene.restart());
+    showResult(this, info, {
+      onRetry: () => goTo(this, 'Game', { resume: false }),
+      onMenu: () => goTo(this, 'Menu'),
+    });
   }
 
   // ---------- 증강 선택 ----------

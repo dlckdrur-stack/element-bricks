@@ -12,7 +12,10 @@
   "gameover.stage": "도달 스테이지 {n}",
   "gameover.best": "최고 기록 {n}",
   "gameover.newBest": "신기록!",
-  "gameover.retry": "화면을 눌러 다시 시작",
+  "result.currency": "획득 재화",
+  "result.bonus": "보너스 +{n}% 포함",
+  "result.retry": "다시 하기",
+  "result.menu": "메인으로",
 
   "common.back": "뒤로",
   "common.yes": "예",
