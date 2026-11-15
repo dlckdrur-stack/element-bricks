@@ -1,17 +1,17 @@
 {
   "costRound": 10,
   "list": [
-    { "id": "ballSpeed",  "levels": 5,  "growth": 1.5, "cost": 100,  "per": 0.08,  "fmt": "pct" },
-    { "id": "critDamage", "levels": 10, "growth": 1.5, "cost": 150,  "per": 0.05,  "fmt": "pct" },
-    { "id": "damage",     "levels": 10, "growth": 1.5, "cost": 200,  "per": 0.05,  "fmt": "pct" },
-    { "id": "xp",         "levels": 10, "growth": 1.5, "cost": 200,  "per": 0.1,   "fmt": "pct" },
-    { "id": "critChance", "levels": 10, "growth": 1.5, "cost": 250,  "per": 0.015, "fmt": "pct" },
-    { "id": "currency",   "levels": 10, "growth": 1.5, "cost": 300,  "per": 0.1,   "fmt": "pct" },
-    { "id": "reroll",     "levels": 3,  "growth": 3,   "cost": 600,  "per": 1,     "fmt": "count" },
-    { "id": "choices",    "levels": 2,  "growth": 3,   "cost": 4000, "per": 1,     "fmt": "count" },
-    { "id": "maxLevel",   "levels": 2,  "growth": 3,   "cost": 6000, "per": 1,     "fmt": "count" },
-    { "id": "luck",       "levels": 10, "growth": 1.5, "cost": 500,  "per": 1,     "fmt": "level" },
-    { "id": "balls",      "levels": 2,  "growth": 3,   "cost": 3000, "per": 1,     "fmt": "count" }
+    { "id": "damage",      "levels": 20, "growth": 1.45, "cost": 300, "per": 0.12, "fmt": "pct" },
+    { "id": "critDamage",  "levels": 15, "growth": 1.5, "cost": 300, "per": 0.1, "fmt": "pct" },
+    { "id": "critChance",  "levels": 10, "growth": 1.6, "cost": 500, "per": 0.02, "fmt": "pct" },
+    { "id": "ballSpeed",   "levels": 5, "growth": 1.8, "cost": 300, "per": 0.06, "fmt": "pct" },
+    { "id": "xp",          "levels": 10, "growth": 1.55, "cost": 300, "per": 0.08, "fmt": "pct" },
+    { "id": "currency",    "levels": 15, "growth": 1.5, "cost": 500, "per": 0.1, "fmt": "pct" },
+    { "id": "balls",       "levels": 2, "growth": 6, "cost": 15000, "per": 1, "fmt": "count" },
+    { "id": "reroll",      "levels": 3, "growth": 4, "cost": 3000, "per": 1, "fmt": "count" },
+    { "id": "choices",     "levels": 2, "growth": 6, "cost": 40000, "per": 1, "fmt": "count" },
+    { "id": "maxLevel",    "levels": 2, "growth": 6, "cost": 60000, "per": 1, "fmt": "count" },
+    { "id": "luck",        "levels": 10, "growth": 1.6, "cost": 1500, "per": 1, "fmt": "level" }
   ],
   "screen": {
     "tabY": 160, "tabW": 156, "tabH": 56, "tabGap": 164,
