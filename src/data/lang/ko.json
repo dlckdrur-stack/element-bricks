@@ -138,6 +138,7 @@
   "grade.prism": "프리즘",
   "tier.core": "핵심",
   "tier.awaken": "각성",
+  "tier.duo": "듀오",
   "aug.fire_purgatory.name": "연옥",
   "aug.fire_purgatory.desc": "필살기 · {cooldown}턴마다 턴 시작 시 반드시 발동: 모든 블록 아래에서 불기둥이 솟아 스테이지 체력의 {wavePct}%씩 {waves}연타",
   "aug.lightning_judgment.name": "뇌신",

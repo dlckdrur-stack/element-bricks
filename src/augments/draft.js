@@ -38,6 +38,7 @@ function weightsFor(level) {
  * 레벨에 맞는 선택지.
  * kind 'main'  : 모든 속성 핵심 중 3개 (등급 없음)
  * kind 'sub'   : 메인이 아닌 속성의 핵심 중 3개 (등급 없음)
+ * kind 'duo'   : 만렙 확장 레벨(기본 만렙 초과)에서만. 내 핵심 조합의 듀오 (없으면 graded 처럼)
  * kind 'graded': 등급 1개를 뽑고, 같은 등급으로 일반 증강 3개 (메인·서브 최소 1개 보장, 각성 조건이면 각성 1장 확정)
  * @returns {{ kind, grade, options: def[] }}
  */
@@ -50,7 +51,13 @@ export function buildChoices(kind, level, mgr, rng = Math.random) {
     return { kind, grade: null, options: sample(cores, n, rng) };
   }
 
-  const pool = all.filter((d) => d.tier !== 'core' && d.tier !== 'awaken' && (!d.requires || mgr.has(d.requires)));
+  if (kind === 'duo') { // 듀오: 만렙 확장 레벨에서만. 내 핵심 조합에 맞는 것만, 등급 배율 적용
+    const duos = all.filter((d) => d.tier === 'duo' && (d.requiresAll ?? []).every((id) => mgr.has(id)));
+    if (duos.length) return { kind, grade: rollGrade(mgr, rng), options: sample(duos, n, rng) };
+    // 아직 듀오 데이터가 없으면 일반 등급 선택으로
+  }
+
+  const pool = all.filter((d) => !['core', 'awaken', 'duo'].includes(d.tier) && (!d.requires || mgr.has(d.requires)));
   if (!pool.length) return { kind, grade: null, options: [] };
   const grade = rollGrade(mgr, rng);
 
