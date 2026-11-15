@@ -4,21 +4,25 @@
   "clearDelayMs": 1100,
   "bonus": 2.5,
   "currencyMul": 20,
-  "hpMul": { "bronze": 20, "silver": 22, "gold": 24, "platinum": 26, "diamond": 28, "challenger": 30 },
+  "hpMul": { "bronze": 12, "silver": 22, "gold": 24, "platinum": 26, "diamond": 28, "challenger": 30 },
   "challengerEvery": 100,
   "challengerGrowth": 0.25,
   "tiers": {
-    "bronze":     { "patterns": ["weakSide"] },
+    "bronze":     { "patterns": ["weakSide"], "turns": 6, "clearBelow": 2 },
     "silver":     { "patterns": ["bounce3", "summon"], "size": { "cols": 1, "rows": 1, "col": 3, "row": 0 } },
-    "gold":       { "patterns": ["straight", "heal"] },
+    "gold":       { "variants": [
+      { "name": "gold", "patterns": ["straight", "heal"] },
+      { "name": "slime", "patterns": ["split"], "turns": 7 }
+    ] },
     "platinum":   { "patterns": ["teleport"] },
     "diamond":    { "patterns": ["shield", "weakSide"] },
-    "challenger": { "patterns": [], "random": 2, "pool": ["weakSide", "bounce3", "straight", "teleport"] }
+    "challenger": { "patterns": [], "random": 2, "pool": ["weakSide", "bounce3", "straight", "teleport", "split"] }
   },
   "weakSide": { "sides": ["bottom", "left", "right"], "barW": 10, "color": "#fff27a" },
   "bounce3": { "need": 3 },
   "summon": { "row": 1, "count": 4, "hpMul": 1.5 },
   "heal": { "pct": 0.06 },
+  "split": { "sizes": [[3, 2], [2, 2], [2, 1], [1, 1]], "hpPct": 0.6, "spawn": 2, "spawnHpMul": 1.0, "maxRow": 2 },
   "teleport": { "every": 1.0, "window": 0.35, "maxRow": 3 },
   "shield": { "cells": [[1, 2], [2, 2], [4, 2], [5, 2]], "hpMul": 2.0, "every": 2 },
   "view": {

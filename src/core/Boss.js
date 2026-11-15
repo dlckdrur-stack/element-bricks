@@ -27,7 +27,10 @@ export class Boss {
     this.theme = theme;
     this.tier = tier;
     this.rng = rng;
-    this.size = { ...cfg.size, ...cfg.tiers[tier.id].size }; // 티어별 크기 (반사의 거울은 1칸)
+    const tc = cfg.tiers[tier.id];
+    this.variant = tc.variants ? tc.variants[Math.floor(rng() * tc.variants.length)] : tc; // 골드는 두 보스 중 무작위
+    this.nameKey = `boss.name.${this.variant.name ?? tier.id}`;
+    this.size = { ...cfg.size, ...this.variant.size }; // 티어별 크기 (반사의 거울은 1칸)
     this.cols = this.size.cols;
     this.rows = this.size.rows;
     const stage = state.stage;
@@ -37,9 +40,9 @@ export class Boss {
     this.base = stage * cfg.currencyMul; // 깨면 재화
     this.colorHex = tier.color;
     this.color = hex(tier.color);
-    this.turnsLeft = cfg.turns;
+    this.turnsLeft = this.variant.turns ?? cfg.turns;
     this.dead = false;
-    this.names = patternsFor(tier.id, rng);
+    this.names = patternsFor(tier.id, rng, this.variant);
     this.list = this.names.map((n) => patterns[n]);
     this.g = {
       grid, state, fx, rng, now: () => scene.time.now / 1000, stageHp: () => stageHp(state.stage),
@@ -49,6 +52,7 @@ export class Boss {
     this.clearArea();
     grid.boss = this;
     for (const p of this.list) p.spawn?.(this, this.g);
+    if (this.splitsLeft) this.base = Math.ceil(this.base / (this.splitsLeft + 1)); // 분열마다 나눠서 지급
     this.refresh(); // 약점 등 패턴 상태 반영
     this.bind(bus);
     this.intro();
@@ -71,7 +75,8 @@ export class Boss {
   /** 등장할 때 보스 자리의 블록은 흡수 */
   clearArea() {
     const c0 = this.size.col;
-    for (let r = this.size.row; r < this.size.row + this.rows; r++) {
+    const below = this.variant.clearBelow ?? 0; // 브론즈: 보스 아래 줄을 비워 길을 열어 줌
+    for (let r = this.size.row; r < Math.min(this.grid.rows, this.size.row + this.rows + below); r++) {
       for (let c = c0; c < c0 + this.cols; c++) {
         const cell = this.grid.cells[r][c];
         if (cell) { cell.dead = true; this.grid.remove(cell, true); }
@@ -89,7 +94,7 @@ export class Boss {
     this.glow = s.add.image(0, 0, 'fx', 'glow').setBlendMode(ADD).setTint(this.color)
       .setDisplaySize(w * V.glowScale, h * V.glowScale * 1.4).setAlpha(V.glowAlpha);
     this.rect = s.add.rectangle(0, 0, w, h, this.color, V.fillAlpha).setStrokeStyle(V.stroke, this.color);
-    this.nameT = s.add.text(0, -h / 2 + V.pad + 6, t(`boss.name.${this.tier.id}`), {
+    this.nameT = s.add.text(0, -h / 2 + V.pad + 6, t(this.nameKey), {
       fontFamily: f, fontSize: `${V.nameSize}px`, fontStyle: 'bold', color: this.colorHex,
     }).setOrigin(0.5, 0).setVisible(this.rows > 1); // 작은 보스는 이름 생략 (컷인·안내에 나옴)
     const small = this.rows < 2;
@@ -113,7 +118,8 @@ export class Boss {
     this.hpT.setText(String(Math.ceil(Math.max(0, this.hp))));
     this.bar.scaleX = Math.max(0, this.hp / this.maxHp);
     const hints = this.names.map((n) => t(`boss.hint.${n}`)).join(' · ');
-    this.hint.setText(`${hints}\n${t('boss.turns', { n: this.turnsLeft, max: cfg.turns })}`);
+    const splits = this.splitsLeft ? ` · ${t('boss.splits', { n: this.splitsLeft })}` : '';
+    this.hint.setText(`${hints}${splits}\n${t('boss.turns', { n: this.turnsLeft, max: this.variant.turns ?? cfg.turns })}`);
     this.placeWeak();
   }
 
@@ -135,7 +141,7 @@ export class Boss {
     this.fx.juice.flash(cfg.fx.introFlash);
     this.fx.juice.shake(cfg.fx.introShake);
     awakenCutin(s, this.fx.cfg.ult.cutin, {
-      title: t(`boss.name.${this.tier.id}`), sub: this.names.map((n) => t(`boss.hint.${n}`)).join(' · '),
+      title: t(this.nameKey), sub: this.names.map((n) => t(`boss.hint.${n}`)).join(' · '),
       color: this.color, fontFamily: this.theme.fontFamily,
     });
   }
@@ -180,6 +186,7 @@ export class Boss {
   }
 
   die() {
+    if (this.splitsLeft > 0) { this.split(); return; }
     this.dead = true;
     this.onDefeat?.();
     const c = cfg.fx;
@@ -193,6 +200,37 @@ export class Boss {
     this.fx.juice.hitstop(c.deathHitstop);
     this.hint.setText(t('boss.down'));
     this.scene.tweens.add({ targets: this.ui, scale: 1.4, alpha: 0, duration: 500, onComplete: () => this.ui.destroy() });
+  }
+
+  /** 분열: 한 단계 작아져서 무작위 위치에 체력 hpPct 로 다시, 주변에 작은 블록 */
+  split() {
+    const c = cfg.split;
+    const g = this.grid;
+    const x0 = this.x + this.w / 2;
+    const y0 = this.y + this.h / 2;
+    this.fx.p.emit('shard', x0, y0, this.color);
+    this.fx.sprites.play(cfg.fx.bonusRing, x0, y0, this.color, { priority: 2 });
+    this.fx.juice.shake('big');
+    this.splitsLeft--;
+    const [cols, rows] = c.sizes[c.sizes.length - 1 - this.splitsLeft];
+    this.cols = cols;
+    this.rows = rows;
+    this.dead = false;
+    this.maxHp = Math.ceil(this.maxHp * c.hpPct);
+    this.hp = this.maxHp;
+    this.ui.destroy();
+    this.hint.destroy();
+    this.makeView();
+    const col = Math.floor(this.rng() * (g.cols - cols + 1));
+    const row = Math.floor(this.rng() * (c.maxRow + 1));
+    this.moveTo(col, row, true);
+    const spots = [];
+    for (let r = row; r < Math.min(g.rows - 1, row + rows + 1); r++) for (let cc = 0; cc < g.cols; cc++) if (!g.cells[r][cc] && (cc < col || cc >= col + cols || r >= row + rows)) spots.push([cc, r]);
+    for (let i = 0; i < c.spawn && spots.length; i++) {
+      const [sc, sr] = spots.splice(Math.floor(this.rng() * spots.length), 1)[0];
+      g.placeAt(sc, sr, { kind: 'block', hp: Math.ceil(this.g.stageHp() * c.spawnHpMul), double: false, base: 0 });
+    }
+    this.refresh();
   }
 
   destroy() {

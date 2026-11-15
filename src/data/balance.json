@@ -51,6 +51,7 @@
     "stepHz": 60,
     "maxStepsPerFrame": 8
   },
+  "augmentDamageMul": 0.85,
   "currency": {
     "perBaseHp": 1
   },

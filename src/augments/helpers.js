@@ -1,8 +1,9 @@
 import { EV } from '../core/events.js';
+import balance from '../data/balance.json';
 /** 증강 효과 공용 도우미. 효과 피해는 "공 데미지(구슬로 오른 값) × 비율" 기준. */
 
 export function strike(api, cell, pct, source) {
-  return api.grid.damage(cell, api.state.damage * pct, source);
+  return api.grid.damage(cell, api.state.damage * pct * balance.augmentDamageMul, source); // 증강 효과 전체 배율
 }
 
 export function cx(api, cell) { return api.grid.centerX(cell.col); }

@@ -74,6 +74,11 @@ export const patterns = {
     bonus: (b, src, g) => isBall(src) && g.now() - b.tpAt <= cfg.teleport.window,
   },
 
+  /** 분열: 깨질 때마다 작아져서 다른 자리에 다시 나타남 (sizes 개수 - 1 번). 분열할 때 작은 블록도 흩뿌림 */
+  split: {
+    spawn(b) { b.splitsLeft = cfg.split.sizes.length - 1; },
+  },
+
   /** 보호막: 보호막 블록이 하나라도 남아 있으면 본체 피해 무효. every 턴마다 빈 자리에 다시 생김 */
   shield: {
     spawn(b, g) { b.shieldTurn = 0; placeShields(g); },
@@ -95,9 +100,9 @@ function placeShields(g) {
 }
 
 /** 티어의 패턴 이름 목록 (챌린저는 pool 에서 random 개 무작위) */
-export function patternsFor(tierId, rng) {
+export function patternsFor(tierId, rng, variant) {
   const t = cfg.tiers[tierId];
-  if (!t.random) return t.patterns;
+  if (!t.random) return (variant ?? t).patterns;
   const pool = [...t.pool];
   const out = [];
   for (let i = 0; i < t.random && pool.length; i++) out.push(pool.splice(Math.floor(rng() * pool.length), 1)[0]);
