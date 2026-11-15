@@ -67,22 +67,21 @@
   },
 
   "ball": {
-    "core": { "scale": 1.15 },
-    "rim": { "radius": 1.22, "peak": 0.84, "alpha": 1 },
-    "coreHalo": { "scale": 1.4, "alpha": 0.5 },
-    "aura": { "scale": 2.5, "alpha": 0.6, "flicker": 0.14, "defaultColor": "#7fe9ff", "defaultAlpha": 0.38 },
+    "core": { "scale": 1.2 },
+    "aura": { "scale": 2.0, "alpha": 0.9, "defaultColor": "#7fe9ff", "defaultAlpha": 0.45 },
     "trail": "trail",
     "elementTrail": "flameTrail",
+    "elementTrails": { "fire": "flameTrail", "lightning": "boltTrail" },
     "trailEverySteps": 1,
     "spark": "ballSpark",
-    "sparkEverySteps": 4,
+    "sparkEverySteps": 3,
     "growth": { "perDamage": 0.012, "max": 0.6 },
     "flare": {
       "orb": { "scale": 1.7, "time": 0.32 },
       "pick": { "scale": 2.3, "time": 0.55 },
       "awaken": { "scale": 3.2, "time": 0.9 }
     },
-    "armor": { "scale": 2.4, "alpha": 0.9, "flicker": 0.45, "spark": "armorSpark", "sparkEverySteps": 5 },
+    "armor": { "spark": "armorSpark", "sparkEverySteps": 3 },
     "mods": {
       "fire_fireball": { "trail": "fireballTail", "auraScale": 1.35, "spark": "fireballSpark", "sparkEverySteps": 2 },
       "lightning_pierce": { "armor": true }

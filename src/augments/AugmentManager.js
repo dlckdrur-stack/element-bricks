@@ -100,7 +100,7 @@ export class AugmentManager {
   get ballFx() {
     if (!this.main) return null;
     const look = {
-      color: this.elements[this.main].aura, trail: fxCfg.ball.elementTrail,
+      color: this.elements[this.main].aura, trail: fxCfg.ball.elementTrails[this.main] ?? fxCfg.ball.elementTrail,
       armorColor: this.color('lightning'),
     };
     for (const id in fxCfg.ball.mods) if (this.has(id)) Object.assign(look, fxCfg.ball.mods[id]);

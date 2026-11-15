@@ -1,10 +1,10 @@
 /**
  * 이미지 파일 없이 입자 그림을 코드로 그려 텍스처 한 장('fx')에 모은다.
  * 모든 프레임은 64×64, 흰색으로 그리고 tint 로 색을 입힌다(가산 혼합과 함께 사용).
- * 프레임: glow(빛 원) core(공 중심) ember(불티) star(별) shard(파편) line(선) ring(링) box(블록 테두리)
+ * 프레임: glow(빛 원) core(공 중심) disc(또렷한 흰 공) ember(불티) star(별) shard(파편) line(선) ring(링) box(블록 테두리)
  */
 export const FRAME = 64;
-const NAMES = ['glow', 'core', 'ember', 'star', 'shard', 'line', 'ring', 'box'];
+const NAMES = ['glow', 'core', 'disc', 'ember', 'star', 'shard', 'line', 'ring', 'box'];
 
 export function makeFxAtlas(scene) {
   if (scene.textures.exists('fx')) return;
@@ -28,6 +28,12 @@ function radial(ctx, x, y, r, stops) {
 }
 
 const DRAW = {
+  /** 가장자리만 1px 부드러운 꽉 찬 원 (공 본체) */
+  disc(ctx, S) {
+    const h = S / 2;
+    ctx.fillStyle = '#fff';
+    ctx.beginPath(); ctx.arc(h, h, h - 1.5, 0, Math.PI * 2); ctx.fill();
+  },
   glow(ctx, S) {
     const h = S / 2;
     ctx.fillStyle = radial(ctx, h, h, h, [[0, 1], [0.25, 0.75], [0.55, 0.25], [1, 0]]);
