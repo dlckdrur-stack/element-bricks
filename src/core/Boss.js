@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 import cfg from '../data/bosses.json';
 import { EV } from './events.js';
 import { hex } from './color.js';
-import { stageHp } from './stageLayout.js';
+import { stageHp, stageBase } from './stageLayout.js';
 import { patterns, patternsFor } from './bossPatterns.js';
 import { awakenCutin } from '../ui/Cutin.js';
 import { t } from '../ui/i18n.js';
@@ -37,7 +37,7 @@ export class Boss {
     const extra = tier.stages ? 0 : Math.max(0, stage / cfg.challengerEvery - 1) * cfg.challengerGrowth;
     this.maxHp = Math.ceil(stageHp(stage) * cfg.hpMul[tier.id] * (1 + extra));
     this.hp = this.maxHp;
-    this.base = stage * cfg.currencyMul; // 깨면 재화
+    this.base = stageBase(stage) * cfg.currencyMul; // 깨면 재화 (블록 기본 체력 기준)
     this.colorHex = tier.color;
     this.color = hex(tier.color);
     this.turnsLeft = this.variant.turns ?? cfg.turns;

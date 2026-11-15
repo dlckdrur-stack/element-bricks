@@ -33,7 +33,7 @@ export class TierScene extends Phaser.Scene {
     const name = this.add.text(left, y - 22, t(`tier.${tier.id}`), style(C.nameSize, open ? tier.color : theme.locked, true))
       .setOrigin(0, 0.5);
     const stages = isInfinite(tier) ? t('tier.infinite') : t('tier.stages', { n: tier.stages });
-    const info = t('tier.info', { stages, hp: tier.hpMul, cur: tier.currencyMul }) + (tier.recommendEnhance ? t('tier.recommend', { n: tier.recommendEnhance }) : '');
+    const info = t('tier.info', { stages, hp: tier.hpMul }) + (tier.recommendEnhance ? t('tier.recommend', { n: tier.recommendEnhance }) : '');
     this.add.text(left, y + 6, info, style(C.infoSize, open ? theme.text : theme.locked)).setOrigin(0, 0.5);
     const rewardKey = !open ? 'tier.locked' : tier.unlock ? `tier.reward.${tier.unlock}` : 'tier.reward.none';
     this.add.text(left, y + 30, t(rewardKey), style(C.infoSize - 1, open ? theme.currency : theme.locked)).setOrigin(0, 0.5);

@@ -8,10 +8,10 @@
   "challengerEvery": 100,
   "challengerGrowth": 0.25,
   "tiers": {
-    "bronze":     { "patterns": ["weakSide"], "turns": 6, "clearBelow": 2 },
+    "bronze":     { "name": "giant", "patterns": ["straight"], "turns": 6, "clearBelow": 2 },
     "silver":     { "patterns": ["bounce3", "summon"], "size": { "cols": 1, "rows": 1, "col": 3, "row": 0 } },
     "gold":       { "variants": [
-      { "name": "gold", "patterns": ["straight", "heal"] },
+      { "name": "guardian", "patterns": ["weakSide", "heal"] },
       { "name": "slime", "patterns": ["split"], "turns": 7 }
     ] },
     "platinum":   { "patterns": ["teleport"] },

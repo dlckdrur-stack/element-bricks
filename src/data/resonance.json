@@ -1,6 +1,6 @@
 {
   "unlockTier": "diamond",
-  "cost": 5000,
+  "cost": 400000,
   "slots": 3,
   "elements": ["fire", "lightning", "dark", "ice", "earth", "grass"],
   "grades": ["rare", "epic", "unique", "legendary"],

@@ -44,6 +44,11 @@ function makeElite(def, stage, rng) {
   return { ...def, hp: Math.ceil(def.hp * t.hpMul), elite: name, icon: t.icon, fixedColor: hex(elites.color) };
 }
 
+/** 재화 기준: 스테이지 곡선 × 티어 배율 (레벨 배율 제외). 블록 하나를 깨면 이만큼 */
+export function stageBase(stage) {
+  return Math.max(1, Math.round(stage * hpMultiplier(stage) * mods.hpMul));
+}
+
 /** 스테이지 기본 체력 × 티어 배율 × 레벨 배율 (재화 계산에는 배율 없는 stage 를 쓸 것) */
 export function stageHp(stage) {
   return Math.max(1, Math.round(stage * hpMultiplier(stage) * mods.hpMul * power));
@@ -84,8 +89,8 @@ export function buildStageRow(stage, cols, rng = Math.random) {
 
   for (let i = 0; i < count; i++) {
     const double = rng() < cfg.doubleChance;
-    // base = 기본 체력(스테이지 숫자). 깨면 이만큼 재화
-    row[order[i]] = makeElite({ kind: 'block', hp: double ? hp * cfg.doubleMultiplier : hp, double, base: stage }, stage, rng);
+    // base = 기본 체력(티어·스테이지 곡선). 깨면 이만큼 재화
+    row[order[i]] = makeElite({ kind: 'block', hp: double ? hp * cfg.doubleMultiplier : hp, double, base: stageBase(stage) }, stage, rng);
   }
   if (rng() < balance.orb.chance) row[order[count]] = { kind: 'orb' };
   return row;
