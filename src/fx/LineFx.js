@@ -81,11 +81,24 @@ export class LineFx {
       e.redraw = c.redraw;
       e.pts = this.zigzag(e.x0, e.y0, e.x1, e.y1, c.segLen, c.jitter);
       e.dim = Math.random() < c.dimChance;
+      e.forks = [];
+      for (let f = 0; f < (c.forks ?? 0); f++) { // 갈래: 중간 어딘가에서 옆으로 갈라짐
+        const i = 2 * (1 + Math.floor(Math.random() * (e.pts.length / 2 - 2)));
+        const fx0 = e.pts[i];
+        const fy0 = e.pts[i + 1];
+        const len = Math.hypot(e.x1 - e.x0, e.y1 - e.y0) * c.forkLen;
+        const ang = Math.atan2(e.y1 - e.y0, e.x1 - e.x0) + (Math.random() < 0.5 ? -1 : 1) * (0.5 + Math.random() * 0.6);
+        e.forks.push(this.zigzag(fx0, fy0, fx0 + Math.cos(ang) * len, fy0 + Math.sin(ang) * len, c.segLen, c.jitter * 0.7));
+      }
     }
     const a = (e.dim ? c.dimAlpha : 1) * (1 - 0.5 * (e.t / e.life));
-    this.stroke(e.pts, c.glowWidth, e.color, c.glowAlpha * a);
-    this.stroke(e.pts, c.outerWidth, e.color, c.outerAlpha * a);
-    this.stroke(e.pts, c.coreWidth, hex(c.coreColor), a);
+    const glow = c.glowColor ? hex(c.glowColor) : e.color; // 번개: 푸른 빛 / 덩굴: 짙은 초록
+    for (const pts of [e.pts, ...(e.forks ?? [])]) {
+      const k = pts === e.pts ? 1 : 0.55;
+      this.stroke(pts, c.glowWidth * k, glow, c.glowAlpha * a);
+      this.stroke(pts, c.outerWidth * k, e.color, c.outerAlpha * a);
+      this.stroke(pts, c.coreWidth * k, hex(c.coreColor), a);
+    }
   }
 
   drawBeam(e) {

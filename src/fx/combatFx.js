@@ -72,6 +72,8 @@ export const combat = {
     this.sprites.play(c.ring, x, y, color);
     this.sprites.play(c.ring2, x, y, color, { priority: 1 });
     this.sprites.play(c.core, x, y, color, { priority: 1 });
+    if (c.flash) this.sprites.play(c.flash, x, y, color, { priority: 1 }); // 하얀 섬광
+    if (c.shock) this.sprites.play(c.shock, x, y, color, { priority: 1 }); // 충격파
     for (const name of c.particles) this.p.emit(name, x, y, color);
     this.juice.shake(depth ? c.chainShake : c.shake);
     this.juice.sound('explosion');

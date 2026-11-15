@@ -1,10 +1,10 @@
 /**
  * 이미지 파일 없이 입자 그림을 코드로 그려 텍스처 한 장('fx')에 모은다.
  * 모든 프레임은 64×64, 흰색으로 그리고 tint 로 색을 입힌다(가산 혼합과 함께 사용).
- * 프레임: glow(빛 원) core(공 중심) disc(또렷한 흰 공) ember(불티) star(별) shard(파편) line(선) ring(링) box(블록 테두리)
+ * 프레임: glow(빛 원) core(공 중심) disc(또렷한 흰 공) blade(칼날) rock(바위) leaf(잎) ember(불티) star(별) shard(파편) line(선) ring(링) box(블록 테두리)
  */
 export const FRAME = 64;
-const NAMES = ['glow', 'core', 'disc', 'ember', 'star', 'shard', 'line', 'ring', 'box'];
+const NAMES = ['glow', 'core', 'disc', 'ember', 'star', 'shard', 'line', 'ring', 'box', 'blade', 'rock', 'leaf'];
 
 export function makeFxAtlas(scene) {
   if (scene.textures.exists('fx')) return;
@@ -28,6 +28,38 @@ function radial(ctx, x, y, r, stops) {
 }
 
 const DRAW = {
+  /** 오른쪽을 향한 칼날: 날 끝이 뾰족하고 손잡이 쪽은 짧은 막대 */
+  blade(ctx, S) {
+    const h = S / 2;
+    ctx.fillStyle = '#fff';
+    ctx.beginPath();
+    ctx.moveTo(S - 1, h); ctx.lineTo(S * 0.3, h - S * 0.14); ctx.lineTo(S * 0.26, h); ctx.lineTo(S * 0.3, h + S * 0.14);
+    ctx.closePath(); ctx.fill();
+    ctx.fillRect(S * 0.06, h - 2, S * 0.22, 4);
+    ctx.fillRect(S * 0.24, h - S * 0.18, 3, S * 0.36);
+  },
+  /** 울퉁불퉁한 바위 */
+  rock(ctx, S) {
+    const h = S / 2;
+    const r = [0.92, 0.7, 0.86, 0.66, 0.95, 0.74, 0.88, 0.7];
+    ctx.fillStyle = '#fff';
+    ctx.beginPath();
+    r.forEach((k, i) => {
+      const a = (i / r.length) * Math.PI * 2;
+      ctx.lineTo(h + Math.cos(a) * h * k * 0.9, h + Math.sin(a) * h * k * 0.9);
+    });
+    ctx.closePath(); ctx.fill();
+  },
+  /** 잎 */
+  leaf(ctx, S) {
+    const h = S / 2;
+    ctx.fillStyle = '#fff';
+    ctx.beginPath();
+    ctx.moveTo(2, h);
+    ctx.quadraticCurveTo(h, h - S * 0.42, S - 2, h);
+    ctx.quadraticCurveTo(h, h + S * 0.42, 2, h);
+    ctx.fill();
+  },
   /** 가장자리만 1px 부드러운 꽉 찬 원 (공 본체) */
   disc(ctx, S) {
     const h = S / 2;

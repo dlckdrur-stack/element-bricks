@@ -21,7 +21,7 @@
       "color": "#ffe14a", "hot": "#ffffff", "shake": "micro",
       "bolt": { "height": 110, "jitterX": 26, "life": 0.09, "redraw": 0.02, "segLen": 14, "jitter": 10,
                 "coreWidth": 3, "coreColor": "#ffffff", "outerWidth": 8, "outerAlpha": 0.95,
-                "glowWidth": 20, "glowAlpha": 0.3, "dimAlpha": 0.4, "dimChance": 0.2 },
+                "glowWidth": 22, "glowAlpha": 0.42, "glowColor": "#3d8bff", "forks": 1, "forkLen": 0.4, "dimAlpha": 0.4, "dimChance": 0.2 },
       "sprites": [
         { "frame": "star", "from": 0.6, "to": 2.2, "life": 0.14, "alpha": 1, "ease": "out", "hot": true },
         { "frame": "ring", "from": 0.3, "to": 2.2, "life": 0.18, "alpha": 1, "ease": "out" }
@@ -74,7 +74,9 @@
     "ring": { "frame": "ring", "color": "#ff9a3c", "from": 0.4, "to": 4.8, "life": 0.38, "alpha": 1, "ease": "out" },
     "ring2": { "frame": "ring", "color": "#ffd28a", "from": 0.2, "to": 2.4, "life": 0.22, "alpha": 0.8, "ease": "out" },
     "core": { "frame": "glow", "color": "#ffe1a8", "from": 1.4, "to": 4.2, "life": 0.24, "alpha": 1, "ease": "out" },
-    "particles": ["explosionCore", "ember", "smoke", "fireHitBurst"],
+    "flash": { "frame": "glow", "color": "#ffffff", "from": 2.6, "to": 0.8, "life": 0.09, "alpha": 1, "ease": "out" },
+    "shock": { "frame": "ring", "color": "#fff1c2", "from": 0.6, "to": 6.0, "life": 0.3, "alpha": 0.9, "ease": "out" },
+    "particles": ["explosionCore", "ember", "smoke", "fireHitBurst", "fireHitEmber"],
     "shake": "small",
     "chainShake": "mid"
   },
@@ -85,7 +87,7 @@
     "life": 0.1, "redraw": 0.025, "segLen": 16, "jitter": 9,
     "coreWidth": 3, "coreColor": "#ffffff",
     "outerWidth": 9, "outerAlpha": 0.95,
-    "glowWidth": 22, "glowAlpha": 0.3,
+    "glowWidth": 24, "glowAlpha": 0.42, "glowColor": "#3d8bff", "forks": 1, "forkLen": 0.35,
     "dimAlpha": 0.35, "dimChance": 0.35,
     "spark": "chainSpark"
   },
@@ -93,7 +95,7 @@
     "life": 0.14, "redraw": 0.03, "segLen": 22, "jitter": 14,
     "coreWidth": 4, "coreColor": "#ffffff",
     "outerWidth": 12, "outerAlpha": 0.95,
-    "glowWidth": 30, "glowAlpha": 0.32,
+    "glowWidth": 34, "glowAlpha": 0.45, "glowColor": "#3d8bff", "forks": 2, "forkLen": 0.4,
     "dimAlpha": 0.35, "dimChance": 0.3,
     "particles": "strike",
     "ring": { "frame": "ring", "from": 0.3, "to": 1.8, "life": 0.22, "alpha": 0.9, "ease": "out" }

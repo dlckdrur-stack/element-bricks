@@ -7,6 +7,7 @@ import { Juice } from './Juice.js';
 import { DamageNumbers } from './DamageNumbers.js';
 import { combat } from './combatFx.js';
 import { ultimate } from './ultimateFx.js';
+import { augment } from './augmentFx.js';
 
 /**
  * 이펙트 엔진 하나 (씬마다 1개). 속성별 차이는 data/fx/*.json 프리셋으로만.
@@ -92,4 +93,4 @@ export class Fx {
   }
 }
 
-Object.assign(Fx.prototype, combat, ultimate);
+Object.assign(Fx.prototype, combat, ultimate, augment);

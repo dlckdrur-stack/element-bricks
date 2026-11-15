@@ -3,6 +3,7 @@ import balance from '../data/balance.json';
 /** 증강 효과 공용 도우미. 효과 피해는 "공 데미지(구슬로 오른 값) × 비율" 기준. */
 
 export function strike(api, cell, pct, source) {
+  if (cell && !cell.dead) api.fx.augFx(source, cx(api, cell), cy(api, cell), `${cell.col},${cell.row}`); // 증강별 고유 이펙트
   return api.grid.damage(cell, api.state.damage * pct * balance.augmentDamageMul, source); // 증강 효과 전체 배율
 }
 

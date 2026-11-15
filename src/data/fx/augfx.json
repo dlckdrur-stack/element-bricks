@@ -1,0 +1,77 @@
+{
+  "maxProjectiles": 24,
+  "projDepth": 32, "bladeAspect": 1, "spinDeg": 60, "jitterTop": 50, "jitterBelow": 60,
+  "byElement": { "fire": "flame", "lightning": "zap", "dark": "blade", "ice": "icicle", "earth": "boulder", "grass": "vine" },
+  "byAug": {
+    "fire_explosion": "none", "fire_chainExplosion": "none", "fire_flameReturn": "none", "fire_meteor": "none",
+    "fire_napalm": "none", "fire_comet": "none", "fire_ashVortex": "none", "fire_heatwave": "none", "fire_volcano": "none",
+    "fire_burn": "burnTick", "fire_sunfire": "flame",
+    "duo_thunderBlast": "none", "duo_railBlast": "none", "duo_pierceBlast": "none", "duo_stormball": "zap", "duo_meteorPierce": "flame",
+    "lightning_railgun": "none", "lightning_railThunder": "none", "lightning_static": "none", "lightning_storm": "none",
+    "lightning_capacitor": "none", "lightning_lightningRod": "none", "lightning_thunderclap": "none",
+    "dark_blackhole": "none", "dark_nightfall": "none", "dark_curse": "none",
+    "ice_spear": "none", "ice_glacier": "shatter", "ice_blizzard": "shatter", "ice_shards": "shatter", "ice_crystal": "shatter",
+    "earth_quake": "quake", "earth_landslide": "quake", "earth_seismic": "quake", "earth_tremor": "quake", "earth_rubble": "crush", "earth_fault": "crush",
+    "grass_tree": "none", "grass_dew": "dew", "grass_spore": "leaf", "grass_pollen": "leaf", "grass_thorns": "thorn"
+  },
+  "recipes": {
+    "flame": { "type": "burst", "color": "#ff7a1a", "hot": "#fff1c2",
+      "sprites": [
+        { "frame": "glow", "from": 1.4, "to": 3.6, "life": 0.16, "alpha": 1, "ease": "out", "hot": true },
+        { "frame": "ring", "from": 0.4, "to": 3.4, "life": 0.26, "alpha": 1, "ease": "out" }
+      ],
+      "particles": ["fireHitBurst", "fireHitEmber", "smoke"], "shake": "micro" },
+    "burnTick": { "type": "burst", "color": "#ff7a1a", "hot": "#ffd27a",
+      "sprites": [ { "frame": "glow", "from": 0.8, "to": 2.0, "life": 0.18, "alpha": 0.9, "ease": "out", "hot": true } ],
+      "particles": ["burnTick", "fireHitEmber"] },
+    "zap": { "type": "bolt", "color": "#ffe14a", "hot": "#ffffff", "height": 170, "jitterX": 40,
+      "bolt": { "life": 0.12, "redraw": 0.02, "segLen": 16, "jitter": 14, "forks": 2, "forkLen": 0.45,
+                "coreWidth": 3, "coreColor": "#ffffff", "outerWidth": 8, "outerAlpha": 1,
+                "glowWidth": 26, "glowAlpha": 0.45, "glowColor": "#3d8bff", "dimAlpha": 0.4, "dimChance": 0.15 },
+      "sprites": [
+        { "frame": "star", "from": 0.8, "to": 2.8, "life": 0.14, "alpha": 1, "ease": "out", "hot": true },
+        { "frame": "ring", "from": 0.3, "to": 2.6, "life": 0.2, "alpha": 1, "ease": "out", "tint": "#7cc4ff" }
+      ],
+      "particles": ["boltHitArc", "chainSpark"], "shake": "micro" },
+    "blade": { "type": "projectile", "frame": "blade", "color": "#c99bff", "hot": "#ffffff", "from": "side", "dist": 140,
+      "time": 0.1, "size": 62, "trail": "shadowTrail", "arrive": "slash" },
+    "slash": { "type": "burst", "color": "#b45cff", "hot": "#ffffff",
+      "sprites": [
+        { "frame": "line", "from": 0.4, "to": 1.6, "life": 0.13, "alpha": 1, "ease": "out", "rot": 40, "w": 170, "h": 16, "hot": true },
+        { "frame": "line", "from": 0.4, "to": 1.4, "life": 0.13, "alpha": 0.9, "ease": "out", "rot": -40, "w": 150, "h": 12 },
+        { "frame": "ring", "from": 0.3, "to": 2.0, "life": 0.18, "alpha": 0.8, "ease": "out" }
+      ],
+      "particles": ["darkWisp"], "shake": "micro" },
+    "icicle": { "type": "projectile", "frame": "shard", "color": "#8fe9ff", "hot": "#ffffff", "from": "top", "dist": 150,
+      "time": 0.1, "size": 52, "trail": "iceTrail", "arrive": "shatter" },
+    "shatter": { "type": "burst", "color": "#8fe9ff", "hot": "#ffffff",
+      "sprites": [
+        { "frame": "star", "from": 0.6, "to": 2.4, "life": 0.16, "alpha": 1, "ease": "out", "hot": true, "randRot": true },
+        { "frame": "ring", "from": 0.4, "to": 2.4, "life": 0.22, "alpha": 0.9, "ease": "out" }
+      ],
+      "particles": ["iceShatter"], "shake": "micro" },
+    "boulder": { "type": "projectile", "frame": "rock", "color": "#c98a4b", "hot": "#ffe2b8", "from": "top", "dist": 170,
+      "time": 0.13, "size": 48, "spin": 7, "trail": "rockTrail", "arrive": "crush", "tint": "color", "blend": "normal" },
+    "crush": { "type": "burst", "color": "#c98a4b", "hot": "#ffe2b8",
+      "sprites": [
+        { "frame": "ring", "from": 0.5, "to": 3.0, "life": 0.22, "alpha": 1, "ease": "out" },
+        { "frame": "glow", "from": 1.0, "to": 2.4, "life": 0.14, "alpha": 0.8, "ease": "out", "hot": true }
+      ],
+      "particles": ["rockChip", "smoke"], "shake": "small" },
+    "quake": { "type": "burst", "color": "#c98a4b", "hot": "#ffe2b8",
+      "sprites": [ { "frame": "shard", "from": 1.2, "to": 2.6, "life": 0.2, "alpha": 1, "ease": "out", "hot": true, "randRot": true } ],
+      "particles": ["rockChip"] },
+    "vine": { "type": "whip", "color": "#5dff7a", "hot": "#eaffc2", "from": "below", "dist": 150,
+      "bolt": { "life": 0.16, "redraw": 0.05, "segLen": 22, "jitter": 8, "forks": 1, "forkLen": 0.35,
+                "coreWidth": 4, "coreColor": "#eaffc2", "outerWidth": 9, "outerAlpha": 1,
+                "glowWidth": 20, "glowAlpha": 0.35, "glowColor": "#1f9e3a", "dimAlpha": 0.6, "dimChance": 0.1 },
+      "arrive": "leaf" },
+    "leaf": { "type": "burst", "color": "#5dff7a", "hot": "#eaffc2",
+      "sprites": [ { "frame": "leaf", "from": 0.4, "to": 1.1, "life": 0.22, "alpha": 1, "ease": "out", "randRot": true } ],
+      "particles": ["leafBurst"] },
+    "dew": { "type": "projectile", "frame": "glow", "color": "#9ff6ff", "hot": "#ffffff", "from": "top", "dist": 160,
+      "time": 0.12, "size": 26, "trail": "iceTrail", "arrive": "leaf" },
+    "thorn": { "type": "projectile", "frame": "blade", "color": "#5dff7a", "hot": "#eaffc2", "from": "side", "dist": 90,
+      "time": 0.08, "size": 30, "trail": "leafTrail", "arrive": "leaf" }
+  }
+}
