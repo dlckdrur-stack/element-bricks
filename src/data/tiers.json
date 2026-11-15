@@ -4,9 +4,9 @@
     "bronze":     { "stages": 20,  "hpMul": 1.3,  "extraBlocks": 0, "eliteChance": 0,    "currencyMul": 1.0, "clearBonus": 300,   "color": "#e09a5a", "unlock": "augments1" },
     "silver":     { "stages": 40,  "hpMul": 1.8, "extraBlocks": 0, "eliteChance": 0.03, "currencyMul": 1.0, "clearBonus": 2000,  "color": "#c9d3e6", "unlock": "augments2" },
     "gold":       { "stages": 60,  "hpMul": 2.4,  "extraBlocks": 1, "eliteChance": 0.06, "currencyMul": 1.0, "clearBonus": 10000,  "color": "#ffd54a", "unlock": "dark" },
-    "platinum":   { "stages": 80,  "hpMul": 3,  "extraBlocks": 1, "eliteChance": 0.1,  "currencyMul": 1.0, "clearBonus": 60000,  "color": "#5fe3c9", "unlock": "awaken" },
-    "diamond":    { "stages": 100, "hpMul": 4.2, "recommendEnhance": 10, "extraBlocks": 1, "eliteChance": 0.15, "currencyMul": 1.0, "clearBonus": 400000, "color": "#7cc7ff", "unlock": "resonance" },
-    "challenger": { "stages": 0,   "hpMul": 5.2, "recommendEnhance": 15,  "extraBlocks": 2, "eliteChance": 0.2,  "currencyMul": 1.0, "clearBonus": 0,     "color": "#ff6b8a", "unlock": null }
+    "platinum":   { "stages": 80,  "hpMul": 3.4,  "extraBlocks": 1, "eliteChance": 0.1,  "currencyMul": 1.0, "clearBonus": 60000,  "color": "#5fe3c9", "unlock": "awaken" },
+    "diamond":    { "stages": 100, "hpMul": 6.0, "recommendEnhance": 10, "extraBlocks": 1, "eliteChance": 0.15, "currencyMul": 1.0, "clearBonus": 400000, "color": "#7cc7ff", "unlock": "resonance" },
+    "challenger": { "stages": 0,   "hpMul": 7.5, "recommendEnhance": 15,  "extraBlocks": 2, "eliteChance": 0.2,  "currencyMul": 1.0, "clearBonus": 0,     "color": "#ff6b8a", "unlock": null }
   },
   "unlocks": {
     "augments1": { "augments": ["fire_overheat", "fire_flameReturn", "lightning_storm", "lightning_capacitor"], "element": "earth" },

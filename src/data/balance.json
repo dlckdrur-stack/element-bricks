@@ -30,7 +30,9 @@
   "blocks": {
     "countByStage": [
       { "from": 1, "min": 2, "max": 4 },
-      { "from": 21, "min": 3, "max": 5 },
+      { "from": 16, "min": 2, "max": 5 },
+      { "from": 31, "min": 3, "max": 5 },
+      { "from": 46, "min": 3, "max": 6 },
       { "from": 61, "min": 4, "max": 6 }
     ],
     "doubleChance": 0.1,
@@ -40,7 +42,7 @@
     "flatUntil": 15,
     "rampUntil": 50,
     "rampTarget": 3,
-    "lateGrowth": 1.065,
+    "lateGrowth": 1.04,
     "perLevel": 0.15
   },
   "orb": {
