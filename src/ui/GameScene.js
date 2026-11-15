@@ -139,8 +139,13 @@ export class GameScene extends Phaser.Scene {
     const s = this.state;
     const next = s.stage + 1;
     const bossNow = this.isBossStage(next); // 보스 스테이지: 새 줄 대신 보스
-    this.grid.shiftDown();
-    if (!bossNow) this.grid.placeRow(buildStageRow(next, this.grid.cols));
+    const g = this.grid;
+    if (g.halt > 0) g.halt--; // 하강 정지 턴: 블록도 안 내려오고 새 줄도 없음
+    else {
+      g.shiftDown();
+      if (!bossNow) g.placeRow(buildStageRow(next, g.cols));
+    }
+    g.held = g.held.map((h) => Math.max(0, h - 1)); // 덩굴 속박 턴 감소
     this.grid.setRefHp(stageHp(next) * balance.blocks.doubleMultiplier);
     if (this.grid.reachedBottom()) { this.gameOver(); return; }
 

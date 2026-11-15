@@ -9,8 +9,8 @@
     "challenger": { "stages": 0,   "hpMul": 1.7,  "extraBlocks": 2, "eliteChance": 0.2,  "currencyMul": 2.6, "clearBonus": 0,     "color": "#ff6b8a", "unlock": null }
   },
   "unlocks": {
-    "augments1": { "augments": ["fire_overheat", "fire_flameReturn", "lightning_storm", "lightning_capacitor"] },
-    "augments2": { "augments": ["fire_wildfire", "fire_scorch", "lightning_plasma", "lightning_fastCharge"] },
+    "augments1": { "augments": ["fire_overheat", "fire_flameReturn", "lightning_storm", "lightning_capacitor"], "element": "earth" },
+    "augments2": { "augments": ["fire_wildfire", "fire_scorch", "lightning_plasma", "lightning_fastCharge"], "element": "grass" },
     "dark": { "element": "dark" },
     "awaken": { "tier": "awaken" },
     "resonance": { "feature": "resonance" }

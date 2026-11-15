@@ -23,9 +23,12 @@ export class Grid {
     this.pad = layout.blockPad;
     this.orbR = balance.orb.radius;
     this.colors = theme.blockColors.map(hex);
+    this.frozenColor = hex(theme.frozen);
     this.refHp = 1;
     this.cells = Array.from({ length: this.rows }, () => new Array(this.cols).fill(null));
     this.boss = null; // 격자 밖 큰 블록 (core/Boss.js). blocks()·query()·bounds() 에 함께 나옴
+    this.halt = 0;    // > 0 이면 그 턴 전체 하강 정지 (빙하기·절대영도·세계수)
+    this.held = new Array(this.cols).fill(0); // 열별 하강 정지 턴 (덩굴 속박)
 
     const fontStyle = {
       fontFamily: theme.fontFamily, fontSize: `${layout.fontSize.block}px`,
@@ -89,7 +92,7 @@ export class Grid {
   }
 
   placeRow(defs) {
-    defs.forEach((def, col) => def && this.placeAt(col, 0, def));
+    defs.forEach((def, col) => def && !this.cells[0][col] && this.placeAt(col, 0, def)); // 묶인 열은 자리가 차 있으면 건너뜀
   }
 
   /** 판 저장용: 칸 내용만 (겉모습·증강 상태 제외) */
@@ -112,7 +115,7 @@ export class Grid {
     for (let r = this.rows - 1; r >= 0; r--) {
       for (let c = 0; c < this.cols; c++) {
         const cell = this.cells[r][c];
-        if (!cell) continue;
+        if (!cell || this.held[c] > 0) continue; // 덩굴로 묶인 열은 그대로
         this.cells[r][c] = null;
         if (r === this.rows - 1) { this.remove(cell, false); continue; }
         cell.row = r + 1;
@@ -252,7 +255,7 @@ export class Grid {
   refreshBlock(cell) {
     const v = cell.view;
     if (!v) return;
-    cell.color = cell.fixedColor ?? this.colorFor(cell.hp); // 엘리트는 고정 색
+    cell.color = cell.frozen > 0 ? this.frozenColor : cell.fixedColor ?? this.colorFor(cell.hp); // 얼음 > 엘리트 > 체력 색
     v.rect.setFillStyle(cell.color, this.theme.blockFillAlpha);
     v.rect.setStrokeStyle(this.theme.blockStroke, cell.color, 1);
     v.label.setText(`${cell.icon ?? ''}${Math.ceil(cell.hp)}`); // 엘리트 아이콘
