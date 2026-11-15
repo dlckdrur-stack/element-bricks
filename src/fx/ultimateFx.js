@@ -89,6 +89,33 @@ export const ultimate = {
     this.juice.shake(c.finaleShake);
   },
 
+  // ---------- 데이터 주도형 필살기 (절대영도·대지진·세계수) ----------
+  /** 시작: 컷인 + 화면 물들이기 + (있으면) 하늘에서 입자 비 */
+  ultGeneric(name, title, sub) {
+    const c = this.cfg.ult[name];
+    const W = this.scene.scale.width;
+    this.ultStart(c, title, sub, col(c.color));
+    if (c.rain) this.timed(c.rainTime, c.rainEvery, () => this.p.emit(c.rain, Math.random() * W, -10, col(c.color)));
+  },
+
+  /** 절정: 거대한 고리 2겹 + 섬광 + 입자 폭발 */
+  ultFinale(name, x, y) {
+    const c = this.cfg.ult[name];
+    this.sprites.play(c.finaleRing, x, y, col(c.color), { priority: 2 });
+    this.sprites.play(c.finaleRing2, x, y, col(c.hot), { priority: 2 });
+    this.sprites.play(c.finaleCore, x, y, col(c.hot), { priority: 2 });
+    for (const n of c.burst) this.p.emit(n, x, y, col(c.color));
+    this.juice.flash(c.flash);
+    this.juice.shake(c.shake);
+  },
+
+  /** 블록마다 */
+  ultCell(name, x, y) {
+    const c = this.cfg.ult[name];
+    this.sprites.play(c.cellSprite, x, y, col(c.hot), { priority: 2 });
+    this.p.emit(c.cellParticles, x, y, col(c.color));
+  },
+
   // ---------- 🌑 일월식 ----------
   /** 화면이 칠흑으로 가라앉고, 붉은 해와 보랏빛 달이 겹치며 코로나가 번짐 */
   eclipseStart(title, sub) {

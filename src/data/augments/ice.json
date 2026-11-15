@@ -1,0 +1,32 @@
+{
+  "element": "ice",
+  "color": "#8fe9ff",
+  "auraColor": "#7fdcff",
+  "augments": [
+    { "id": "ice_glacier", "tier": "core", "values": { "hitsPerStage": 4, "minHits": 20, "rows": 2, "maxHpPct": 0.25, "turns": 2 }, "bonusKeys": ["maxHpPct"] },
+    { "id": "ice_shatter", "tier": "core", "values": { "hits": 3, "turns": 2, "bonusPct": 1.0 }, "bonusKeys": ["bonusPct"] },
+    { "id": "ice_spear", "tier": "core", "values": { "every": 2, "dmgPct": 3.0 }, "bonusKeys": ["dmgPct"] },
+
+    { "id": "ice_permafrost", "tier": "exclusive", "requires": "ice_glacier", "values": { "reducePct": 0.3 } },
+    { "id": "ice_flashFreeze", "tier": "exclusive", "requires": "ice_shatter", "values": { "hitsReduce": 1 } },
+    { "id": "ice_spearRain", "tier": "exclusive", "requires": "ice_spear", "values": { "extra": 1 } },
+    { "id": "ice_coldHeart", "tier": "exclusive", "requires": "ice_glacier", "values": { "dmgPct": 0.5 }, "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
+    { "id": "ice_crystal", "tier": "exclusive", "requires": "ice_shatter", "values": { "dmgPct": 0.4 }, "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
+    { "id": "ice_glacialLance", "tier": "exclusive", "requires": "ice_spear", "values": { "bonusPct": 1.0 }, "gradeKeys": ["bonusPct"] },
+
+    { "id": "ice_frostbite", "tier": "common", "values": { "dmgPct": 0.3 }, "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
+    { "id": "ice_shards", "tier": "common", "values": { "dmgPct": 0.5 }, "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
+    { "id": "ice_deepCold", "tier": "common", "values": { "extraTurns": 1, "chancePct": 0.1 }, "gradeKeys": ["chancePct"] },
+    { "id": "ice_lastStand", "tier": "common", "values": { "dmgPct": 0.5 }, "gradeKeys": ["dmgPct"] },
+    { "id": "ice_coldSnap", "tier": "common", "values": { "count": 4, "dmgPct": 0.4 }, "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
+    { "id": "ice_avalanche", "tier": "common", "values": { "kills": 12, "dmgPct": 1.0 }, "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
+    { "id": "ice_mirrorIce", "tier": "common", "values": { "dmgPct": 0.6 }, "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
+    { "id": "ice_blizzard", "tier": "common", "values": { "every": 4, "dmgPct": 0.3 }, "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
+    { "id": "ice_icicle", "tier": "common", "values": { "dmgPct": 0.5, "maxPerBall": 3 }, "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
+    { "id": "ice_chillAura", "tier": "common", "values": { "perPct": 0.02, "maxPct": 0.4 }, "gradeKeys": ["maxPct"] },
+    { "id": "ice_thaw", "tier": "common", "values": { "dmgPct": 1.5 }, "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
+
+    { "id": "ice_absoluteZero", "tier": "awaken", "ult": "absoluteZero",
+      "values": { "need": 1, "rows": 3, "cooldown": 3, "freezeTurns": 2, "haltTurns": 2, "hitPct": 0.7, "bonusPct": 0.3 } }
+  ]
+}

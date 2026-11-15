@@ -21,6 +21,20 @@
     "finaleCore": { "frame": "glow", "from": 3.0, "to": 12.0, "life": 0.45, "alpha": 1, "ease": "out" }
   },
 
+  "absoluteZero": {
+    "color": "#8fe9ff", "hot": "#ffffff",
+    "tint": "#001428", "tintAlpha": 0.62, "tintIn": 0.12, "tintHold": 1.0, "tintOut": 0.5,
+    "flash": "white", "hitstop": "awaken", "shake": "huge",
+    "startDelay": 0.7, "finaleTime": 0.6,
+    "rain": "iceShatter", "rainTime": 1.6, "rainEvery": 0.025,
+    "finaleRing": { "frame": "ring", "from": 1.0, "to": 18.0, "life": 0.7, "alpha": 1, "ease": "out" },
+    "finaleRing2": { "frame": "ring", "from": 0.6, "to": 11.0, "life": 0.5, "alpha": 1, "ease": "out" },
+    "finaleCore": { "frame": "glow", "from": 3.0, "to": 13.0, "life": 0.5, "alpha": 1, "ease": "out" },
+    "burst": ["iceShatter", "prismStar", "awakenBurst"],
+    "cellSprite": { "frame": "star", "from": 0.6, "to": 2.6, "life": 0.35, "alpha": 1, "ease": "out" },
+    "cellParticles": "iceShatter"
+  },
+
   "eclipse": {
     "color": "#b45cff", "sun": "#ff3b5c", "white": "#ffffff",
     "tint": "#000000", "tintAlpha": 0.78, "tintIn": 0.15, "tintHold": 1.0, "tintOut": 0.5,

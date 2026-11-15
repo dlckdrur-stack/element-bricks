@@ -2,6 +2,7 @@ import fireData from '../data/augments/fire.json';
 import lightningData from '../data/augments/lightning.json';
 import darkData from '../data/augments/dark.json';
 import duoData from '../data/augments/duo.json';
+import iceData from '../data/augments/ice.json';
 import draftCfg from '../data/draft.json';
 import balance from '../data/balance.json';
 import { fxCfg } from '../fx/config.js';
@@ -12,10 +13,11 @@ import * as fire from './fire.js';
 import * as lightning from './lightning.js';
 import * as dark from './dark.js';
 import * as duo from './duo.js';
+import * as ice from './ice.js';
 
 // 속성 추가 시: data/augments/{el}.json + augments/{el}.js 를 여기 등록
-const ELEMENT_DATA = [fireData, lightningData, darkData, duoData];
-const MODULES = { fire, lightning, dark, duo };
+const ELEMENT_DATA = [fireData, lightningData, darkData, iceData, duoData];
+const MODULES = { fire, lightning, dark, ice, duo };
 
 /**
  * 보유 증강·메인/서브 속성·수치 계산.
