@@ -1,0 +1,16 @@
+{
+  "element": "duo",
+  "color": "#ffb347",
+  "auraColor": "#ffd27a",
+  "augments": [
+    { "id": "duo_thunderBlast", "tier": "duo", "requiresAll": ["fire_explosion", "lightning_chain"], "values": { "dmgPct": 0.2 }, "gradeKeys": ["dmgPct"] },
+    { "id": "duo_railBlast", "tier": "duo", "requiresAll": ["fire_explosion", "lightning_railgun"], "values": { "dmgPct": 0.35 }, "gradeKeys": ["dmgPct"] },
+    { "id": "duo_pierceBlast", "tier": "duo", "requiresAll": ["fire_explosion", "lightning_pierce"], "values": { "dmgPct": 0.4 }, "gradeKeys": ["dmgPct"] },
+    { "id": "duo_shockBurn", "tier": "duo", "requiresAll": ["fire_burn", "lightning_chain"], "values": { "stacks": 1 } },
+    { "id": "duo_heatRay", "tier": "duo", "requiresAll": ["fire_burn", "lightning_railgun"], "values": { "stacks": 2 } },
+    { "id": "duo_searPierce", "tier": "duo", "requiresAll": ["fire_burn", "lightning_pierce"], "values": { "stacks": 1, "burnBonusPct": 0.3 }, "gradeKeys": ["burnBonusPct"] },
+    { "id": "duo_stormball", "tier": "duo", "requiresAll": ["fire_fireball", "lightning_chain"], "values": { "targets": 4, "dmgPct": 0.4, "chainBonusPct": 0.3 }, "gradeKeys": ["dmgPct", "chainBonusPct"] },
+    { "id": "duo_solarRail", "tier": "duo", "requiresAll": ["fire_fireball", "lightning_railgun"], "values": { "railBonusPct": 0.5 }, "gradeKeys": ["railBonusPct"] },
+    { "id": "duo_meteorPierce", "tier": "duo", "requiresAll": ["fire_fireball", "lightning_pierce"], "values": { "extraPierce": 2, "dmgPct": 0.3 }, "gradeKeys": ["dmgPct"] }
+  ]
+}

@@ -23,7 +23,7 @@ export function stats(aug, s) {
   }
 }
 
-function explode(api, col, row, pct, depth) {
+export function explode(api, col, row, pct, depth) {
   const color = api.mgr.color('fire');
   api.fx.explosion(api.grid.centerX(col), api.grid.centerY(row), color, depth, `${col},${row},${depth}`);
   for (const b of api.grid.around(col, row, 1)) {
@@ -31,7 +31,7 @@ function explode(api, col, row, pct, depth) {
   }
 }
 
-function addBurn(api, cell, stacks) {
+export function addBurn(api, cell, stacks) {
   if (!cell || cell.dead) return;
   const v = api.mgr.owned.get('fire_burn')?.v;
   if (!v) return;
@@ -122,7 +122,7 @@ export const handlers = {
   fire_giantHunt(api, aug) {
     api.bus.on(EV.HIT, (ctx) => {
       const c = ctx.cell;
-      if (c.elite || c.treasure || c.shield) ctx.damage *= 1 + aug.v.dmgPct;
+      if (c.elite || c.special || c.shield) ctx.damage *= 1 + aug.v.dmgPct; // 엘리트·보물·분열·방패·보호막
     });
   },
 

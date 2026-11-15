@@ -10,5 +10,10 @@
     "steel":    { "icon": "🛡", "hpMul": 2, "dmgMul": 0.5 },
     "runner":   { "icon": "💨", "hpMul": 1.5 }
   },
+  "specials": {
+    "treasure": { "fromStage": 5,  "chance": 0.03, "icon": "💰", "color": "#ffd54f", "hpMul": 2, "currencyMul": 5 },
+    "split":    { "fromStage": 15, "chance": 0.05, "icon": "◈",  "color": "#7cf8ff", "hpMul": 1 },
+    "guard":    { "fromStage": 25, "chance": 0.05, "icon": "⛨",  "color": "#b8c2dc", "hpMul": 1, "dmgMul": 0.5 }
+  },
   "fx": { "ring": { "frame": "ring", "from": 0.4, "to": 2.2, "life": 0.3, "alpha": 0.9, "ease": "out" }, "heal": "leafBurst", "summon": "darkWisp" }
 }

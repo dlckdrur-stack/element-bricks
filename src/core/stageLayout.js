@@ -16,9 +16,19 @@ export function hpMultiplier(stage, s = balance.hpScale) {
 let mods = { hpMul: 1, extraBlocks: 0, eliteChance: 0 };
 export function setStageMods(m) { mods = { hpMul: m.hpMul ?? 1, extraBlocks: m.extraBlocks ?? 0, eliteChance: m.eliteChance ?? 0 }; }
 
+/** 특수 블록: 보물(체력 2배·재화 5배) · 분열(깨지면 둘로) · 방패(아래에서 맞으면 -50%) */
+function makeSpecial(def, stage, rng) {
+  for (const [name, sp] of Object.entries(elites.specials)) {
+    if (stage >= sp.fromStage && rng() < sp.chance) {
+      return { ...def, hp: Math.ceil(def.hp * sp.hpMul), special: name, icon: sp.icon, fixedColor: hex(sp.color) };
+    }
+  }
+  return def;
+}
+
 /** 티어 확률로 블록을 엘리트로 (종류는 무작위, 체력 배율·아이콘·고정 색) */
 function makeElite(def, stage, rng) {
-  if (stage < elites.fromStage || !(rng() < mods.eliteChance)) return def;
+  if (stage < elites.fromStage || !(rng() < mods.eliteChance)) return makeSpecial(def, stage, rng);
   const names = Object.keys(elites.types);
   const name = names[Math.floor(rng() * names.length)];
   const t = elites.types[name];

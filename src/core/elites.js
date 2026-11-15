@@ -8,6 +8,7 @@ import { stageHp } from './stageLayout.js';
  *   거인 체력 5배 · 소환사 매 턴 졸개 2개 · 재생 매 턴 20% 회복(화상이면 못 함)
  *   강철 받는 피해 -50%(뇌전 투과면 무시) · 질주 매 턴 한 줄 더 내려옴
  * 깨면 경험치 +10, 재화 3배.
+ * 특수 블록도 여기서: 보물 재화 5배 · 분열 깨지면 체력 절반 블록 2개 · 방패 공이 아래에서 맞히면 -50%
  */
 export class Elites {
   constructor({ bus, grid, fx, state, mgr }) {
@@ -20,6 +21,16 @@ export class Elites {
       if (ctx.cell.elite !== 'steel') return;
       if (ctx.source?.type === 'lightning' && mgr.has('lightning_conductive')) return;
       ctx.damage *= cfg.types.steel.dmgMul;
+    });
+    bus.on(EV.HIT, (ctx) => {
+      const sp = ctx.cell.special;
+      if (sp !== 'guard' || !(ctx.source?.ny > 0.5)) return; // 아래쪽 면
+      if (ctx.source?.type === 'lightning' && mgr.has('lightning_conductive')) return;
+      ctx.damage *= cfg.specials.guard.dmgMul;
+    });
+    bus.on(EV.KILL, (ctx) => {
+      if (ctx.cell.special === 'treasure') ctx.currencyBonus += cfg.specials.treasure.currencyMul - 1;
+      if (ctx.cell.special === 'split') this.split(ctx.cell);
     });
     bus.on(EV.KILL, (ctx) => {
       if (!ctx.cell.elite) return;
@@ -58,6 +69,17 @@ export class Elites {
       g.placeAt(c, r, { kind: 'block', hp: Math.max(1, Math.ceil(stageHp(this.state.stage) * t.minionHpMul)), double: false, base: 0 });
     }
     this.fx.p.emit(cfg.fx.summon, ...this.pos(e), this.color);
+  }
+
+  /** 분열: 깨진 자리와 옆 빈칸에 체력 절반 블록 2개 */
+  split(cell) {
+    const g = this.grid;
+    const spots = [[cell.col, cell.row], [cell.col - 1, cell.row], [cell.col + 1, cell.row], [cell.col, cell.row + 1]]
+      .filter(([c, r]) => c >= 0 && c < g.cols && r < g.rows - 1 && !g.cells[r][c]);
+    for (const [c, r] of spots.slice(0, 2)) {
+      g.placeAt(c, r, { kind: 'block', hp: Math.max(1, Math.ceil(cell.maxHp / 2)), double: false, base: Math.ceil((cell.base ?? 0) / 2) });
+    }
+    this.fx.p.emit('iceShatter', ...this.pos(cell), 0x7cf8ff);
   }
 
   /** 질주: 아래 칸이 비어 있으면 한 줄 더 내려옴 */

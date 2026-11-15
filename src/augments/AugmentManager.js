@@ -1,6 +1,7 @@
 import fireData from '../data/augments/fire.json';
 import lightningData from '../data/augments/lightning.json';
 import darkData from '../data/augments/dark.json';
+import duoData from '../data/augments/duo.json';
 import draftCfg from '../data/draft.json';
 import balance from '../data/balance.json';
 import { fxCfg } from '../fx/config.js';
@@ -10,10 +11,11 @@ import { isAugUnlocked } from '../meta/tiers.js';
 import * as fire from './fire.js';
 import * as lightning from './lightning.js';
 import * as dark from './dark.js';
+import * as duo from './duo.js';
 
 // 속성 추가 시: data/augments/{el}.json + augments/{el}.js 를 여기 등록
-const ELEMENT_DATA = [fireData, lightningData, darkData];
-const MODULES = { fire, lightning, dark };
+const ELEMENT_DATA = [fireData, lightningData, darkData, duoData];
+const MODULES = { fire, lightning, dark, duo };
 
 /**
  * 보유 증강·메인/서브 속성·수치 계산.
@@ -104,7 +106,9 @@ export class AugmentManager {
     const s = { ...(this.api.baseStats ?? balance.stats) }; // 영구 강화가 반영된 기본 능력치
     for (const aug of this.owned.values()) MODULES[aug.def.element].stats?.(aug, s, this);
     this.counts = {};
-    for (const aug of this.owned.values()) this.counts[aug.def.element] = (this.counts[aug.def.element] ?? 0) + 1;
+    for (const aug of this.owned.values()) {
+      if (aug.def.tier !== 'duo') this.counts[aug.def.element] = (this.counts[aug.def.element] ?? 0) + 1;
+    }
     const els = Object.keys(this.counts);
     this.pure = els.length === 1;
     s.ballDamageMul *= 1 + this.purePct; // 순수: 공 데미지도 증가

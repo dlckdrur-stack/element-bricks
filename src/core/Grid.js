@@ -97,7 +97,7 @@ export class Grid {
     const out = [];
     this.forEachCell((c) => out.push({
       kind: c.kind, col: c.col, row: c.row, hp: c.hp, maxHp: c.maxHp, double: c.double, base: c.base,
-      elite: c.elite, icon: c.icon, fixedColor: c.fixedColor,
+      elite: c.elite, special: c.special, icon: c.icon, fixedColor: c.fixedColor,
     }));
     return out;
   }
