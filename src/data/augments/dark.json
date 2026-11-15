@@ -28,7 +28,7 @@
     { "id": "dark_curse", "tier": "common", "values": { "dmgPct": 0.2 }, "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
     { "id": "dark_nightfall", "tier": "common", "values": { "count": 3, "dmgPct": 0.6 }, "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
     { "id": "dark_reaper", "tier": "common", "values": { "stackPct": 0.5, "maxStacks": 5 }, "gradeKeys": ["stackPct"] },
-    { "id": "dark_shadowWall", "tier": "common", "values": { "dmgPct": 0.3 }, "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
+    { "id": "dark_shadowWall", "tier": "common", "values": { "dmgPct": 0.2, "maxPerBall": 4 }, "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
     { "id": "dark_abyss", "tier": "common", "values": { "kills": 10, "thresholdPct": 0.4 }, "gradeKeys": ["thresholdPct"] },
     { "id": "dark_wraith", "tier": "common", "values": { "dmgPct": 0.5 }, "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
 

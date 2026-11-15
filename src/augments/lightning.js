@@ -1,5 +1,5 @@
 import { EV } from '../core/events.js';
-import { strike, cx, cy, nearest, randomBlocks, isBallHit, ultimateGauge, later } from './helpers.js';
+import { strike, cx, cy, nearest, randomBlocks, isBallHit, ultimateGauge, later, wallOk } from './helpers.js';
 import { stageHp } from '../core/stageLayout.js';
 import { t } from '../ui/i18n.js';
 
@@ -103,7 +103,8 @@ export const handlers = {
   },
 
   lightning_static(api, aug) {
-    api.bus.on(EV.WALL_BOUNCE, () => {
+    api.bus.on(EV.WALL_BOUNCE, ({ ball }) => {
+      if (!wallOk(ball, aug)) return;
       const [b] = randomBlocks(api, 1);
       if (b) bolt(api, b, aug.v.dmgPct, SRC('lightning_static'));
     });
@@ -133,7 +134,7 @@ export const handlers = {
   /** 천둥 박수: 공이 천장에 튕길 때 그 열 전체로 낙뢰가 관통 */
   lightning_thunderclap(api, aug) {
     api.bus.on(EV.WALL_BOUNCE, ({ ball, side }) => {
-      if (side !== 'top') return;
+      if (side !== 'top' || !wallOk(ball, aug)) return;
       const col = Math.floor(ball.x / api.grid.cellW);
       const list = api.grid.blocks().filter((b) => b.col === col);
       if (!list.length) return;

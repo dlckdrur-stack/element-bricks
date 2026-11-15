@@ -1,5 +1,5 @@
 import { EV } from '../core/events.js';
-import { strike, cx, cy, isBallHit, ultimateGauge, later } from './helpers.js';
+import { strike, cx, cy, isBallHit, ultimateGauge, later, wallOk } from './helpers.js';
 import { stageHp } from '../core/stageLayout.js';
 import { t } from '../ui/i18n.js';
 
@@ -169,6 +169,7 @@ export const handlers = {
   /** 화염 장벽: 공이 벽에 튕길 때 그 줄의 블록 전체에 불꽃 */
   fire_flameWall(api, aug) {
     api.bus.on(EV.WALL_BOUNCE, ({ ball }) => {
+      if (!wallOk(ball, aug)) return;
       const row = Math.floor((ball.y - api.grid.top) / api.grid.cellH);
       if (row < 0 || row >= api.grid.rows) return;
       for (const b of api.grid.cells[row].filter((c) => c && c.kind === 'block')) {
@@ -229,6 +230,7 @@ export const handlers = {
   /** 혜성: 불덩이 공이 벽에 튕길 때마다 벽 근처 블록 폭발 */
   fire_comet(api, aug) {
     api.bus.on(EV.WALL_BOUNCE, ({ ball }) => {
+      if (!wallOk(ball, aug)) return;
       const g = api.grid;
       const r = g.cellW * 1.2;
       const hit = [];

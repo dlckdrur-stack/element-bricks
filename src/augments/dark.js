@@ -1,5 +1,5 @@
 import { EV } from '../core/events.js';
-import { strike, cx, cy, nearest, randomBlocks, isBallHit, ultimateGauge, later } from './helpers.js';
+import { strike, cx, cy, nearest, randomBlocks, isBallHit, ultimateGauge, later, wallOk } from './helpers.js';
 import { stageHp } from '../core/stageLayout.js';
 import { t } from '../ui/i18n.js';
 
@@ -211,6 +211,7 @@ export const handlers = {
   /** 그림자 벽: 공이 벽에 튕길 때 가장 가까운 블록에 그림자 칼날 */
   dark_shadowWall(api, aug) {
     api.bus.on(EV.WALL_BOUNCE, ({ ball }) => {
+      if (!wallOk(ball, aug)) return;
       const [b] = nearPoint(api, ball.x, ball.y, 1);
       if (!b) return;
       api.fx.chain(ball.x, ball.y, cx(api, b), cy(api, b), api.mgr.color('dark'));

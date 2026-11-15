@@ -61,6 +61,13 @@ export function ultimateGauge(api, aug, event, filter, fire) {
   });
 }
 
+/** 벽 튕김 증강: 공 1개가 한 번 발사될 때 maxPerBall 번까지만 발동 (너무 강해서 상한) */
+export function wallOk(ball, aug) {
+  const k = `w_${aug.def.id}`;
+  ball[k] = (ball[k] ?? 0) + 1;
+  return ball[k] <= aug.v.maxPerBall;
+}
+
 /** sec 초 뒤 fn (씬이 바뀌면 자동 취소) */
 export function later(api, sec, fn) {
   api.scene.time.delayedCall(sec * 1000, fn);
