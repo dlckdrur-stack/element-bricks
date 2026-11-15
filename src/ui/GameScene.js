@@ -21,6 +21,7 @@ import { fadeIn } from './widgets.js';
 import { t } from './i18n.js';
 import { pickFlow } from './pickFlow.js';
 import { runEnd } from './runEnd.js';
+import { bossFlow } from './bossFlow.js';
 import { getTier } from '../meta/tiers.js';
 import { applyFxSettings, getSettings, settingsCfg } from '../meta/settings.js';
 import { AutoQuality } from '../fx/AutoQuality.js';
@@ -41,6 +42,7 @@ export class GameScene extends Phaser.Scene {
   init(data) {
     this.resume = !!data?.resume;
     this.tierId = data?.tier;
+    this.boss = null; // 씬을 다시 시작해도 이전 판의 보스가 남지 않게
   }
 
   create() {
@@ -134,15 +136,17 @@ export class GameScene extends Phaser.Scene {
   nextTurn() {
     const s = this.state;
     const next = s.stage + 1;
+    const bossNow = this.isBossStage(next); // 보스 스테이지: 새 줄 대신 보스
     this.grid.shiftDown();
-    this.grid.placeRow(buildStageRow(next, this.grid.cols));
+    if (!bossNow) this.grid.placeRow(buildStageRow(next, this.grid.cols));
     this.grid.setRefHp(stageHp(next) * balance.blocks.doubleMultiplier);
     if (this.grid.reachedBottom()) { this.gameOver(); return; }
 
     s.stage = next;
+    if (bossNow) this.startBoss();
     this.bus.emit(EV.TURN_START, { stage: s.stage });
     this.beginAim();
-    saveRun(this); // 판 중간 저장: 턴 끝(새 줄이 내려온 직후)에 한 번, 바뀐 것만
+    if (!this.boss) saveRun(this); // 판 중간 저장: 턴 끝(새 줄이 내려온 직후)에 한 번, 바뀐 것만
   }
 
   beginAim() {
@@ -182,7 +186,7 @@ export class GameScene extends Phaser.Scene {
       this.saveData.bestStage = s.stage;
       commitProfile(); // 저장은 턴 끝에 한 번
     }
-    if (this.isTierEnd()) { this.victory(); return; } // 티어 마지막 스테이지까지 버팀 = 클리어
+    if (this.bossEndTurn()) return; // 보스전: 클리어·패배·다음 보스 턴
     this.nextTurn();
   }
 
@@ -223,6 +227,7 @@ export class GameScene extends Phaser.Scene {
     const dt = Math.min(delta, 100);
     this.fx.update(dt / 1000);
     this.look.update(dt / 1000);
+    this.boss?.update(dt / 1000);
     if (this.launcherOn) this.look.animate(this.launcher);
 
     const s = this.state;
@@ -265,4 +270,4 @@ export class GameScene extends Phaser.Scene {
   }
 }
 
-Object.assign(GameScene.prototype, pickFlow, runEnd); // openPick · ballPos · gameOver · victory
+Object.assign(GameScene.prototype, pickFlow, runEnd, bossFlow); // openPick · ballPos · gameOver · victory · 보스전

@@ -1,7 +1,7 @@
 import { EV } from '../core/events.js';
 import { commitProfile } from '../meta/save.js';
 import { clearRun } from '../meta/runSave.js';
-import { markCleared, tierOrder, isInfinite } from '../meta/tiers.js';
+import { markCleared, tierOrder } from '../meta/tiers.js';
 import { showResult } from './ResultView.js';
 import { goTo } from './widgets.js';
 import { t } from './i18n.js';
@@ -11,11 +11,6 @@ import { t } from './i18n.js';
  * 재화는 연출 전에 바로 저장한다.
  */
 export const runEnd = {
-  /** 티어 마지막 스테이지까지 버텼는가 (무한 티어는 없음) */
-  isTierEnd() {
-    return !isInfinite(this.tier) && this.state.stage >= this.tier.stages;
-  },
-
   gameOver() { this.finishRun(false); },
 
   victory() { this.finishRun(true); },

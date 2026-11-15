@@ -25,6 +25,7 @@ export class Grid {
     this.colors = theme.blockColors.map(hex);
     this.refHp = 1;
     this.cells = Array.from({ length: this.rows }, () => new Array(this.cols).fill(null));
+    this.boss = null; // 격자 밖 큰 블록 (core/Boss.js). blocks()·query()·bounds() 에 함께 나옴
 
     const fontStyle = {
       fontFamily: theme.fontFamily, fontSize: `${layout.fontSize.block}px`,
@@ -46,6 +47,7 @@ export class Grid {
 
   /** 블록 충돌 사각형 (표시와 동일, 패딩 포함) */
   bounds(cell) {
+    if (cell.boss) return cell; // 보스는 자기 사각형(x,y,w,h)
     return {
       x: cell.col * this.cellW + this.pad,
       y: this.top + cell.row * this.cellH + this.pad,
@@ -66,6 +68,8 @@ export class Grid {
         if (cell) cb(cell);
       }
     }
+    const b = this.boss;
+    if (b && !b.dead && b.x < x1 && b.x + b.w > x0 && b.y < y1 && b.y + b.h > y0) cb(b);
   }
 
   forEachCell(cb) {
@@ -74,15 +78,18 @@ export class Grid {
 
   // ---------- 생성·하강 ----------
   /** buildStageRow() 결과를 맨 윗줄에 배치 */
+  /** 한 칸에 블록·구슬 놓기 (보스 소환·보호막용) */
+  placeAt(col, row, def) {
+    const cell = { ...def, col, row, maxHp: def.hp ?? 0, view: null };
+    this.cells[row][col] = cell;
+    if (cell.kind === 'block') this.showBlock(cell);
+    else this.showOrb(cell);
+    this.fadeIn(cell);
+    return cell;
+  }
+
   placeRow(defs) {
-    defs.forEach((def, col) => {
-      if (!def) return;
-      const cell = { ...def, col, row: 0, maxHp: def.hp ?? 0, view: null };
-      this.cells[0][col] = cell;
-      if (cell.kind === 'block') this.showBlock(cell);
-      else this.showOrb(cell);
-      this.fadeIn(cell);
-    });
+    defs.forEach((def, col) => def && this.placeAt(col, 0, def));
   }
 
   /** 판 저장용: 칸 내용만 (겉모습·증강 상태 제외) */
@@ -96,13 +103,7 @@ export class Grid {
 
   /** 이어하기: snapshot() 결과를 그대로 다시 배치 */
   restore(list) {
-    for (const d of list) {
-      const cell = { ...d, view: null };
-      this.cells[d.row][d.col] = cell;
-      if (cell.kind === 'block') this.showBlock(cell);
-      else this.showOrb(cell);
-      this.fadeIn(cell);
-    }
+    for (const d of list) this.placeAt(d.col, d.row, d).maxHp = d.maxHp;
   }
 
   /** 전체 1줄 하강. 맨 아랫줄의 구슬은 사라진다(블록은 그 전에 게임오버). */
@@ -155,6 +156,7 @@ export class Grid {
   blocks() {
     const out = [];
     this.forEachCell((c) => { if (c.kind === 'block') out.push(c); });
+    if (this.boss && !this.boss.dead) out.push(this.boss);
     return out;
   }
 
@@ -200,6 +202,8 @@ export class Grid {
       if (x < 0 || x > this.cols * this.cellW || y < this.top || y > bottom) break;
       const b = this.blockAt(Math.floor(x / this.cellW), Math.floor((y - this.top) / this.cellH));
       if (b && !seen.has(b)) { seen.add(b); out.push(b); }
+      const bo = this.boss;
+      if (bo && !bo.dead && !seen.has(bo) && x > bo.x && x < bo.x + bo.w && y > bo.y && y < bo.y + bo.h) { seen.add(bo); out.push(bo); }
     }
     return { cells: out, endX: x, endY: y };
   }

@@ -109,7 +109,7 @@ export class BallSystem {
     const b = {
       id: this.nextId++, x: this.originX, y: this.launchY,
       vx: this.dirX * this.speed, vy: this.dirY * this.speed, mul: 1, age: 0, view,
-      pierce: s.pierce, pierceChain: 0, passing: [],
+      pierce: s.pierce, pierceChain: 0, passing: [], walls: 0, // walls = 벽 튕긴 수 (보스 패턴)
     };
     this.look.place(view, b.x, b.y);
     this.active.push(b);
@@ -136,6 +136,7 @@ export class BallSystem {
   }
 
   wall(b, side) {
+    b.walls++;
     this.fixAngle(b);
     const s = this.state.stats;
     if (s.pierceRefillOnWall) { b.pierce = s.pierce; b.pierceChain = 0; }
@@ -151,11 +152,11 @@ export class BallSystem {
   }
 
   /** 공 타격 피해: 구슬 데미지 × 공 배율 × 치명타 × 관통 보너스 */
-  hit(b, cell, extraMul, pierce = false) {
+  hit(b, cell, extraMul, pierce = false, nx = 0, ny = 0) {
     const s = this.state.stats;
     const crit = Math.random() < s.critChance;
     const dmg = this.state.damage * s.ballDamageMul * b.mul * (crit ? s.critDamage : 1) * extraMul;
-    this.grid.damage(cell, dmg, { type: 'ball', ball: b, crit, pierce });
+    this.grid.damage(cell, dmg, { type: 'ball', ball: b, crit, pierce, nx, ny }); // nx·ny = 맞은 면 방향 (보스 약점)
   }
 
   collideBlocks(b) {
@@ -218,7 +219,7 @@ export class BallSystem {
       b.vy = (b.vy / sp) * this.speed;
     }
     this.fixAngle(b);
-    this.hit(b, hit, 1);
+    this.hit(b, hit, 1, false, nx, ny);
   }
 
   collectOrbs(b) {

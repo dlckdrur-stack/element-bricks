@@ -1,0 +1,38 @@
+{
+  "size": { "cols": 3, "rows": 2, "col": 2, "row": 0 },
+  "turns": 5,
+  "bonus": 2.5,
+  "currencyMul": 20,
+  "hpMul": { "bronze": 20, "silver": 22, "gold": 24, "platinum": 26, "diamond": 28, "challenger": 30 },
+  "challengerEvery": 100,
+  "challengerGrowth": 0.25,
+  "tiers": {
+    "bronze":     { "patterns": ["weakSide"] },
+    "silver":     { "patterns": ["bounce3", "summon"] },
+    "gold":       { "patterns": ["straight", "heal"] },
+    "platinum":   { "patterns": ["teleport"] },
+    "diamond":    { "patterns": ["shield", "weakSide"] },
+    "challenger": { "patterns": [], "random": 2, "pool": ["weakSide", "bounce3", "straight", "teleport"] }
+  },
+  "weakSide": { "sides": ["bottom", "left", "right", "top"], "barW": 10, "color": "#fff27a" },
+  "bounce3": { "need": 3 },
+  "summon": { "row": 2, "count": 3, "hpMul": 0.6 },
+  "heal": { "pct": 0.06 },
+  "teleport": { "every": 1.0, "window": 0.35, "maxRow": 3 },
+  "shield": { "cells": [[1, 2], [2, 2], [4, 2], [5, 2]], "hpMul": 2.0, "every": 2 },
+  "view": {
+    "depth": 13, "fillAlpha": 0.3, "stroke": 5, "glowScale": 1.5, "glowAlpha": 0.55,
+    "nameSize": 18, "hpSize": 30, "barH": 8, "pad": 8,
+    "hintY": 926, "hintSize": 17, "shieldColor": "#7cf8ff"
+  },
+  "fx": {
+    "introShake": "big", "introFlash": "white", "hitShake": "micro",
+    "bonusRing": { "frame": "ring", "from": 0.6, "to": 3.0, "life": 0.22, "alpha": 1, "ease": "out" },
+    "bonusStar": "crit",
+    "teleportRing": { "frame": "ring", "from": 3.0, "to": 0.4, "life": 0.18, "alpha": 0.9, "ease": "out" },
+    "deathRing": { "frame": "ring", "from": 1.0, "to": 16.0, "life": 0.7, "alpha": 1, "ease": "out" },
+    "deathCore": { "frame": "glow", "from": 3.0, "to": 12.0, "life": 0.5, "alpha": 1, "ease": "out" },
+    "deathBurst": ["awakenBurst", "shard", "prismStar"],
+    "deathFlash": "awaken", "deathShake": "huge", "deathHitstop": "awaken"
+  }
+}
