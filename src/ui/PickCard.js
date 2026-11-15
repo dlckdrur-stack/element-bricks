@@ -30,7 +30,7 @@ function perim(u, w, h) {
 /**
  * 증강 카드 1장 (컨테이너). 뒷면으로 시작해 flip() 으로 앞면.
  * 테두리는 등급색으로 빛남: 실버=흰빛, 골드=금빛 반짝임이 둘레를 돎, 프리즘=무지개가 계속 흐름.
- * o = { scene, ov(UiOverlay), def, choice, mgr, layout, theme, draftCfg, cfg(ui.cards), x, y }
+ * o = { scene, ov(UiOverlay), def, choice, mgr, layout, theme, draftCfg, cfg(ui.cards), x, y, pioneer?(id)→비율 }
  */
 export function makePickCard(o) {
   const { scene, ov, def, choice, mgr, layout, theme, draftCfg, cfg } = o;
@@ -78,6 +78,12 @@ export function makePickCard(o) {
   if (status) {
     parts.push(scene.add.text(W / 2 - 14, top, t(`pick.tag.${status}`, { n: Math.round(draftCfg.elementBonus * 100) }), {
       fontFamily: f, fontSize: `${fs.cardTag}px`, color: theme.orb,
+    }).setOrigin(1, 0));
+  }
+  if (o.pioneer) { // 개척 보너스 (레벨 1 카드): 그 판 재화 +N%
+    const pct = Math.round(o.pioneer(def.id) * 100);
+    parts.push(scene.add.text(W / 2 - 14, top + 30, t('pick.pioneer', { n: pct }), {
+      fontFamily: f, fontSize: `${fs.cardDesc + 2}px`, fontStyle: 'bold', color: theme.currency,
     }).setOrigin(1, 0));
   }
   const front = scene.add.container(0, 0, parts).setVisible(false);

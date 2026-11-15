@@ -63,6 +63,7 @@
   "upg.luck.eff": "행운 {n}단계 (골드·프리즘↑, 천장↓)",
   "upg.balls.name": "공 추가",
   "upg.balls.eff": "시작 공 +{n}개",
+  "pick.pioneer": "💰 +{n}%",
   "pick.reroll": "🎲 다시 뽑기 ({n})",
   "settings.title": "환경설정",
   "settings.quality": "이펙트 품질",

@@ -24,6 +24,7 @@ import { pickFlow } from './pickFlow.js';
 import { applyFxSettings, getSettings, settingsCfg } from '../meta/settings.js';
 import { AutoQuality } from '../fx/AutoQuality.js';
 import { setupRun } from '../meta/runSetup.js';
+import { Pioneer } from '../meta/pioneer.js';
 
 const STEP_MS = 1000 / balance.physics.stepHz;
 
@@ -72,6 +73,8 @@ export class GameScene extends Phaser.Scene {
     this.leveling = new Leveling(this.bus, levelsCfg, this.state, meta.bonus);
     this.wallet = new RunWallet(this.bus, balance.currency);
     this.wallet.bonusPct = meta.bonus.currencyPct; // 개척 보너스는 레벨 1 선택 때 더함
+    const cores = [...this.augments.defs.values()].filter((d) => d.tier === 'core').map((d) => d.id);
+    this.pioneer = new Pioneer(this.bus, this.saveData, cores, balance.pioneer);
     this.hud = new Hud(this, deps);
     this.aim = new AimInput(this, { ...deps, onFire: (a) => this.fire(a) });
 
@@ -187,6 +190,7 @@ export class GameScene extends Phaser.Scene {
     const w = this.wallet;
     const info = { stage: s.stage, best, newBest: s.stage > this.startBest, total: w.total, bonusPct: w.bonusPct };
     this.saveData.currency += info.total; // 재화는 연출 전에 바로 저장
+    this.pioneer.settle();
     commitProfile();
     this.bus.emit(EV.GAME_OVER, info);
     showResult(this, info, {
