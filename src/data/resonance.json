@@ -1,6 +1,8 @@
 {
   "unlockTier": "diamond",
   "cost": 400000,
+  "multi": { "count": 3, "cost": 1000000, "note": "재화를 더 쓰고 새 옵션 3개 중 하나를 고름" },
+  "outlier": { "chance": 0.03, "beyondMul": 1.35, "color": "#ff4d6d", "note": "줄마다 chance 확률로 한 등급 위 수치 (레전더리는 그 위 = 레전더리 × beyondMul)" },
   "slots": 2,
   "maxHpBossMul": 0.3,
   "optionNote": "경험치 옵션 삭제(새로 뽑을 때 안 나옴). 최대 체력 비례는 공 1타마다라서 수치를 낮게, 보스에는 maxHpBossMul 배만. 장착 2칸으로 줄이고 수치 약 1.3배",
@@ -31,6 +33,6 @@
     "listTop": 214, "rowH": 46, "nameX": 24, "equipX": 470, "equipW": 110, "equipH": 36,
     "detailY": 510, "lineGap": 30, "rollY": 700, "rollW": 300, "rollH": 64,
     "compareY": 520, "keepX": 160, "changeX": 380, "choiceY": 820, "choiceW": 190, "choiceH": 60,
-    "probY": 760
+    "probY": 760, "rollGap": 260, "rollW2": 240, "blockTop": 212, "blockH": 112, "blockGap": 10, "blockW": 490, "keepY": 734, "hintY": 786
   }
 }

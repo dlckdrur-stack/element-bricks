@@ -3,7 +3,7 @@
   "color": "#5dff7a",
   "auraColor": "#7dff8f",
   "augments": [
-    { "id": "grass_vine", "tier": "core", "values": { "hitsPerStage": 4, "minHits": 20, "count": 3, "turns": 2, "maxHpPct": 0.3 }, "bonusKeys": ["maxHpPct"] },
+    { "id": "grass_vine", "tier": "core", "values": { "hitsPerStage": 2, "minHits": 10, "count": 3, "turns": 2, "maxHpPct": 0.3 }, "bonusKeys": ["maxHpPct"] },
     { "id": "grass_seed", "tier": "core", "values": { "bonusPct": 0.25, "bloomTurns": 1, "lifeTurns": 3 }, "bonusKeys": ["bonusPct"] },
     { "id": "grass_tree", "tier": "core", "values": { "perPct": 0.01, "maxPct": 0.6 }, "bonusKeys": ["perPct"] },
 
@@ -21,7 +21,7 @@
     { "id": "grass_growth", "tier": "common", "values": { "perHitPct": 0.01, "maxPct": 0.6, "dmgShare": 0.25 }, "gradeKeys": ["maxPct"] },
     { "id": "grass_thorns", "tier": "common", "values": { "dmgPct": 0.3 }, "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
     { "id": "grass_overgrowth", "tier": "common", "values": { "every": 3, "dmgPct": 0.5 }, "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
-    { "id": "grass_leech", "tier": "common", "values": { "every": 30, "gain": 1 } },
+    { "id": "grass_leech", "tier": "common", "values": { "every": 15, "gain": 1 } },
     { "id": "grass_fruit", "tier": "common", "values": { "kills": 15 } },
     { "id": "grass_dew", "tier": "common", "values": { "count": 3, "dmgPct": 0.6 }, "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
     { "id": "grass_spore", "tier": "common", "values": { "dmgPct": 0.15 }, "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },

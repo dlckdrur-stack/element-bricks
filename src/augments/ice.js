@@ -51,14 +51,12 @@ function spear(api, aug, col) {
 export const handlers = {
   /** 각성 「절대영도」: 블록이 바닥 rows 줄 안에 들어온 턴 시작 시 반드시 발동 (발동 후 cooldown 턴 대기) */
   ice_absoluteZero(api, aug) {
-    aug.state.count = 0;
-    let wait = 0;
+    aug.state.count = 0; // every 턴마다 반드시 발동 (HUD 게이지: 턴 수)
+    aug.state.turns = true;
     api.bus.on(EV.HIT, (ctx) => { if (ctx.cell.deepFreeze && isFrozen(ctx.cell)) ctx.damage *= 1 + aug.v.bonusPct; });
     api.bus.on(EV.TURN_START, () => {
-      if (wait > 0) { wait--; return; }
-      const low = Math.max(-1, ...api.grid.blocks().filter((b) => !b.boss).map((b) => b.row));
-      if (low < api.grid.rows - aug.v.rows) return;
-      wait = aug.v.cooldown;
+      if (++aug.state.count < aug.v.every) return;
+      aug.state.count = 0;
       const c = api.fx.cfg.ult.absoluteZero;
       api.fx.ultGeneric('absoluteZero', t('aug.ice_absoluteZero.name'), t('ult.sub'));
       api.grid.halt = Math.max(api.grid.halt, aug.v.haltTurns);

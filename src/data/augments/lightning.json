@@ -18,9 +18,9 @@
       "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
     { "id": "lightning_storm", "tier": "common", "values": { "dmgPct": 0.5, "strikes": 5 },
       "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
-    { "id": "lightning_capacitor", "tier": "common", "values": { "dmgPct": 0.5, "every": 20 },
+    { "id": "lightning_capacitor", "tier": "common", "values": { "dmgPct": 0.5, "every": 10 },
       "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
-    { "id": "lightning_conductive", "tier": "common", "values": { "need": 5, "dmgPct": 1.0 } },
+    { "id": "lightning_conductive", "tier": "common", "values": { "need": 3, "dmgPct": 1.0 } },
     { "id": "lightning_thunderclap", "tier": "common", "values": {"dmgPct": 0.3, "maxPerBall": 3}, "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
     { "id": "lightning_overload", "tier": "common", "values": {"targets": 3, "dmgPct": 0.5}, "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
     { "id": "lightning_magnet", "tier": "common", "values": {"dmgPct": 0.3}, "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
@@ -32,6 +32,6 @@
     { "id": "lightning_resonance", "tier": "common", "values": { "dmgPct": 0.4 }, "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
     { "id": "lightning_lightningRod", "tier": "common", "values": {"rows": 3, "dmgPct": 0.8}, "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
     { "id": "lightning_judgment", "tier": "awaken", "ult": "judgment",
-      "values": { "need": 100, "targets": 8, "hitPct": 1.5, "chains": 3, "chainPct": 0.5 } }
+      "values": { "need": 60, "targets": 8, "hitPct": 1.5, "chains": 3, "chainPct": 0.5 } }
   ]
 }

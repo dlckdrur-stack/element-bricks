@@ -11,6 +11,7 @@ import { MenuBall } from './MenuBall.js';
 import { makeButton, makeCorner, goTo, fadeIn } from './widgets.js';
 import { makeMenuTitle } from './MenuTitle.js';
 import { canClaim } from '../meta/attendance.js';
+import { canClaimAny } from '../meta/quests.js';
 import { hex } from '../core/color.js';
 import { t } from './i18n.js';
 
@@ -33,10 +34,11 @@ export class MenuScene extends Phaser.Scene {
     makeCorner(this, profile);
     const rb = screens.rankButton;
     makeButton(this, rb.x, rb.y, t('rank.icon'), { w: rb.w, h: rb.h, size: layout.fontSize.cardDesc, color: theme.currency, onClick: () => goTo(this, 'Ranking'), depth: 30 });
-    const ab = screens.attendButton; // 출석 체크
-    makeButton(this, ab.x, ab.y, t('attend.icon'), { w: ab.w, h: ab.h, size: layout.fontSize.cardDesc, color: theme.buttonPrimary, onClick: () => goTo(this, 'Attendance'), depth: 30 });
-    if (canClaim()) {
-      const dot = this.add.circle(ab.x + ab.w / 2 - 4, ab.y - ab.h / 2 + 4, ab.dot, hex(theme.danger)).setDepth(31);
+    // 출석 체크 · 일일 퀘스트 (받을 게 있으면 빨간 점)
+    for (const [b, icon, scene, ready] of [[screens.attendButton, 'attend.icon', 'Attendance', canClaim()], [screens.questButton, 'quest.icon', 'Quest', canClaimAny()]]) {
+      makeButton(this, b.x, b.y, t(icon), { w: b.w, h: b.h, size: layout.fontSize.cardDesc, color: theme.buttonPrimary, onClick: () => goTo(this, scene), depth: 30 });
+      if (!ready) continue;
+      const dot = this.add.circle(b.x + b.w / 2 - 4, b.y - b.h / 2 + 4, b.dot, hex(theme.danger)).setDepth(31);
       this.tweens.add({ targets: dot, scale: 1.3, duration: 500, yoyo: true, repeat: -1 });
     }
     makeMenuTitle(this, 30);

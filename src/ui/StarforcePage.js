@@ -1,7 +1,8 @@
 import layout from '../data/layout.json';
 import theme from '../data/themes/neon.json';
 import { hex } from '../core/color.js';
-import { sfData, star, isUnlocked, isMax, dmgAt, canProtect, costFor, odds, tryStar } from '../meta/starforce.js';
+import { sfData, star, isUnlocked, isMax, dmgAt, canProtect, costFor, odds, tryStar, ticketHere, ticketsHere } from '../meta/starforce.js';
+import { buyTicket } from '../meta/enhance.js';
 import { makeButton, style, styleD, fmtNum } from './widgets.js';
 import { t } from './i18n.js';
 
@@ -9,14 +10,14 @@ const C = sfData.screen;
 const pct = (x) => Math.round(x * 1000) / 10;
 
 /**
- * 강화 화면의 "스타포스" 탭. 챌린저 100스테이지 전에는 잠김.
- * 별 25개 · 현재 성과 효과 · 확률(성공/유지/파괴) · 비용 · 파괴 방지 · 강화 버튼
+ * 강화 화면의 "성좌" 탭. 챌린저 100스테이지 전에는 잠김.
+ * 별 20개 · 현재 단계와 효과 · 확률(성공/유지/붕괴) · 비용 · 방지권(공 강화와 공용) 사용·구매 · 강화 버튼
  */
 export class StarforcePage {
   constructor(scene, { onChange }) {
     this.scene = scene;
     this.onChange = onChange;
-    this.protect = false;
+    this.protect = true;
     const s = scene;
     const W = layout.width;
     const fs = layout.fontSize;
@@ -42,13 +43,16 @@ export class StarforcePage {
     this.effT = s.add.text(W / 2, C.effY, '', style(fs.cardDesc, theme.text)).setOrigin(0.5);
     this.rateT = s.add.text(W / 2, C.rateY, '', style(fs.cardDesc - 2, theme.hudText)).setOrigin(0.5);
     this.costT = s.add.text(W / 2, C.costY, '', style(fs.cardDesc + 2, theme.currencySoft, true)).setOrigin(0.5);
-    this.protBtn = makeButton(s, W / 2, C.protectY, '', {
-      w: C.protectW, h: C.protectH, size: fs.small + 1, color: theme.hudText, onClick: () => { this.protect = !this.protect; this.refresh(); },
+    this.protBtn = makeButton(s, W / 2 - C.protectGap / 2, C.protectY, '', {
+      w: C.protectW, h: C.protectH, size: fs.small, color: theme.hudText, onClick: () => { this.protect = !this.protect; this.refresh(); },
+    });
+    this.buyBtn = makeButton(s, W / 2 + C.protectGap / 2, C.protectY, '', {
+      w: C.protectW, h: C.protectH, size: fs.small, color: theme.currency, onClick: () => { const tk = ticketHere(); if (tk && buyTicket(tk.id)) this.onChange(); },
     });
     this.go = makeButton(s, W / 2, C.goY, t('sf.go'), { w: C.buttonW, h: C.buttonH, color: theme.buttonPrimary, onClick: () => this.enhance() });
     this.resultT = s.add.text(W / 2, C.resultY, '', styleD(C.resultSize, theme.text)).setOrigin(0.5).setAlpha(0);
-    this.root.add([...this.stars, this.starT, this.effT, this.rateT, this.costT, this.protBtn, this.go, this.resultT]);
-    this.buttons = [this.protBtn, this.go];
+    this.root.add([...this.stars, this.starT, this.effT, this.rateT, this.costT, this.protBtn, this.buyBtn, this.go, this.resultT]);
+    this.buttons = [this.protBtn, this.buyBtn, this.go];
     this.refresh();
   }
 
@@ -63,7 +67,6 @@ export class StarforcePage {
     const s = star();
     this.stars.forEach((img, i) => img.setTint(hex(i < s ? C.on : C.off)));
     this.starT.setText(t('sf.star', { n: s }));
-    const prot = this.protect && canProtect(s);
     if (isMax()) {
       this.effT.setText(t('sf.eff', { n: pct(dmgAt(s)) }));
       this.rateT.setText('');
@@ -71,23 +74,28 @@ export class StarforcePage {
       this.go.setEnabled(false);
     } else {
       this.effT.setText(t('sf.effNext', { n: pct(dmgAt(s)), m: pct(dmgAt(s + 1)) }));
-      const o = odds(s, prot);
+      const o = odds(s);
       this.rateT.setText(t('sf.rate', { s: pct(o.success), f: pct(o.fail), d: pct(o.destroy) }));
-      const cost = costFor(s, prot);
+      const cost = costFor(s);
       this.costT.setText(t('meta.currency', { n: fmtNum(cost) }));
       this.go.setEnabled(this.scene.profile.currency >= cost);
     }
-    this.protBtn.setVisible(canProtect(s));
-    this.protBtn.bg.input.enabled = this.root.visible && canProtect(s);
-    this.protBtn.label.setText(t(this.protect ? 'sf.protectOn' : 'sf.protectOff'));
+    const tk = ticketHere(s);
+    for (const b of [this.protBtn, this.buyBtn]) { b.setVisible(!!tk); b.bg.input.enabled = this.root.visible && !!tk; }
+    this.protBtn.label.setText(t(this.protect ? 'sf.protectOn' : 'sf.protectOff', { n: ticketsHere(s) }));
+    if (tk) {
+      this.buyBtn.label.setText(t('sf.buy', { n: fmtNum(tk.price) }));
+      this.buyBtn.setEnabled(this.scene.profile.currency >= tk.price);
+    }
   }
 
   enhance() {
     const s = this.scene;
     const before = star();
     const r = tryStar(this.protect && canProtect(before));
+    if (r === 'saved') s.fx.juice.flash('white');
     if (!r) return;
-    const colors = { success: theme.currency, fail: theme.hudText, destroy: theme.danger };
+    const colors = { success: theme.currency, fail: theme.hudText, destroy: theme.danger, saved: theme.button };
     this.resultT.setText(t(`sf.${r}`)).setColor(colors[r]).setAlpha(1).setScale(1.4);
     s.tweens.killTweensOf(this.resultT);
     s.tweens.add({ targets: this.resultT, scale: 1, duration: 260, ease: 'Back.easeOut' });

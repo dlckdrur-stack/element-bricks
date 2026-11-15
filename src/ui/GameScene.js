@@ -29,6 +29,7 @@ import { AutoQuality } from '../fx/AutoQuality.js';
 import { setupRun } from '../meta/runSetup.js';
 import { Pioneer } from '../meta/pioneer.js';
 import { hookResonance } from '../meta/resonanceHooks.js';
+import { hookQuests } from '../meta/questHooks.js';
 import { DamageStats } from '../meta/dmgStats.js';
 
 const STEP_MS = 1000 / balance.physics.stepHz;
@@ -83,6 +84,7 @@ export class GameScene extends Phaser.Scene {
     this.augments = new AugmentManager({ ...deps, grid: this.grid, fx: this.fx });
     this.balls = new BallSystem(this, { ...deps, grid: this.grid, fx: this.fx });
     this.dmgStats = new DamageStats(this.bus); // 일시정지 화면의 피해 비율
+    hookQuests(this.bus, this); // 일일 퀘스트 진행
     hookResonance(this.bus, this.state, meta.res); // 각인: 모든 피해·속성 효과·엘리트·방어 무시·구슬
     this.elites = new Elites({ ...deps, grid: this.grid, fx: this.fx, mgr: this.augments }); // Leveling 보다 먼저 (처치 경험치)
     this.leveling = new Leveling(this.bus, levelsCfg, this.state, meta.bonus);
@@ -232,7 +234,7 @@ export class GameScene extends Phaser.Scene {
   /** 필살기 게이지 배지 (타격 수 게이지는 자주 바뀌어서 0.5초마다도 갱신) */
   refreshUlt() {
     const ults = [...this.augments.owned.values()].filter((a) => a.def.tier === 'awaken')
-      .map((a) => ({ name: t(`aug.${a.def.id}.name`), n: a.state.count ?? 0, max: a.v.need, cd: a.state.cd ?? 0 }));
+      .map((a) => ({ name: t(`aug.${a.def.id}.name`), n: a.state.count ?? 0, max: a.v.need ?? a.v.every, cd: a.state.cd ?? 0 }));
     this.hud.setUlt(ults, theme);
   }
 

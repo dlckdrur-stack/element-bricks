@@ -35,6 +35,15 @@ export function nextInfo(lv = level()) {
 export const ticketFor = (lv = level()) => data.tickets.find((t) => lv >= t.from && lv <= t.to) ?? null; // 현재 강 기준 구간
 export const ticketCount = (id) => state().tickets[id] ?? 0;
 
+/** 방지권 1장 사용 (공 강화·성좌 강화 공용). 있으면 true */
+export function spendTicket(id) {
+  const s = state();
+  if (!(s.tickets[id] > 0)) return false;
+  s.tickets[id]--;
+  commitProfile();
+  return true;
+}
+
 export function buyTicket(id) {
   const t = data.tickets.find((x) => x.id === id);
   const p = getProfile();

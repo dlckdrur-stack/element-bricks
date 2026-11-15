@@ -38,7 +38,7 @@ export const runEnd = {
     p.currency += info.total;
     commitProfile();
     this.bus.emit(EV.GAME_OVER, info);
-    submitRank({ tier: this.tier.id, stage: s.stage, won }); // 네트워크는 판 종료 때만
+    if (!this.tier.stages) submitRank({ tier: this.tier.id, stage: s.stage, won }); // 랭킹은 챌린저만 · 네트워크는 판 종료 때만
 
     const next = tierOrder[this.tier.index + 1];
     showResult(this, info, {

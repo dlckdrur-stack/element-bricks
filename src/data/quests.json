@@ -1,0 +1,18 @@
+{
+  "note": "일일 퀘스트: 매일(현지 자정) perDay 개를 날짜로 정해서 뽑음. 특정 원소·증강으로 스테이지 도달 같은 빌드 퀘스트 포함. 모두 받으면 allClearBonus",
+  "perDay": 3,
+  "allClearBonus": 100000,
+  "templates": [
+    { "id": "stages", "n": [30, 50], "reward": 30000, "weight": 10 },
+    { "id": "kills", "n": [300, 600], "reward": 30000, "weight": 10 },
+    { "id": "crits", "n": [150, 300], "reward": 40000, "weight": 8 },
+    { "id": "boss", "n": [1, 1], "reward": 60000, "weight": 6 },
+    { "id": "ult", "n": [2, 3], "reward": 50000, "weight": 6 },
+    { "id": "mainEl", "n": [15, 25], "reward": 60000, "weight": 10 },
+    { "id": "useAug", "n": [15, 20], "reward": 80000, "weight": 12 }
+  ],
+  "screen": {
+    "top": 200, "cardH": 136, "cardGap": 14, "cardW": 490, "barW": 300, "barH": 10,
+    "claimW": 150, "claimH": 50, "bonusY": 690, "infoY": 790
+  }
+}

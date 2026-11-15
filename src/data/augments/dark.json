@@ -4,7 +4,7 @@
   "auraColor": "#9b4dff",
   "augments": [
     { "id": "dark_clone", "tier": "core", "values": { "ratio": 0.3, "min": 1, "dmgPct": 0.5, "hits": 5 }, "bonusKeys": ["dmgPct"] },
-    { "id": "dark_blackhole", "tier": "core", "values": { "every": 6, "dmgPct": 0.8, "size": 2 }, "bonusKeys": ["dmgPct"] },
+    { "id": "dark_blackhole", "tier": "core", "values": { "every": 4, "dmgPct": 0.8, "size": 2 }, "bonusKeys": ["dmgPct"] },
     { "id": "dark_blade", "tier": "core", "values": { "count": 2, "dmgPct": 0.4 }, "bonusKeys": ["dmgPct"] },
 
     { "id": "dark_legion", "tier": "exclusive", "requires": "dark_clone",
@@ -23,7 +23,7 @@
     { "id": "dark_ambush", "tier": "common", "values": { "critChancePct": 0.2 }, "gradeKeys": ["critChancePct"] },
     { "id": "dark_execute", "tier": "common", "values": { "thresholdPct": 0.15, "eliteThresholdPct": 0.07 } },
     { "id": "dark_mark", "tier": "common", "values": { "bonusPct": 1.0 }, "gradeKeys": ["bonusPct"] },
-    { "id": "dark_soulDrain", "tier": "common", "values": { "every": 25, "gain": 1 } },
+    { "id": "dark_soulDrain", "tier": "common", "values": { "every": 12, "gain": 1 } },
     { "id": "dark_void", "tier": "common", "values": { "transferPct": 1.0 }, "gradeKeys": ["transferPct"] },
     { "id": "dark_curse", "tier": "common", "values": { "dmgPct": 0.2 }, "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
     { "id": "dark_nightfall", "tier": "common", "values": { "count": 3, "dmgPct": 0.6 }, "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },

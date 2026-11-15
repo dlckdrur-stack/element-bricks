@@ -48,6 +48,7 @@
   "ranking": { "headY": 160, "top": 220, "rowH": 56, "padX": 60, "statusY": 600 },
   "rankButton": { "x": 500, "y": 80, "w": 64, "h": 44 },
   "attendButton": { "x": 40, "y": 80, "w": 64, "h": 44, "dot": 7 },
+  "questButton": { "x": 112, "y": 80, "w": 64, "h": 44, "dot": 7 },
   "pause": { "dim": 0.93, "titleY": 50, "infoY": 96, "cardW": 504, "cardAlpha": 0.92, "cardStroke": 0.22, "radius": 12, "pad": 16, "headY": 24, "card1Top": 120, "card1H": 288, "rowTop": 56, "rowH": 26, "rows": 9, "nameW": 128, "barW": 160, "barH": 10, "pctW": 58, "card2Top": 420, "card2H": 268, "roleGap": 30, "lineGap": 26, "tagW": 54, "buttonsY": 726, "buttonW": 300, "buttonH": 54, "gap": 10, "noteY": 912 },
   "dialog": { "w": 440, "h": 260, "buttonW": 170, "buttonH": 64, "buttonGapX": 200, "dim": 0.75, "info": { "w": 490, "h": 640 } }
 }

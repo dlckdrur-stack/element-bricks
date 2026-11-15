@@ -19,14 +19,14 @@
     { "id": "earth_erosion", "tier": "common", "values": { "maxHpPct": 0.03 }, "gradeKeys": ["maxHpPct"] },
     { "id": "earth_weight", "tier": "common", "values": { "sizePct": 0.3, "dmgPct": 0.25 }, "gradeKeys": ["sizePct"] },
     { "id": "earth_landslide", "tier": "common", "values": { "every": 3, "dmgPct": 0.8 }, "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
-    { "id": "earth_boulder", "tier": "common", "values": { "hits": 8, "dmgPct": 1.5 }, "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
+    { "id": "earth_boulder", "tier": "common", "values": { "hits": 5, "dmgPct": 1.5 }, "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
     { "id": "earth_fault", "tier": "common", "values": { "cracks": 2, "dmgPct": 0.4 }, "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
     { "id": "earth_gravel", "tier": "common", "values": { "count": 2, "dmgPct": 0.2 }, "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
     { "id": "earth_bedrock", "tier": "common", "values": { "dmgPct": 0.8 }, "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
-    { "id": "earth_seismic", "tier": "common", "values": { "every": 20, "dmgPct": 0.5 }, "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
+    { "id": "earth_seismic", "tier": "common", "values": { "every": 10, "dmgPct": 0.5 }, "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
     { "id": "earth_geode", "tier": "common", "values": { "cracks": 3, "spread": 2, "dmgPct": 0.5 }, "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
 
     { "id": "earth_greatQuake", "tier": "awaken", "ult": "greatQuake",
-      "values": { "need": 60, "cols": 3, "colPct": 1.8, "otherPct": 0.4, "vulnPct": 0.3, "turns": 2 } }
+      "values": { "need": 30, "cols": 3, "colPct": 1.8, "otherPct": 0.4, "vulnPct": 0.3, "turns": 2 } }
   ]
 }

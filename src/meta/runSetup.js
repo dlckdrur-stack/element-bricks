@@ -11,7 +11,7 @@ export function setupRun(balance) {
   const bonus = runBonuses();
   const res = equippedBonus(); // 장착한 각인 잠재 능력
   const o = res.total;
-  o.allDmg = (o.allDmg ?? 0) + starforceDmg(); // 스타포스: 모든 피해
+  o.allDmg = (o.allDmg ?? 0) + starforceDmg(); // 성좌 강화: 모든 피해
   bonus.xpPct += o.xp ?? 0;
   bonus.currencyPct += o.currency ?? 0;
   bonus.speedMul *= 1 + (o.ballSpeed ?? 0); // 공 속도
