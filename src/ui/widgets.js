@@ -63,12 +63,12 @@ export function fadeIn(scene) {
 }
 
 /** 위 제목 + 아래 "뒤로" 버튼이 있는 화면 틀 */
-export function makePanel(scene, titleKey, backKey = 'Menu') {
+export function makePanel(scene, titleKey, backKey = 'Menu', onBack = null) {
   const p = screens.panel;
   const W = layout.width;
   scene.add.text(W / 2, p.titleY, t(titleKey), style(layout.fontSize.title * 0.7, theme.accent, true)).setOrigin(0.5);
   makeButton(scene, W / 2, p.backY, t('common.back'), {
-    w: p.backW, h: p.backH, color: theme.hudText, onClick: () => goTo(scene, backKey),
+    w: p.backW, h: p.backH, color: theme.hudText, onClick: () => (onBack ? onBack() : goTo(scene, backKey)),
   });
 }
 

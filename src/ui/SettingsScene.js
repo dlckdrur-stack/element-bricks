@@ -28,9 +28,13 @@ const onOff = (v) => t(v ? 'settings.on' : 'settings.off');
 export class SettingsScene extends Phaser.Scene {
   constructor() { super('Settings'); }
 
+  /** data.from = 'Pause' 면 게임 중에 연 것 → 뒤로 가면 일시정지 화면으로 */
+  init(data) { this.from = data?.from; }
+
   create() {
     fadeIn(this);
-    makePanel(this, 'settings.title');
+    const back = this.from === 'Pause' ? () => { this.scene.stop(); this.scene.wake('Pause'); } : null;
+    makePanel(this, 'settings.title', 'Menu', back);
     const c = screens.settings;
     const sizes = sizeSteps();
     const rows = [

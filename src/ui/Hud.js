@@ -1,5 +1,6 @@
 import { t } from './i18n.js';
 import { hex } from '../core/color.js';
+import { makeButton } from './widgets.js';
 
 /** 상단 정보(스테이지·데미지·최고·레벨·경험치 바)·발사대 공 개수·FPS·배속·조준 안내 */
 export class Hud {
@@ -25,7 +26,11 @@ export class Hud {
     this.level = scene.add.text(16, h.row2Y, '', { ...small, fontStyle: 'bold', color: theme.text })
       .setOrigin(0, 0.5).setDepth(D);
     this.barX = h.barX;
-    this.barW = W - h.barX - 16;
+    this.barW = W - h.barX - 24 - h.pauseW;
+    this.pauseBtn = makeButton(scene, W - 12 - h.pauseW / 2, h.row2Y, t('pause.icon'), {
+      w: h.pauseW, h: h.pauseH, size: fs.small + 2, color: theme.hudText, depth: D + 2,
+      onClick: () => { scene.scene.launch('Pause'); scene.scene.pause(); },
+    });
     scene.add.rectangle(this.barX, h.row2Y, this.barW, h.barH, hex(theme.xpBarBack))
       .setOrigin(0, 0.5).setDepth(D);
     this.bar = scene.add.rectangle(this.barX, h.row2Y, this.barW, h.barH, hex(theme.xpBar))
