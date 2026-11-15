@@ -5,7 +5,7 @@
   "ball": "#ffffff",
   "aim": "#9ff6ff",
   "orb": "#ffd740",
-  "text": "#ffffff",
+  "text": "#dfe3f1",
   "hudText": "#a9b8ff",
   "accent": "#ff4dff",
   "xpBar": "#7cf8ff",
@@ -33,9 +33,10 @@
   "fontFamily": "system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans KR', sans-serif",
   "displayFont": "'Black Han Sans', system-ui, 'Noto Sans KR', sans-serif",
   "titleFont": "Orbitron, 'Black Han Sans', sans-serif",
-  "titleGlow": "rgba(255,77,255,0.35)",
+  "titleGlow": "#ff4dff",
   "textSoft": "#d4daf0",
   "textDim": "#8890b4",
   "currencySoft": "#e3c25e",
-  "labelText": "#e4e8f6"
+  "labelText": "#c2c8de",
+  "titleGlowSoft": "rgba(255,77,255,0.35)"
 }

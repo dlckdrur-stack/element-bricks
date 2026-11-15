@@ -27,6 +27,6 @@
     { "id": "ice_thaw", "tier": "common", "values": { "dmgPct": 1.5 }, "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
 
     { "id": "ice_absoluteZero", "tier": "awaken", "ult": "absoluteZero",
-      "values": { "need": 1, "rows": 3, "cooldown": 3, "freezeTurns": 2, "haltTurns": 2, "hitPct": 0.7, "bonusPct": 0.3 } }
+      "values": { "need": 1, "rows": 3, "cooldown": 5, "freezeTurns": 2, "haltTurns": 2, "hitPct": 0.7, "bonusPct": 0.3 } }
   ]
 }

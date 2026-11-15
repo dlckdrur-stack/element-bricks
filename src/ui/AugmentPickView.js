@@ -47,7 +47,9 @@ export function showAugmentPick(scene, deps, choice, level, cb) {
     ov.add(scene.add.text(W / 2, L.titleY, title, {
       fontFamily: f, fontSize: `${layout.fontSize.title * 0.75}px`, fontStyle: 'bold', color: gradeColor,
     }).setOrigin(0.5).setDepth(61)),
-    ov.add(scene.add.text(W / 2, L.subY, sub, { fontFamily: f, fontSize: `${layout.fontSize.cardDesc}px`, color: theme.hudText })
+    ov.add(scene.add.text(W / 2, L.subY, sub, {
+      fontFamily: f, fontSize: `${layout.fontSize.cardDesc}px`, color: theme.hudText, align: 'center', wordWrap: { width: W - 40, useAdvancedWrap: true },
+    })
       .setOrigin(0.5).setDepth(61)),
   ];
   for (const h of heads) h.setAlpha(0);

@@ -18,6 +18,7 @@ function state() {
     for (const el of data.elements) engr[el] = { grade: 'rare', lines: [], pity: 0 };
     p.resonance = { engr, equip: [], pending: null };
   }
+  if (p.resonance.equip.length > data.slots) p.resonance.equip.length = data.slots; // 장착 칸이 줄었으면 앞에서부터
   return p.resonance;
 }
 
@@ -107,7 +108,8 @@ export function estimate(lines) {
   const crit = (1 + (e.baseCritChance + (o.critChance ?? 0)) * (e.baseCritDmg + (o.critDmg ?? 0) - 1))
     / (1 + e.baseCritChance * (e.baseCritDmg - 1));
   const mul = (1 + (o.ballDmg ?? 0)) * (1 + (o.allDmg ?? 0)) * crit
-    * (1 + (o.elemEffect ?? 0) * e.elemShare) * (1 + (o.eliteDmg ?? 0) * e.eliteShare) * (1 + (o.ignoreDef ?? 0) * e.defShare);
+    * (1 + (o.elemEffect ?? 0) * e.elemShare) * (1 + (o.eliteDmg ?? 0) * e.eliteShare) * (1 + (o.ignoreDef ?? 0) * e.defShare)
+    * (1 + (o.maxHpDmg ?? 0) * e.maxHpPerPct) * (1 + (o.ballSpeed ?? 0) * e.speedShare);
   return mul - 1;
 }
 

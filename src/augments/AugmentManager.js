@@ -131,11 +131,11 @@ export class AugmentManager {
 
   get caps() { return draftCfg.caps; }
 
-  /** 핵심·듀오·각성을 뺀 보유 증강 수 (메인·서브 속성별) */
+  /** 듀오·각성을 뺀 보유 증강 수 (메인·서브 속성별, 핵심 포함) */
   pickCounts() {
     const out = { main: 0, sub: 0 };
     for (const a of this.owned.values()) {
-      if (['core', 'duo', 'awaken'].includes(a.def.tier)) continue;
+      if (['duo', 'awaken'].includes(a.def.tier)) continue;
       const st = this.elementStatus(a.def.element);
       if (st) out[st]++;
     }

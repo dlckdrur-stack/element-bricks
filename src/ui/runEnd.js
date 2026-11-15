@@ -26,12 +26,12 @@ export const runEnd = {
     this.placeLauncher(false);
     this.hud.showHint(false);
 
-    p.bestStage = Math.max(p.bestStage, s.stage);
+    if (!this.tier.stages) p.bestStage = Math.max(p.bestStage, s.stage); // 최고 기록은 챌린저만
     p.tierBest = { ...p.tierBest, [this.tier.id]: Math.max(p.tierBest?.[this.tier.id] ?? 0, s.stage) };
     const clear = won ? markCleared(this.tier.id) : { first: false, reward: null, bonus: 0 };
     const w = this.wallet;
     const info = {
-      stage: s.stage, best: p.tierBest[this.tier.id], newBest: s.stage > this.startBest,
+      stage: s.stage, best: p.tierBest[this.tier.id], newBest: !this.tier.stages && s.stage > this.startBest, showBest: !this.tier.stages,
       total: w.total + clear.bonus, bonusPct: w.bonusPct, won,
       clearBonus: clear.bonus, unlocked: clear.reward ? t(`tier.unlocked.${clear.reward}`) : null,
     };

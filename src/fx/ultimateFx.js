@@ -1,5 +1,6 @@
 import { hex } from '../core/color.js';
 import { awakenCutin } from '../ui/Cutin.js';
+import { playUltArt } from './ultArt.js';
 
 const ms = (s) => s * 1000;
 const colorCache = new Map();
@@ -61,6 +62,7 @@ export const ultimate = {
     this.timed(c.rainTime, c.rainEvery, () => this.p.emit(c.rain, Math.random() * W, -10, col(c.color)));
     this.sprites.play(c.floorWave, W / 2, H, col(c.color), { priority: 2 });
     this.sprites.play(c.floorWave, W / 2, H, col(c.hot), { priority: 2, scale: 0.6 });
+    playUltArt(this, 'purgatory'); // 거대 메테오
   },
 
   /** 블록 아래에서 불기둥이 솟구침 */
@@ -96,6 +98,7 @@ export const ultimate = {
     const W = this.scene.scale.width;
     this.ultStart(c, title, sub, col(c.color));
     if (c.rain) this.timed(c.rainTime, c.rainEvery, () => this.p.emit(c.rain, Math.random() * W, -10, col(c.color)));
+    playUltArt(this, name); // 세계수·화면 균열·얼었다 깨짐
   },
 
   /** 절정: 거대한 고리 2겹 + 섬광 + 입자 폭발 */
@@ -122,9 +125,8 @@ export const ultimate = {
     const c = this.cfg.ult.eclipse;
     const x = this.scene.scale.width / 2;
     this.ultStart(c, title, sub, col(c.color));
-    this.sprites.play(c.sunCore, x - 30, c.y, col(c.sun), { priority: 2 });
-    this.sprites.play(c.moon, x + 30, c.y, col(c.color), { priority: 2 });
     this.sprites.play(c.corona, x, c.y, col(c.color), { priority: 2 });
+    playUltArt(this, 'eclipse'); // 개기일식
   },
 
   /** 겹침 순간: 거대한 코로나 폭발 */
@@ -153,6 +155,7 @@ export const ultimate = {
       const x = (W * (i + 0.5)) / c.preBolts + (Math.random() - 0.5) * 60;
       this.lines.bolt(x, 0, x + (Math.random() - 0.5) * 80, H, col(c.color), c.bolt);
     }
+    playUltArt(this, 'judgment'); // 뇌운
   },
 
   /** 마지막: 하늘 전체에 낙뢰가 쏟아지고 바닥에서 거대한 전기 고리 */

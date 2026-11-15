@@ -1,6 +1,5 @@
 import { EV } from '../core/events.js';
 import { strike, cx, cy, nearest, isBallHit, later } from './helpers.js';
-import { stageHp } from '../core/stageLayout.js';
 import { t } from '../ui/i18n.js';
 
 /**
@@ -99,14 +98,10 @@ export const handlers = {
       api.fx.ultGeneric('worldTree', t('aug.grass_worldTree.name'), t('ult.sub'));
       api.grid.halt = Math.max(api.grid.halt, aug.v.holdTurns);
       aug.state.buff = aug.v.buffTurns;
-      later(api, c.startDelay, () => {
+      later(api, c.startDelay, () => { // 피해 없이 생명의 기운만: buffTurns 턴 동안 모든 피해 +buffPct
         const g = api.grid;
         api.fx.ultFinale('worldTree', api.scene.scale.width / 2, g.top + g.rows * g.cellH);
-        const dmg = stageHp(api.state.stage) * aug.v.dmgPct;
-        for (const b of g.blocks()) {
-          api.fx.ultCell('worldTree', cx(api, b), cy(api, b));
-          g.damage(b, dmg, SRC('grass_worldTree', { ult: true }));
-        }
+        for (const b of g.blocks()) api.fx.ultCell('worldTree', cx(api, b), cy(api, b));
       });
     });
   },
@@ -185,14 +180,10 @@ export const handlers = {
   },
 
   /** 풍요: every 레벨마다 이번 판 공 +1개 (최대 max) */
+  /** 풍요: 고르는 즉시 이번 판 공 +balls (실버 1 · 골드 2 · 프리즘 3). 이어하기는 저장된 공 개수로 덮어씀 */
   grass_abundance(api, aug) {
-    aug.state.n = 0;
-    api.bus.on(EV.LEVEL_UP, ({ level }) => {
-      if (level % aug.v.every || aug.state.n >= aug.v.max) return;
-      aug.state.n++;
-      api.state.ballCount++;
-      api.scene.look.flareUp('pick');
-    });
+    api.state.ballCount += aug.v.balls;
+    api.scene.look?.flareUp('pick');
   },
 
   /** 무럭무럭: 공이 맞힐 때마다 공 크기 +perHitPct (최대 maxPct), 커질수록 데미지도. 그 판 동안 유지 */

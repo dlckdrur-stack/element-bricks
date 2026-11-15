@@ -13,10 +13,11 @@ import { PauseScene } from './ui/PauseScene.js';
 import { UpgradeScene } from './ui/UpgradeScene.js';
 import { SettingsScene } from './ui/SettingsScene.js';
 import { TierScene } from './ui/TierScene.js';
+import { AttendanceScene } from './ui/AttendanceScene.js';
 
 // 개발 모드에서만: 주소 뒤에 ?fxtest 를 붙이면 이펙트 테스트 화면으로 시작 (배포 빌드에는 포함되지 않음)
 const fxTest = import.meta.env.DEV && new URLSearchParams(location.search).has('fxtest');
-const scenes = { Menu: MenuScene, Tier: TierScene, Game: GameScene, Upgrade: UpgradeScene, Shop: ShopScene, Ranking: RankingScene, Pause: PauseScene, Settings: SettingsScene };
+const scenes = { Menu: MenuScene, Tier: TierScene, Game: GameScene, Upgrade: UpgradeScene, Shop: ShopScene, Ranking: RankingScene, Pause: PauseScene, Settings: SettingsScene, Attendance: AttendanceScene };
 
 /** 캔버스 글자는 글꼴이 늦게 오면 기본 글꼴로 굳으므로, 게임 시작 전에 글꼴을 먼저 불러온다 (최대 FONT_WAIT_MS) */
 const FONT_WAIT_MS = 3000;

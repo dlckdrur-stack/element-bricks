@@ -53,12 +53,15 @@ export function ultimate(api, aug, fire) {
 export function ultimateGauge(api, aug, event, filter, fire) {
   aug.state.count = 0;
   aug.state.busy = false;
+  aug.state.cd = 0; // 발동 후 ultCooldownTurns 턴 동안은 게이지가 안 참 (5턴에 한 번)
+  api.bus.on(EV.TURN_START, () => { if (aug.state.cd > 0) aug.state.cd--; });
   api.bus.on(event, (ctx) => {
-    if (aug.state.busy || ctx.source?.ult || !filter(ctx)) return;
+    if (aug.state.busy || aug.state.cd > 0 || ctx.source?.ult || !filter(ctx)) return;
     aug.state.count++;
     if (aug.state.count < aug.v.need) return;
     aug.state.count = 0;
     aug.state.busy = true;
+    aug.state.cd = balance.ultCooldownTurns;
     later(api, fire(), () => { aug.state.busy = false; });
   });
 }

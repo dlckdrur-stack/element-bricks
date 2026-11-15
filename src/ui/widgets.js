@@ -35,7 +35,8 @@ export function makeButton(scene, x, y, text, { w, h, color = theme.button, size
   const glow = scene.add.rectangle(0, 0, w + c.glowPad, h + c.glowPad, col, 0).setStrokeStyle(c.glowWidth, col, c.glowAlpha);
   const bg = scene.add.rectangle(0, 0, w, h, col, c.fill).setStrokeStyle(c.stroke, col);
   const shine = scene.add.rectangle(0, -h / 2 + c.shineInset, w - c.shineInset * 4, 2, 0xffffff, c.shineAlpha);
-  const label = scene.add.text(0, 0, text, styleD(size, theme.labelText)).setOrigin(0.5).setShadow(0, 0, color, c.textGlow, false, true);
+  const label = scene.add.text(0, 0, text, styleD(size, theme.labelText)).setOrigin(0.5);
+  if (c.textGlow) label.setShadow(0, 0, color, c.textGlow, false, true);
   const box = scene.add.container(x, y, [glow, bg, shine, cornerMarks(scene, w, h, c), label]).setDepth(depth);
   box.bg = bg;
   box.label = label;
@@ -93,7 +94,7 @@ export function makePanel(scene, titleKey, backKey = 'Menu', onBack = null) {
   const p = screens.panel;
   const W = layout.width;
   scene.add.text(W / 2, p.titleY, t(titleKey), styleD(layout.fontSize.title * 0.7, theme.textSoft)).setOrigin(0.5)
-    .setShadow(0, 0, theme.titleGlow, p.titleGlow, false, true);
+    .setShadow(0, 0, theme.titleGlowSoft, p.titleGlow, false, true);
   const lineY = p.titleY + p.lineGap;
   scene.add.rectangle(W / 2, lineY, p.lineW, 3, hex(theme.accent)); // 제목 밑줄 + 양끝 마름모
   for (const s of [-1, 1]) scene.add.rectangle(W / 2 + (s * p.lineW) / 2, lineY, 9, 9, hex(theme.accent)).setAngle(45);
@@ -108,7 +109,7 @@ export function makeCorner(scene, profile) {
   const fs = layout.fontSize.hud;
   const money = scene.add.text(c.pad, c.y, t('meta.currency', { n: fmtNum(profile.currency) }),
     style(fs, theme.currency, true)).setOrigin(0, 0.5);
-  const best = scene.add.text(layout.width - c.pad, c.y, t('hud.best', { n: profile.bestStage }),
+  const best = scene.add.text(layout.width - c.pad, c.y, t('hud.bestChal', { n: profile.tierBest?.challenger ?? 0 }),
     style(fs, theme.hudText, true)).setOrigin(1, 0.5);
   return { money, best, refresh: (p) => money.setText(t('meta.currency', { n: fmtNum(p.currency) })) };
 }

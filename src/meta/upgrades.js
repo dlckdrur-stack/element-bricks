@@ -49,7 +49,6 @@ export function runBonuses() {
     critChance: effect('critChance'),
     currencyPct: effect('currency'),
     rerolls: effect('reroll'),
-    choices: effect('choices'),
     maxLevel: effect('maxLevel'),
     luck: effect('luck'),
     balls: effect('balls'),

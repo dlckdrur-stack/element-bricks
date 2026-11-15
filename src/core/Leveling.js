@@ -28,11 +28,10 @@ export class Leveling {
 
   get progress() { return Math.min(1, this.xp / this.need); }
 
-  /** 게임 시작 직후 레벨 1 (메인 속성 선택) */
+  /** 게임 시작: 레벨 1 (증강 없음, 메인 속성은 레벨 2에서) */
   start() {
     this.level = 1;
     this.xp = 0;
-    this.pending.push(1);
     this.bus.emit(EV.LEVEL_UP, { level: 1 });
   }
 

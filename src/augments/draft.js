@@ -38,7 +38,7 @@ function weightsFor(level, mgr) {
 /**
  * 레벨에 맞는 선택지.
  * kind 'main'  : 모든 속성 핵심 중 3개 (등급 없음)
- * kind 'sub'   : 메인이 아닌 속성의 핵심 중 3개 (등급 없음)
+ * kind 'sub'   : 메인이 아닌 속성의 핵심 중 3개 (등급 없음, 메인 속성은 안 나옴)
  * kind 'core'  : 11·16레벨. 메인·서브 속성의 남은 핵심
  * kind 'duo'   : 17레벨. 내 핵심 조합의 듀오 (없으면 각성 → 등급)
  * kind 'awaken': 18레벨. 메인·서브 속성의 각성 (플래티넘 클리어 후, 없으면 듀오 → 등급)
@@ -52,16 +52,15 @@ export function buildChoices(kind, level, mgr, rng = Math.random) {
   if (kind === 'main') {
     return { kind, grade: null, options: sample(all.filter((d) => d.tier === 'core'), n, rng) };
   }
-  if (kind === 'sub') { // 다른 속성 핵심 + 메인 속성 핵심 1장(고르면 한 속성 집중)
-    const cores = all.filter((d) => d.tier === 'core');
-    const mine = sample(cores.filter((d) => d.element === mgr.main), 1, rng);
-    const others = sample(cores.filter((d) => d.element !== mgr.main), n - mine.length, rng);
-    return { kind, grade: null, options: sample([...others, ...mine], others.length + mine.length, rng) };
+  if (kind === 'sub') { // 메인이 아닌 속성의 핵심만 (메인을 또 고를 수 없음)
+    return { kind, grade: null, options: sample(all.filter((d) => d.tier === 'core' && d.element !== mgr.main), n, rng) };
   }
+  const cnt = mgr.pickCounts();
+  const room = { main: cnt.main < draftCfg.caps.main, sub: cnt.sub < draftCfg.caps.sub }; // 메인 10 · 서브 5 (핵심 포함), 다른 속성은 안 나옴
 
   const mine = (d) => d.element === mgr.main || d.element === mgr.sub;
   if (kind === 'core') { // 11·16레벨: 메인·서브 속성의 남은 핵심
-    const cores = all.filter((d) => d.tier === 'core' && mine(d));
+    const cores = all.filter((d) => d.tier === 'core' && mine(d) && room[categoryOf(d, mgr)]);
     if (cores.length) return { kind, grade: null, options: sample(cores, n, rng) };
   }
   const duos = all.filter((d) => d.tier === 'duo' && (d.requiresAll ?? []).every((id) => mgr.has(id)));
@@ -71,8 +70,6 @@ export function buildChoices(kind, level, mgr, rng = Math.random) {
   if (kind === 'awaken' && duos.length) return { kind: 'duo', grade: null, options: sample(duos, n, rng) };
   // 고를 핵심·듀오·각성이 없으면 일반 등급 선택으로
 
-  const cnt = mgr.pickCounts();
-  const room = { main: cnt.main < draftCfg.caps.main, sub: cnt.sub < draftCfg.caps.sub }; // 메인 10 · 서브 5, 다른 속성은 안 나옴
   const pool = all.filter((d) => !['core', 'awaken', 'duo'].includes(d.tier) && (!d.requires || mgr.has(d.requires))
     && room[categoryOf(d, mgr)]);
   if (!pool.length) return { kind, grade: null, options: [] };

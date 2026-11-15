@@ -1,6 +1,7 @@
 import { runBonuses } from './upgrades.js';
 import { dmgMul } from './enhance.js';
 import { equippedBonus } from './resonance.js';
+import { dmgAt as starforceDmg } from './starforce.js';
 
 /**
  * 판 시작 시 영구 강화를 게임 수치에 반영.
@@ -10,8 +11,10 @@ export function setupRun(balance) {
   const bonus = runBonuses();
   const res = equippedBonus(); // 장착한 각인 잠재 능력
   const o = res.total;
+  o.allDmg = (o.allDmg ?? 0) + starforceDmg(); // 스타포스: 모든 피해
   bonus.xpPct += o.xp ?? 0;
   bonus.currencyPct += o.currency ?? 0;
+  bonus.speedMul *= 1 + (o.ballSpeed ?? 0); // 공 속도
   const b = balance.stats;
   const baseStats = {
     ...b,

@@ -4,7 +4,7 @@ import theme from '../data/themes/neon.json';
 import screens from '../data/screens.json';
 import { hex } from '../core/color.js';
 import { applyFxSettings, getSettings } from '../meta/settings.js';
-import { makeButton, style, styleD } from './widgets.js';
+import { makeButton, style, styleD, confirmDialog } from './widgets.js';
 import { showPauseStats } from './PauseStats.js';
 import { t } from './i18n.js';
 
@@ -20,7 +20,7 @@ export class PauseScene extends Phaser.Scene {
     const W = layout.width;
     const H = layout.height;
     this.add.rectangle(W / 2, H / 2, W, H, hex(theme.overlay), P.dim).setInteractive();
-    this.add.text(W / 2, P.titleY, t('pause.title'), styleD(layout.fontSize.title * 0.62, theme.textSoft)).setOrigin(0.5).setShadow(0, 0, theme.titleGlow, 8, false, true);
+    this.add.text(W / 2, P.titleY, t('pause.title'), styleD(layout.fontSize.title * 0.62, theme.textSoft)).setOrigin(0.5).setShadow(0, 0, theme.titleGlowSoft, 8, false, true);
     showPauseStats(this, P, this.gameScene());
     const items = [
       { key: 'pause.resume', color: theme.buttonPrimary, go: () => this.resume() },
@@ -51,8 +51,13 @@ export class PauseScene extends Phaser.Scene {
     this.scene.launch('Settings', { from: 'Pause' });
   }
 
+  /** 메인으로: 확인 후 지금까지 얻은 재화를 받고 판을 끝냄 (결과 화면 → 메인) */
   toMenu() {
-    this.scene.stop('Game');
-    this.scene.start('Menu');
+    confirmDialog(this, 'pause.quitConfirm', () => {
+      const g = this.gameScene();
+      this.scene.stop();
+      this.scene.resume('Game');
+      g.finishRun(false);
+    });
   }
 }

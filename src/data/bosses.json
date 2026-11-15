@@ -4,7 +4,8 @@
   "clearDelayMs": 1100,
   "bonus": 2.5,
   "currencyMul": 20,
-  "hpMul": { "bronze": 12, "silver": 22, "gold": 24, "platinum": 26, "diamond": 28, "challenger": 30 },
+  "hpMul": { "bronze": 9, "silver": 16.5, "gold": 18, "platinum": 19.5, "diamond": 21, "challenger": 22.5 },
+  "hpNote": "공·증강 피해를 0.75배로 낮춘 만큼 보스 체력도 0.75배 (보스 난이도는 그대로)",
   "challengerEvery": 100,
   "challengerGrowth": 0.25,
   "tiers": {

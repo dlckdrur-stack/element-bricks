@@ -10,6 +10,8 @@ import { applyFxSettings } from '../meta/settings.js';
 import { MenuBall } from './MenuBall.js';
 import { makeButton, makeCorner, goTo, fadeIn } from './widgets.js';
 import { makeMenuTitle } from './MenuTitle.js';
+import { canClaim } from '../meta/attendance.js';
+import { hex } from '../core/color.js';
 import { t } from './i18n.js';
 
 /**
@@ -31,6 +33,12 @@ export class MenuScene extends Phaser.Scene {
     makeCorner(this, profile);
     const rb = screens.rankButton;
     makeButton(this, rb.x, rb.y, t('rank.icon'), { w: rb.w, h: rb.h, size: layout.fontSize.cardDesc, color: theme.currency, onClick: () => goTo(this, 'Ranking'), depth: 30 });
+    const ab = screens.attendButton; // 출석 체크
+    makeButton(this, ab.x, ab.y, t('attend.icon'), { w: ab.w, h: ab.h, size: layout.fontSize.cardDesc, color: theme.buttonPrimary, onClick: () => goTo(this, 'Attendance'), depth: 30 });
+    if (canClaim()) {
+      const dot = this.add.circle(ab.x + ab.w / 2 - 4, ab.y - ab.h / 2 + 4, ab.dot, hex(theme.danger)).setDepth(31);
+      this.tweens.add({ targets: dot, scale: 1.3, duration: 500, yoyo: true, repeat: -1 });
+    }
     makeMenuTitle(this, 30);
 
     const items = [];

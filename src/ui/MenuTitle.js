@@ -47,7 +47,7 @@ export function makeMenuTitle(scene, depth) {
   // 제목: 원소색 그라데이션 + 빛 번짐 + 천천히 숨쉬기
   const title = scene.add.text(cx, cy, t('menu.title'), {
     fontFamily: theme.titleFont, fontSize: `${m.titleSize}px`, fontStyle: '900', color: '#ffffff',
-  }).setOrigin(0.5).setDepth(depth).setAlpha(m.titleAlpha).setShadow(0, 0, theme.titleGlow, m.titleGlow, false, true);
+  }).setOrigin(0.5).setDepth(depth).setStroke('#ffffff', 1).setShadow(0, 0, theme.titleGlow, m.titleGlow, true, true);
   const grd = title.context.createLinearGradient(0, 0, title.width, 0);
   ELEMENT_COLORS.forEach((c, i) => grd.addColorStop(i / (ELEMENT_COLORS.length - 1), c));
   title.setFill(grd);

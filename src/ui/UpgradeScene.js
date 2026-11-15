@@ -12,10 +12,11 @@ import { makeButton, makePanel, makeCorner, fadeIn, style, fmtNum } from './widg
 import { t } from './i18n.js';
 import { EnhancePage } from './EnhancePage.js';
 import { ResonancePage } from './ResonancePage.js';
+import { StarforcePage } from './StarforcePage.js';
 import { isFeatureUnlocked } from '../meta/tiers.js';
 
 const C = upgData.screen;
-const TABS = ['upgrade', 'enhance', 'resonance'];
+const TABS = ['upgrade', 'enhance', 'resonance', 'starforce'];
 
 /** 효과 숫자 표시용: pct → 15, count/level → 2 */
 function effNum(u, v) {
@@ -39,7 +40,8 @@ export class UpgradeScene extends Phaser.Scene {
 
     this.enhance = new EnhancePage(this, { onChange: () => this.refresh() });
     this.resonance = new ResonancePage(this, { onChange: () => this.refresh() });
-    this.pages = { upgrade: this.makeUpgradePage(), enhance: this.enhance, resonance: this.resonance };
+    this.starforce = new StarforcePage(this, { onChange: () => this.refresh() });
+    this.pages = { upgrade: this.makeUpgradePage(), enhance: this.enhance, resonance: this.resonance, starforce: this.starforce };
     const W = layout.width;
     this.tabs = TABS.map((key, i) => makeButton(this, W / 2 + (i - (TABS.length - 1) / 2) * C.tabGap, C.tabY,
       t(`upgrade.tab.${key}`), { w: C.tabW, h: C.tabH, size: layout.fontSize.cardDesc + 2, onClick: () => this.showTab(key) }));
@@ -83,6 +85,7 @@ export class UpgradeScene extends Phaser.Scene {
     this.corner.refresh(this.profile);
     this.enhance?.refresh();
     this.resonance?.refresh();
+    this.starforce?.refresh();
     for (const r of this.rows ?? []) {
       const { u } = r;
       const lv = level(u.id);

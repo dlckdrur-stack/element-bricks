@@ -79,8 +79,8 @@ export class Hud {
   /** 필살기 게이지 배지. list = [{ name, n, max }] — readyAt(80%) 이상이면 크게·노랗게 */
   setUlt(list, theme) {
     if (!list.length) { this.ult.setText(''); return; }
-    const near = (u) => u.n >= u.max * this.ultCfg.readyAt;
-    this.ult.setText(list.map((u) => t(near(u) ? 'ult.ready' : 'ult.badge', u)).join('   '));
+    const near = (u) => !u.cd && u.n >= u.max * this.ultCfg.readyAt;
+    this.ult.setText(list.map((u) => t(u.cd ? 'ult.cooldown' : near(u) ? 'ult.ready' : 'ult.badge', u)).join('   '));
     const ready = list.some(near);
     this.ult.setColor(ready ? theme.currency : theme.hudText);
     this.ult.setScale(ready ? this.ultCfg.readyScale : 1);

@@ -194,7 +194,7 @@ export class GameScene extends Phaser.Scene {
     s.phase = 'end';
     s.launchX = this.balls.nextLaunchX;
     this.bus.emit(EV.TURN_END, { stage: s.stage });
-    if (s.stage > this.saveData.bestStage) {
+    if (!this.tier.stages && s.stage > this.saveData.bestStage) { // 최고 기록은 챌린저(무한)만
       this.saveData.bestStage = s.stage;
       commitProfile(); // 저장은 턴 끝에 한 번
     }
@@ -232,7 +232,7 @@ export class GameScene extends Phaser.Scene {
   /** 필살기 게이지 배지 (타격 수 게이지는 자주 바뀌어서 0.5초마다도 갱신) */
   refreshUlt() {
     const ults = [...this.augments.owned.values()].filter((a) => a.def.tier === 'awaken')
-      .map((a) => ({ name: t(`aug.${a.def.id}.name`), n: a.state.count ?? 0, max: a.v.need }));
+      .map((a) => ({ name: t(`aug.${a.def.id}.name`), n: a.state.count ?? 0, max: a.v.need, cd: a.state.cd ?? 0 }));
     this.hud.setUlt(ults, theme);
   }
 

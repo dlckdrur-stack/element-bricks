@@ -33,6 +33,6 @@
     { "id": "dark_wraith", "tier": "common", "values": { "dmgPct": 0.5 }, "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
 
     { "id": "dark_eclipse", "tier": "awaken", "ult": "eclipse",
-      "values": { "need": 15, "execPct": 0.25, "hitPct": 0.6, "critBuffPct": 0.25, "buffTurns": 2 } }
+      "values": { "need": 100, "execPct": 0.25, "hitPct": 0.6, "critBuffPct": 0.25, "buffTurns": 2 } }
   ]
 }

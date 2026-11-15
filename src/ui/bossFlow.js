@@ -12,7 +12,7 @@ import { Boss } from '../core/Boss.js';
  */
 export const bossFlow = {
   isBossStage(stage) {
-    return this.tier.stages ? stage === this.tier.stages : stage % cfg.challengerEvery === 0;
+    return this.tier.stages ? stage === this.tier.stages : false; // 챌린저: 보스 없는 무한 스테이지
   },
 
   startBoss() {

@@ -33,7 +33,7 @@ export function showResult(scene, info, { onRetry, onMenu, onNext }) {
     txt(r.currencyY + fs.title * 0.6, t('result.bonus', { n: Math.round(info.bonusPct * 100) }),
       style(fs.small, theme.currency));
   }
-  txt(r.bestY, t('gameover.best', { n: info.best }), style(fs.body, theme.hudText));
+  if (info.showBest) txt(r.bestY, t('gameover.best', { n: info.best }), style(fs.body, theme.hudText)); // 챌린저만
   if (info.newBest) {
     const nb = txt(r.newBestY, t('gameover.newBest'), style(fs.body, theme.orb, true)).setAlpha(0);
     scene.tweens.add({ targets: nb, alpha: 1, scale: { from: 1.6, to: 1 }, duration: 350, delay: r.countDelayMs, ease: 'Back.easeOut' });

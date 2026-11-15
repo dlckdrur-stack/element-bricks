@@ -12,7 +12,7 @@
   "stats": {
     "critChance": 0.05,
     "critDamage": 1.5,
-    "ballDamageMul": 1,
+    "ballDamageMul": 0.75,
     "ballScale": 1,
     "pierce": 0,
     "pierceBonus": 0,
@@ -54,7 +54,8 @@
     "stepHz": 60,
     "maxStepsPerFrame": 8
   },
-  "augmentDamageMul": 0.7,
+  "augmentDamageMul": 0.525,
+  "ultCooldownTurns": 5,
   "currency": {
     "perBaseHp": 1
   },
