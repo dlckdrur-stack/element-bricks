@@ -51,9 +51,8 @@ export class Leveling {
     }
   }
 
-  /** 'main' | 'sub' | 'graded' | 'duo' */
+  /** 'main' | 'sub' | 'core' | 'duo' | 'awaken' | 'graded' (levels.json coreLevels) */
   kindFor(level) {
-    if (level > this.cfg.maxLevel) return 'duo'; // 기본 만렙을 넘는 레벨 = 영구 강화 '만렙 확장'으로만 도달
     return this.cfg.coreLevels[String(level)] ?? 'graded';
   }
 }

@@ -65,7 +65,7 @@ export function makePickCard(o) {
   // 앞면 (이전 카드 내용과 같음)
   const subFocus = choice.kind === 'sub' && def.element === mgr.main; // 서브 자리에 메인 속성 = 집중
   const status = choice.kind === 'main' || subFocus ? 'main' : choice.kind === 'sub' ? 'sub' : mgr.elementStatus(def.element);
-  const v = displayValues(mgr.valuesFor(def, choice.grade, status !== null));
+  const v = displayValues(mgr.valuesFor(def, choice.grade, status === 'main'));
   // 카드가 낮아지면(선택지 4~5장) 글씨도 같은 비율로 작게. 설명이 넘치면 들어갈 때까지 더 줄임
   const k = Math.max(cfg.text.minScale, Math.min(1, H / cfg.text.baseH));
   const px = (n) => `${Math.round(n * k)}px`;
@@ -91,7 +91,8 @@ export function makePickCard(o) {
   fitText(desc, H / 2 - cfg.text.padBottom - desc.y, Math.round(fs.cardDesc * k), cfg.text.minDesc);
   parts.push(desc);
   if (status) {
-    parts.push(scene.add.text(W / 2 - 14, top, t(`pick.tag.${status}`, { n: Math.round(draftCfg.elementBonus * 100) }), {
+    const tagN = status === 'sub' ? draftCfg.roles.subAmpPerAug : draftCfg.elementBonus;
+    parts.push(scene.add.text(W / 2 - 14, top, t(`pick.tag.${status}`, { n: Math.round(tagN * 100) }), {
       fontFamily: f, fontSize: px(fs.cardTag), color: theme.orb,
     }).setOrigin(1, 0));
   }

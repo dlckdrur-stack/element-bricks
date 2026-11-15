@@ -43,7 +43,7 @@
     "rampUntil": 50,
     "rampTarget": 3,
     "lateGrowth": 1.04,
-    "perLevel": 0.15
+    "perLevel": 0.09
   },
   "orb": {
     "chance": 0.9,
@@ -54,7 +54,7 @@
     "stepHz": 60,
     "maxStepsPerFrame": 8
   },
-  "augmentDamageMul": 0.85,
+  "augmentDamageMul": 0.7,
   "currency": {
     "perBaseHp": 1
   },

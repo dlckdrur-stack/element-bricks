@@ -29,6 +29,7 @@ import { AutoQuality } from '../fx/AutoQuality.js';
 import { setupRun } from '../meta/runSetup.js';
 import { Pioneer } from '../meta/pioneer.js';
 import { hookResonance } from '../meta/resonanceHooks.js';
+import { DamageStats } from '../meta/dmgStats.js';
 
 const STEP_MS = 1000 / balance.physics.stepHz;
 
@@ -81,6 +82,7 @@ export class GameScene extends Phaser.Scene {
     this.grid = new Grid(this, deps);
     this.augments = new AugmentManager({ ...deps, grid: this.grid, fx: this.fx });
     this.balls = new BallSystem(this, { ...deps, grid: this.grid, fx: this.fx });
+    this.dmgStats = new DamageStats(this.bus); // 일시정지 화면의 피해 비율
     hookResonance(this.bus, this.state, meta.res); // 각인: 모든 피해·속성 효과·엘리트·방어 무시·구슬
     this.elites = new Elites({ ...deps, grid: this.grid, fx: this.fx, mgr: this.augments }); // Leveling 보다 먼저 (처치 경험치)
     this.leveling = new Leveling(this.bus, levelsCfg, this.state, meta.bonus);
@@ -225,10 +227,7 @@ export class GameScene extends Phaser.Scene {
     this.hud.setLevel(lv.level, lv.progress, lv.isMax, color);
     this.refreshUlt();
     const m = this.augments;
-    const pct = m.main ? Math.round(m.focusPct(m.main) * 100) : 0;
-    const pure = Math.round(m.purePct * 100);
-    const txt = !pct ? '' : pure ? t('hud.focusPure', { el: t(`element.${m.main}`), n: pct, p: pure }) : t('hud.focus', { el: t(`element.${m.main}`), n: pct });
-    this.hud.setFocus(txt, m.main ? `#${m.color(m.main).toString(16).padStart(6, '0')}` : null);
+    this.hud.setFocus(m.roleText(t), m.main ? `#${m.color(m.main).toString(16).padStart(6, '0')}` : null);
   }
 
   /** 필살기 게이지 배지 (타격 수 게이지는 자주 바뀌어서 0.5초마다도 갱신) */

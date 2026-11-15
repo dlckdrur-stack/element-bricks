@@ -50,6 +50,7 @@ export class AugmentManager {
     api.bus.on(EV.HIT, (ctx) => {
       const el = ctx.source?.type;
       if (this.counts[el]) ctx.damage *= 1 + this.focusPct(el);
+      if (el && el === this.main) ctx.damage *= 1 + this.subAmp; // 서브 = 메인 효과 증폭
     });
     this.luck = api.bonus?.luck ?? draftCfg.luck;               // 영구 강화: 행운 단계
     this.choices = draftCfg.choices + (api.bonus?.choices ?? 0); // 영구 강화: 선택지 추가
@@ -106,7 +107,7 @@ export class AugmentManager {
 
   recompute() {
     for (const aug of this.owned.values()) {
-      const bonusOn = this.elementStatus(aug.def.element) !== null;
+      const bonusOn = this.elementStatus(aug.def.element) === 'main'; // 메인만 자기 피해 보너스
       Object.assign(aug.v, this.valuesFor(aug.def, aug.grade, bonusOn));
     }
     const s = { ...(this.api.baseStats ?? balance.stats) }; // 영구 강화가 반영된 기본 능력치
@@ -125,6 +126,21 @@ export class AugmentManager {
   focusPct(el) {
     const f = draftCfg.focus;
     return Math.min(f.maxPct, f.perAugPct * (this.counts[el] ?? 0));
+  }
+
+  /** 서브 역할: 서브 속성 증강 1개당 메인 속성 효과 +subAmpPerAug (최대 subAmpMax) */
+  get subAmp() {
+    const r = draftCfg.roles;
+    return this.sub ? Math.min(r.subAmpMax, r.subAmpPerAug * (this.counts[this.sub] ?? 0)) : 0;
+  }
+
+  /** HUD 한 줄: "불 집중 +24% · 서브(번개) 증폭 +15%" */
+  roleText(t) {
+    if (!this.main) return '';
+    const el = t(`element.${this.main}`);
+    const n = Math.round(this.focusPct(this.main) * 100);
+    const amp = Math.round(this.subAmp * 100);
+    return amp ? t('hud.focusAmp', { el, n, sub: t(`element.${this.sub}`), p: amp }) : t('hud.focus', { el, n });
   }
 
   /** 순수(한 속성만): 공 데미지 +purePerAugPct × 개수 (최대 pureMaxPct) */

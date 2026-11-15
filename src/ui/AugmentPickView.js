@@ -39,7 +39,7 @@ export function showAugmentPick(scene, deps, choice, level, cb) {
   // 제목·설명
   const gradeName = choice.grade ? t(`grade.${choice.grade}`) : '';
   const gradeColor = choice.grade ? draftCfg.grades[choice.grade].color : theme.text;
-  const title = choice.grade ? t('pick.title.graded', { n: level }) : t(`pick.title.${choice.kind}`);
+  const title = choice.grade ? t('pick.title.graded', { n: level }) : t(`pick.title.${choice.kind}`, { n: level });
   const sub = choice.grade ? t('pick.sub.graded', { grade: gradeName }) : t(`pick.sub.${choice.kind}`);
   const heads = [
     ov.add(scene.add.text(W / 2, L.titleY, title, {

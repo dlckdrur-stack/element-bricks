@@ -1,9 +1,16 @@
 {
   "xpPerBlock": 1,
-  "xpToNext": [4, 8, 12, 20, 28, 36, 48, 60, 76, 92, 110],
-  "maxLevel": 10,
-  "maxLevelCap": 12,
-  "afterMaxXpPerDamage": 100,
+  "xpToNext": [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 13, 14, 14, 15, 12, 14, 18, 20],
+  "maxLevel": 18,
+  "maxLevelCap": 20,
+  "afterMaxXpPerDamage": 60,
   "afterMaxDamageGain": 1,
-  "coreLevels": { "1": "main", "6": "sub" }
+  "coreLevels": {
+    "1": "main",
+    "6": "sub",
+    "11": "core",
+    "16": "core",
+    "17": "duo",
+    "18": "awaken"
+  }
 }
