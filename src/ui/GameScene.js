@@ -14,7 +14,7 @@ import { hex } from '../core/color.js';
 import { Fx } from '../fx/Fx.js';
 import { AugmentManager } from '../augments/AugmentManager.js';
 import { buildChoices } from '../augments/draft.js';
-import { loadSave, writeSave } from '../meta/save.js';
+import { getProfile, commitProfile } from '../meta/save.js';
 import { AimInput } from './AimInput.js';
 import { Hud } from './Hud.js';
 import { showGameOver } from './GameOverView.js';
@@ -36,7 +36,7 @@ export class GameScene extends Phaser.Scene {
     this.fx = new Fx(this, fxCfg, { fontFamily: theme.fontFamily }); // 입자 텍스처·글로우(화면 1곳)도 여기서
 
     this.bus = new GameEvents();
-    this.saveData = loadSave();
+    this.saveData = getProfile();
     this.startBest = this.saveData.bestStage; // 신기록 판정용
     this.state = {
       stage: 0,
@@ -138,7 +138,7 @@ export class GameScene extends Phaser.Scene {
     this.bus.emit(EV.TURN_END, { stage: s.stage });
     if (s.stage > this.saveData.bestStage) {
       this.saveData.bestStage = s.stage;
-      writeSave(this.saveData); // 저장은 턴 끝에 한 번
+      commitProfile(); // 저장은 턴 끝에 한 번
     }
     this.nextTurn();
   }
@@ -151,7 +151,7 @@ export class GameScene extends Phaser.Scene {
     this.hud.showHint(false);
     const best = Math.max(this.saveData.bestStage, s.stage);
     this.saveData.bestStage = best;
-    writeSave(this.saveData);
+    commitProfile();
     const info = { stage: s.stage, best, newBest: s.stage > this.startBest };
     this.bus.emit(EV.GAME_OVER, info);
     showGameOver(this, { layout, theme, balance }, info, () => this.scene.restart());

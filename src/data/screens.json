@@ -1,0 +1,43 @@
+{
+  "fadeMs": 220,
+  "button": { "fill": 0.16, "stroke": 3, "pressScale": 0.94, "pressMs": 70, "disabledAlpha": 0.35 },
+  "corner": { "pad": 20, "y": 34 },
+  "menu": {
+    "titleY": 220,
+    "subtitleY": 284,
+    "buttonsY": 450,
+    "buttonW": 340,
+    "buttonH": 78,
+    "buttonGap": 20,
+    "introDelayMs": 60,
+    "introMs": 360,
+    "introOffsetY": 60,
+    "bgBall": { "element": "fire", "speed": 2.4, "radius": 16, "margin": 30 }
+  },
+  "panel": { "titleY": 90, "backY": 890, "backW": 260, "backH": 70, "bodyY": 440 },
+  "result": {
+    "titleY": 230,
+    "stageY": 350,
+    "currencyY": 440,
+    "bestY": 530,
+    "newBestY": 585,
+    "buttonsY": 720,
+    "buttonW": 230,
+    "buttonH": 76,
+    "buttonGapX": 250,
+    "countDelayMs": 450,
+    "countUpMs": 1200,
+    "countPopScale": 1.25,
+    "inputDelayMs": 700
+  },
+  "settings": {
+    "top": 170,
+    "rowH": 72,
+    "labelX": 36,
+    "valueX": 504,
+    "valueW": 190,
+    "valueH": 52,
+    "resetY": 800
+  },
+  "dialog": { "w": 440, "h": 260, "buttonW": 170, "buttonH": 64, "buttonGapX": 200, "dim": 0.75 }
+}

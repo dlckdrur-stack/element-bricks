@@ -202,7 +202,7 @@ export class FxTestScene extends Phaser.Scene {
     };
     this.button(colX(0), row, P.btnW, t('fxtest.minus'), () => step(-R.step));
     this.button(colX(2), row, P.btnW, t('fxtest.plus'), () => step(R.step));
-    this.button(colX(3), row, P.btnW, t('fxtest.back'), () => this.scene.start('Game'));
+    this.button(colX(3), row, P.btnW, t('fxtest.back'), () => this.scene.start('Menu'));
     showSize();
   }
 
