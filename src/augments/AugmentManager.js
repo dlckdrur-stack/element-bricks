@@ -1,5 +1,6 @@
 import fireData from '../data/augments/fire.json';
 import lightningData from '../data/augments/lightning.json';
+import darkData from '../data/augments/dark.json';
 import draftCfg from '../data/draft.json';
 import balance from '../data/balance.json';
 import { fxCfg } from '../fx/config.js';
@@ -8,10 +9,11 @@ import { hex } from '../core/color.js';
 import { isAugUnlocked } from '../meta/tiers.js';
 import * as fire from './fire.js';
 import * as lightning from './lightning.js';
+import * as dark from './dark.js';
 
 // 속성 추가 시: data/augments/{el}.json + augments/{el}.js 를 여기 등록
-const ELEMENT_DATA = [fireData, lightningData];
-const MODULES = { fire, lightning };
+const ELEMENT_DATA = [fireData, lightningData, darkData];
+const MODULES = { fire, lightning, dark };
 
 /**
  * 보유 증강·메인/서브 속성·수치 계산.

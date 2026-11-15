@@ -89,6 +89,34 @@ export const ultimate = {
     this.juice.shake(c.finaleShake);
   },
 
+  // ---------- 🌑 일월식 ----------
+  /** 화면이 칠흑으로 가라앉고, 붉은 해와 보랏빛 달이 겹치며 코로나가 번짐 */
+  eclipseStart(title, sub) {
+    const c = this.cfg.ult.eclipse;
+    const x = this.scene.scale.width / 2;
+    this.ultStart(c, title, sub, col(c.color));
+    this.sprites.play(c.sunCore, x - 30, c.y, col(c.sun), { priority: 2 });
+    this.sprites.play(c.moon, x + 30, c.y, col(c.color), { priority: 2 });
+    this.sprites.play(c.corona, x, c.y, col(c.color), { priority: 2 });
+  },
+
+  /** 겹침 순간: 거대한 코로나 폭발 */
+  eclipseFinale() {
+    const c = this.cfg.ult.eclipse;
+    const x = this.scene.scale.width / 2;
+    this.sprites.play(c.corona2, x, c.y, col(c.white), { priority: 2 });
+    this.sprites.play(c.corona, x, c.y, col(c.sun), { priority: 2 });
+    for (const n of c.burst) this.p.emit(n, x, c.y, col(c.color));
+    this.juice.flash(c.flash);
+    this.juice.shake(c.shake);
+  },
+
+  /** 처형된 블록 자리 */
+  eclipseExec(x, y) {
+    const c = this.cfg.ult.eclipse;
+    this.sprites.play(c.execRing, x, y, col(c.sun), { priority: 2 });
+  },
+
   // ---------- ⚡ 뇌신 ----------
   judgmentStart(title, sub) {
     const c = this.cfg.ult.judgment;

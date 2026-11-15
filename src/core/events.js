@@ -13,6 +13,7 @@ import Phaser from 'phaser';
  * onOrbCollect{ cell, ball, gain }        ← ctx.gain 수정 가능
  * onLaunch    { ball }
  * onBallReturn{ ball, first, last }
+ * onExtraGone { ball }                   ← 분신 등 추가 공이 사라질 때
  * onLevelUp   { level }
  * onAugment   { aug }                    ← 증강을 고른 직후
  * onGameOver  { stage, best, newBest }
@@ -32,6 +33,7 @@ export const EV = Object.freeze({
   ORB_COLLECT: 'onOrbCollect',
   LAUNCH: 'onLaunch',
   BALL_RETURN: 'onBallReturn',
+  EXTRA_GONE: 'onExtraGone',
   GAME_OVER: 'onGameOver',
 });
 

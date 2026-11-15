@@ -179,6 +179,14 @@ export const actions = {
     }));
     later(s, c.startDelay + 8 * c.boltGap, () => s.fx.judgmentFinale(s.grid.top + s.grid.rows * s.grid.cellH));
   },
+  eclipse: (s) => {
+    const c = fxCfg.ult.eclipse;
+    s.fx.eclipseStart(t('aug.dark_eclipse.name'), t('ult.sub'));
+    later(s, c.startDelay, () => {
+      s.fx.eclipseFinale();
+      for (const b of s.grid.blocks()) { const p = pos(s, b); s.fx.eclipseExec(p.x, p.y); hit(s, b); }
+    });
+  },
 };
 
 /** 버튼 배치 순서 (키 = actions 이름 = 문구 fxtest.{키}) */
@@ -187,5 +195,5 @@ export const BUTTONS = [
   'chain', 'bolt', 'pierce', 'break',
   'orb', 'burn', 'look', 'refill',
   'cardSilver', 'cardGold', 'cardPrism', 'awaken',
-  'purgatory', 'judgment',
+  'purgatory', 'judgment', 'eclipse',
 ];

@@ -44,6 +44,19 @@ export const combat = {
     return this.colorCache.get(hexStr);
   },
 
+  /** 블랙홀: 빨려 들어가는 고리 → 터지는 고리. size = 칸 크기 배율 */
+  blackhole(x, y, color, size = 1) {
+    const c = this.cfg.combat.blackhole;
+    this.sprites.play(c.implode, x, y, color, { priority: 2, scale: size });
+    this.sprites.play(c.core, x, y, color, { priority: 2, scale: size });
+    for (const n of c.particles) this.p.emit(n, x, y, color);
+    this.scene.time.delayedCall(c.burstDelay * 1000, () => {
+      this.sprites.play(c.burst, x, y, color, { priority: 2, scale: size });
+      this.p.emit(c.burstParticles, x, y, color);
+      this.juice.shake(c.shake);
+    });
+  },
+
   /** 블록 파괴: 블록 색 파편 + 하얀 테두리 번쩍 */
   blockBreak(x, y, w, h, color) {
     const c = this.cfg.combat.blockBreak;

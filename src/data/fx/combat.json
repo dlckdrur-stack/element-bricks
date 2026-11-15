@@ -2,6 +2,12 @@
   "_doc": "스프라이트 효과 {frame, from, to(64px 기준 배율), life(초), alpha, ease: out|in|linear}. 선 굵기는 px. shake: small|mid|big|huge. hitstop: default.json juice.hitstop 키.",
 
   "blockHit": { "particles": "blockHit" },
+  "blackhole": {
+    "implode": { "frame": "ring", "from": 4.0, "to": 0.3, "life": 0.42, "alpha": 1, "ease": "in" },
+    "core": { "frame": "glow", "from": 3.2, "to": 0.6, "life": 0.45, "alpha": 0.9, "ease": "in" },
+    "burst": { "frame": "ring", "from": 0.4, "to": 5.0, "life": 0.35, "alpha": 1, "ease": "out" },
+    "particles": ["darkWisp", "darkWisp"], "burstParticles": "judgmentSpark", "shake": "mid", "burstDelay": 0.38
+  },
   "elementHit": {
     "fire": {
       "color": "#ff7a1a", "hot": "#ffd27a", "shake": "micro",

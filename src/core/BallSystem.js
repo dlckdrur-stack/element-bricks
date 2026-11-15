@@ -75,7 +75,7 @@ export class BallSystem {
     for (let i = this.active.length - 1; i >= 0; i--) {
       const b = this.active[i];
       b.age++;
-      if (this.move(b)) {
+      if (b.gone || this.move(b)) { // gone = 정해진 타수를 다 쓴 추가 공(분신 등)
         this.active[i] = this.active[this.active.length - 1];
         this.active.pop();
         this.returnBall(b);
@@ -114,6 +114,25 @@ export class BallSystem {
     this.look.place(view, b.x, b.y);
     this.active.push(b);
     this.bus.emit(EV.LAUNCH, { ball: b });
+  }
+
+  /**
+   * 추가 공 (분신·불사조 등). from 의 위치·방향에서 angleDeg 만큼 틀어서 발사.
+   * hits 번 맞히면 사라짐(없으면 바닥까지). 턴 끝 위치·귀환 이벤트에는 영향 없음. color = 공 색
+   */
+  spawnExtra(from, angleDeg, mul, hits, kind, color) {
+    if (this.active.length >= this.cfg.maxOnScreen) return null;
+    const a = Math.atan2(from.vy, from.vx) + (angleDeg * Math.PI) / 180;
+    const view = this.dress(this.pool.get());
+    if (color !== undefined) { view.core.setTint(color); view.aura.setTint(color); }
+    const b = {
+      id: this.nextId++, x: from.x, y: Math.min(from.y, this.launchY - 1), vx: Math.cos(a) * this.speed, vy: Math.sin(a) * this.speed,
+      mul, age: 0, view, pierce: 0, pierceChain: 0, passing: [], walls: 0, hitsLeft: hits, extra: kind,
+    };
+    this.fixAngle(b);
+    this.look.place(view, b.x, b.y);
+    this.active.push(b);
+    return b;
   }
 
   /** @returns true = 바닥으로 돌아옴 */
@@ -157,6 +176,7 @@ export class BallSystem {
     const crit = Math.random() < s.critChance;
     const dmg = this.state.damage * s.ballDamageMul * b.mul * (crit ? s.critDamage : 1) * extraMul;
     this.grid.damage(cell, dmg, { type: 'ball', ball: b, crit, pierce, nx, ny }); // nx·ny = 맞은 면 방향 (보스 약점)
+    if (b.hitsLeft !== undefined && --b.hitsLeft <= 0) b.gone = true;
   }
 
   collideBlocks(b) {
@@ -236,6 +256,11 @@ export class BallSystem {
   }
 
   returnBall(b) {
+    if (b.extra) { // 추가 공: 사라지기만
+      this.bus.emit(EV.EXTRA_GONE, { ball: b });
+      this.pool.release(b.view);
+      return;
+    }
     const first = this.firstReturnX === null;
     if (first) this.firstReturnX = b.x;
     const last = this.isDone();

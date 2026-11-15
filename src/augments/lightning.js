@@ -128,4 +128,115 @@ export const handlers = {
   lightning_conductive(api) {
     api.bus.on(EV.HIT, (ctx) => { if (ctx.source?.type === 'lightning') ctx.ignoreShield = true; });
   },
+
+  // ---------- 추가 증강 10종 ----------
+  /** 천둥 박수: 공이 천장에 튕길 때 그 열 전체로 낙뢰가 관통 */
+  lightning_thunderclap(api, aug) {
+    api.bus.on(EV.WALL_BOUNCE, ({ ball, side }) => {
+      if (side !== 'top') return;
+      const col = Math.floor(ball.x / api.grid.cellW);
+      const list = api.grid.blocks().filter((b) => b.col === col);
+      if (!list.length) return;
+      const low = Math.max(...list.map((b) => b.row));
+      api.fx.bolt(api.grid.centerX(col), api.grid.top, api.grid.centerY(low), api.mgr.color('lightning'));
+      for (const b of list) strike(api, b, aug.v.dmgPct, SRC('lightning_thunderclap'));
+    });
+  },
+
+  /** 과부하: 공 치명타가 터지면 주변 targets 개로 번개가 튐 */
+  lightning_overload(api, aug) {
+    api.bus.on(EV.AFTER_HIT, ({ cell, source }) => {
+      if (!isBallHit(source) || !source.crit) return;
+      for (const b of nearest(api, cell, aug.v.targets)) {
+        api.fx.chain(cx(api, cell), cy(api, cell), cx(api, b), cy(api, b), api.mgr.color('lightning'));
+        strike(api, b, aug.v.dmgPct, SRC('lightning_overload'));
+      }
+    });
+  },
+
+  /** 자기장: 매 턴 체력이 가장 높은 블록이 자석이 됨. 그 블록이 맞을 때마다 주변 블록에 전류 */
+  lightning_magnet(api, aug) {
+    let mag = null;
+    api.bus.on(EV.TURN_START, () => { [mag] = api.grid.blocks().sort((a, b) => b.hp - a.hp); });
+    api.bus.on(EV.AFTER_HIT, ({ cell, source }) => {
+      if (cell !== mag || source?.aug === 'lightning_magnet') return;
+      for (const b of api.grid.around(cell.col, cell.row, 1)) {
+        api.fx.chain(cx(api, cell), cy(api, cell), cx(api, b), cy(api, b), api.mgr.color('lightning'));
+        strike(api, b, aug.v.dmgPct, SRC('lightning_magnet'));
+      }
+    });
+  },
+
+  /** 구전(구형 번개): 매 턴 첫 공이 날아가는 동안 every 초마다 가장 가까운 블록에 번개 */
+  lightning_ballLightning(api, aug) {
+    let armed = false;
+    api.bus.on(EV.TURN_START, () => { armed = true; });
+    api.bus.on(EV.LAUNCH, ({ ball }) => {
+      if (!armed) return;
+      armed = false;
+      let acc = 0;
+      api.fx.addTicker((dt) => {
+        if (!api.scene.balls.active.includes(ball)) return false;
+        if ((acc += dt) < aug.v.every) return true;
+        acc = 0;
+        const g = api.grid;
+        const [b] = nearest(api, { col: Math.floor(ball.x / g.cellW), row: Math.floor((ball.y - g.top) / g.cellH) }, 1);
+        if (b) { api.fx.chain(ball.x, ball.y, cx(api, b), cy(api, b), api.mgr.color('lightning')); strike(api, b, aug.v.dmgPct, SRC('lightning_ballLightning')); }
+        return true;
+      });
+    });
+  },
+
+  /** 연쇄 폭주: 연쇄 번개로 깬 블록에서 다시 번개가 튐 (1번) */
+  lightning_chainKill(api, aug) {
+    api.bus.on(EV.KILL, ({ cell, source }) => {
+      if (source?.aug !== 'lightning_chain') return;
+      for (const b of nearest(api, cell, aug.v.targets)) {
+        api.fx.chain(cx(api, cell), cy(api, cell), cx(api, b), cy(api, b), api.mgr.color('lightning'));
+        strike(api, b, aug.v.dmgPct, SRC('lightning_chainKill'));
+      }
+    });
+  },
+
+  /** 뇌우 레일: 레일건이 맞힌 블록마다 하늘에서 낙뢰가 꽂힘 */
+  lightning_railThunder(api, aug) {
+    api.bus.on(EV.AFTER_HIT, ({ cell, source, killed }) => {
+      if (source?.aug === 'lightning_railgun' && !killed) bolt(api, cell, aug.v.dmgPct, SRC('lightning_railThunder'));
+    });
+  },
+
+  /** 아크 관통: 관통할 때마다 관통한 블록에서 번개 targets 갈래 */
+  lightning_arcPierce(api, aug) {
+    api.bus.on(EV.AFTER_HIT, ({ cell, source }) => {
+      if (!isBallHit(source) || !source.pierce) return;
+      for (const b of nearest(api, cell, aug.v.targets)) {
+        api.fx.chain(cx(api, cell), cy(api, cell), cx(api, b), cy(api, b), api.mgr.color('lightning'));
+        strike(api, b, aug.v.dmgPct, SRC('lightning_arcPierce'));
+      }
+    });
+  },
+
+  /** 초전도: 공이 벽에 튕길 때마다 그 공의 피해 +perWallPct (최대 maxPct, 돌아오면 초기화) */
+  lightning_superconductor(api, aug) {
+    api.bus.on(EV.WALL_BOUNCE, ({ ball }) => {
+      ball.baseMul ??= ball.mul;
+      ball.sc = Math.min(aug.v.maxPct, (ball.sc ?? 0) + aug.v.perWallPct);
+      ball.mul = ball.baseMul * (1 + ball.sc);
+      api.fx.p.emit('boltHitArc', ball.x, ball.y, api.mgr.color('lightning'));
+    });
+  },
+
+  /** 뇌성: 모든 번개 효과 피해 +dmgPct */
+  lightning_resonance(api, aug) {
+    api.bus.on(EV.HIT, (ctx) => { if (ctx.source?.type === 'lightning') ctx.damage *= 1 + aug.v.dmgPct; });
+  },
+
+  /** 피뢰침: 턴 시작 시 바닥에서 rows 줄 안에 들어온 블록에 낙뢰 */
+  lightning_lightningRod(api, aug) {
+    api.bus.on(EV.TURN_START, () => {
+      for (const b of api.grid.blocks().filter((c) => c.row >= api.grid.rows - aug.v.rows && !c.boss)) {
+        bolt(api, b, aug.v.dmgPct, SRC('lightning_lightningRod'));
+      }
+    });
+  },
 };

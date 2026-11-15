@@ -72,7 +72,7 @@
     "aura": { "scale": 2.0, "alpha": 0.9, "defaultColor": "#7fe9ff", "defaultAlpha": 0.45 },
     "trail": "trail",
     "elementTrail": "flameTrail",
-    "elementTrails": { "fire": "flameTrail", "lightning": "boltTrail" },
+    "elementTrails": { "fire": "flameTrail", "lightning": "boltTrail", "dark": "shadowTrail" },
     "trailEverySteps": 1,
     "spark": "ballSpark",
     "sparkEverySteps": 3,
