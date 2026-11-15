@@ -85,6 +85,26 @@ export class Grid {
     });
   }
 
+  /** 판 저장용: 칸 내용만 (겉모습·증강 상태 제외) */
+  snapshot() {
+    const out = [];
+    this.forEachCell((c) => out.push({
+      kind: c.kind, col: c.col, row: c.row, hp: c.hp, maxHp: c.maxHp, double: c.double, base: c.base,
+    }));
+    return out;
+  }
+
+  /** 이어하기: snapshot() 결과를 그대로 다시 배치 */
+  restore(list) {
+    for (const d of list) {
+      const cell = { ...d, view: null };
+      this.cells[d.row][d.col] = cell;
+      if (cell.kind === 'block') this.showBlock(cell);
+      else this.showOrb(cell);
+      this.fadeIn(cell);
+    }
+  }
+
   /** 전체 1줄 하강. 맨 아랫줄의 구슬은 사라진다(블록은 그 전에 게임오버). */
   shiftDown() {
     for (let r = this.rows - 1; r >= 0; r--) {
