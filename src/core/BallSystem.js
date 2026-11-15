@@ -10,7 +10,7 @@ const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
  * 능력치(state.stats): ballScale·ballDamageMul·crit·pierce 는 발사 시점에 반영.
  */
 export class BallSystem {
-  constructor(scene, { bus, grid, fx, layout, balance, state, fxCfg }) {
+  constructor(scene, { bus, grid, fx, layout, balance, state, fxCfg, bonus }) {
     this.scene = scene;
     this.bus = bus;
     this.grid = grid;
@@ -23,7 +23,7 @@ export class BallSystem {
     this.width = layout.width;
     this.top = layout.hudHeight;
     this.floor = layout.floorY;
-    this.speed = this.cfg.speed;
+    this.speed = this.cfg.speed * (bonus?.speedMul ?? 1); // 영구 강화: 공 속도
     this.minVy = this.speed * Math.sin((this.cfg.minAngleDeg * Math.PI) / 180);
 
     this.look = new BallLook(scene, fxCfg, fx, state);

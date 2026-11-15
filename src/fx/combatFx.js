@@ -9,6 +9,11 @@ export const combat = {
     if (ball && this.once(`h${key}`)) this.p.emit(c.blockHit.particles, x, y, color);
     if (crit) {
       this.p.emit(c.crit.particles, x, y, 0xffffff);
+      if (this.once(`c${key}`)) { // 치명타: 짧은 노란 번쩍 (칸당 프레임 1회)
+        const col = this.critColor ??= parseInt(c.crit.color.slice(1), 16);
+        this.sprites.play(c.crit.flash, x, y, col);
+        this.sprites.play(c.crit.star, x, y, col);
+      }
       this.juice.shake(c.crit.shake);
       this.juice.hitstop(c.crit.hitstop);
     }

@@ -25,6 +25,8 @@ export const pickFlow = {
     const deps = {
       layout, theme, draftCfg, mgr: this.augments, fx: this.fx, fxCfg, look: this.look,
       ballPos: () => this.ballPos(),
+      rerolls: s.rerolls,
+      pioneer: kind === 'main' ? (id) => this.pioneer.bonusFor(id) : null,
     };
     showAugmentPick(this, deps, choice, level, {
       onPick: (def) => { // 카드가 공에 닿는 순간: 증강 적용 → 공 불꽃이 바로 바뀜
@@ -35,6 +37,12 @@ export const pickFlow = {
           this.placeLauncher(true);
         } else this.balls.redressAll();
         this.refreshHud();
+      },
+      onReroll: () => {
+        s.rerolls--;
+        this.leveling.pending.unshift(level); // 다음 프레임에 같은 레벨 선택을 새로 연다
+        s.phase = this.resumePhase;
+        this.acc = 0;
       },
       onDone: () => {
         s.phase = this.resumePhase;

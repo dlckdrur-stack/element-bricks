@@ -12,7 +12,7 @@ function sample(arr, n, rng) {
 /** 행운 단계 표 + 프리즘 천장 */
 export function rollGrade(mgr, rng = Math.random) {
   const rows = draftCfg.luckTable;
-  const row = rows.find((r) => r.luck === draftCfg.luck) ?? rows[0];
+  const row = rows.find((r) => r.luck === (mgr.luck ?? draftCfg.luck)) ?? rows[0];
   let grade;
   if (mgr.noPrism >= row.pity) grade = 'prism';
   else {
@@ -42,7 +42,7 @@ function weightsFor(level) {
  * @returns {{ kind, grade, options: def[] }}
  */
 export function buildChoices(kind, level, mgr, rng = Math.random) {
-  const n = draftCfg.choices;
+  const n = Math.min(draftCfg.maxChoices, mgr.choices ?? draftCfg.choices);
   const all = [...mgr.defs.values()].filter((d) => mgr.isAvailable(d) && !mgr.has(d.id));
 
   if (kind === 'main' || kind === 'sub') {

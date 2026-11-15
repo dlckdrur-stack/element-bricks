@@ -33,6 +33,8 @@ export class AugmentManager {
     this.main = null;
     this.sub = null;
     this.noPrism = 0; // 프리즘 천장 카운터
+    this.luck = api.bonus?.luck ?? draftCfg.luck;               // 영구 강화: 행운 단계
+    this.choices = draftCfg.choices + (api.bonus?.choices ?? 0); // 영구 강화: 선택지 추가
     this.recompute();
   }
 
@@ -89,7 +91,7 @@ export class AugmentManager {
       const bonusOn = this.elementStatus(aug.def.element) !== null;
       Object.assign(aug.v, this.valuesFor(aug.def, aug.grade, bonusOn));
     }
-    const s = { ...balance.stats };
+    const s = { ...(this.api.baseStats ?? balance.stats) }; // 영구 강화가 반영된 기본 능력치
     for (const aug of this.owned.values()) MODULES[aug.def.element].stats?.(aug, s, this);
     this.api.state.stats = s;
   }

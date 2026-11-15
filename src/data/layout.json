@@ -8,6 +8,6 @@
   "blockPad": 3,
   "ballRadius": 9,
   "hud": { "row1Y": 30, "row2Y": 72, "barX": 120, "barH": 10 },
-  "pick": { "titleY": 210, "subY": 262, "cardTop": 320, "cardW": 470, "cardH": 158, "cardGap": 22 },
+  "pick": { "titleY": 210, "subY": 262, "cardTop": 320, "cardW": 470, "cardH": 158, "cardGap": 22, "fitTop": 296, "fitBottom": 878, "fitGap": 12, "rerollY": 915, "rerollW": 230, "rerollH": 50 },
   "fontSize": { "hud": 26, "block": 26, "small": 16, "title": 56, "body": 28, "cardName": 30, "cardDesc": 20, "cardTag": 17 }
 }

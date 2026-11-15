@@ -1,0 +1,23 @@
+{
+  "costRound": 10,
+  "list": [
+    { "id": "aim",        "levels": 3,  "growth": 2,   "cost": 100,  "per": 0.4,   "fmt": "pct" },
+    { "id": "ballSpeed",  "levels": 5,  "growth": 1.5, "cost": 100,  "per": 0.08,  "fmt": "pct" },
+    { "id": "critDamage", "levels": 10, "growth": 1.5, "cost": 150,  "per": 0.05,  "fmt": "pct" },
+    { "id": "damage",     "levels": 10, "growth": 1.5, "cost": 200,  "per": 0.05,  "fmt": "pct" },
+    { "id": "xp",         "levels": 10, "growth": 1.5, "cost": 200,  "per": 0.1,   "fmt": "pct" },
+    { "id": "critChance", "levels": 10, "growth": 1.5, "cost": 250,  "per": 0.015, "fmt": "pct" },
+    { "id": "currency",   "levels": 10, "growth": 1.5, "cost": 300,  "per": 0.1,   "fmt": "pct" },
+    { "id": "reroll",     "levels": 3,  "growth": 3,   "cost": 600,  "per": 1,     "fmt": "count" },
+    { "id": "choices",    "levels": 2,  "growth": 3,   "cost": 4000, "per": 1,     "fmt": "count" },
+    { "id": "maxLevel",   "levels": 2,  "growth": 3,   "cost": 6000, "per": 1,     "fmt": "count" },
+    { "id": "luck",       "levels": 10, "growth": 1.5, "cost": 500,  "per": 1,     "fmt": "level" },
+    { "id": "balls",      "levels": 9,  "growth": 1.7, "cost": 300,  "per": 1,     "fmt": "count" }
+  ],
+  "screen": {
+    "tabY": 160, "tabW": 220, "tabH": 56, "tabGap": 236,
+    "listTop": 222, "rowH": 52, "nameX": 26, "buyX": 440, "buyW": 170, "buyH": 42,
+    "devX": 462, "devY": 92, "devW": 132, "devH": 40, "devAmount": 100000,
+    "lockY": 440, "sparkle": "cardSparkle", "sparkleStar": "cardStar", "popScale": 1.18
+  }
+}

@@ -23,6 +23,7 @@ import { t } from './i18n.js';
 import { pickFlow } from './pickFlow.js';
 import { applyFxSettings, getSettings, settingsCfg } from '../meta/settings.js';
 import { AutoQuality } from '../fx/AutoQuality.js';
+import { setupRun } from '../meta/runSetup.js';
 
 const STEP_MS = 1000 / balance.physics.stepHz;
 
@@ -48,24 +49,29 @@ export class GameScene extends Phaser.Scene {
     this.bus = new GameEvents();
     this.saveData = getProfile();
     this.startBest = this.saveData.bestStage; // 신기록 판정용
+    const meta = setupRun(balance); // 영구 강화 반영
     this.state = {
       stage: 0,
       damage: balance.ball.startDamage,
-      ballCount: balance.ball.startCount,
+      ballCount: meta.ballCount,
+      rerolls: meta.rerolls,
       phase: 'aim',
       launchX: layout.width / 2,
       speed: 1,
       turnMs: 0,
-      stats: { ...balance.stats },
+      stats: { ...meta.baseStats },
       ballFx: null,
     };
 
-    const deps = { scene: this, bus: this.bus, layout, theme, balance, fxCfg, state: this.state };
+    const deps = {
+      scene: this, bus: this.bus, layout, theme, balance, fxCfg, state: this.state, bonus: meta.bonus, baseStats: meta.baseStats,
+    };
     this.grid = new Grid(this, deps);
     this.augments = new AugmentManager({ ...deps, grid: this.grid, fx: this.fx });
     this.balls = new BallSystem(this, { ...deps, grid: this.grid, fx: this.fx });
-    this.leveling = new Leveling(this.bus, levelsCfg, this.state);
+    this.leveling = new Leveling(this.bus, levelsCfg, this.state, meta.bonus);
     this.wallet = new RunWallet(this.bus, balance.currency);
+    this.wallet.bonusPct = meta.bonus.currencyPct; // 개척 보너스는 레벨 1 선택 때 더함
     this.hud = new Hud(this, deps);
     this.aim = new AimInput(this, { ...deps, onFire: (a) => this.fire(a) });
 

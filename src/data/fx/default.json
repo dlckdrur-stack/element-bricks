@@ -54,7 +54,7 @@
     "settleTime": 0.1,
     "fadeFrom": 0.55,
     "fontSize": 22,
-    "critFontSize": 30,
+    "critFontSize": 38,
     "color": "#ffffff",
     "critColor": "#ffd740",
     "stroke": "#05050c",

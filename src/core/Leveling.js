@@ -6,17 +6,19 @@ import { EV } from './events.js';
  * 만렙 이후에는 afterMaxXpPerDamage 마다 공 데미지 +afterMaxDamageGain.
  */
 export class Leveling {
-  constructor(bus, cfg, state) {
+  constructor(bus, cfg, state, bonus = {}) {
     this.bus = bus;
     this.cfg = cfg;
+    this.maxLevel = Math.min(cfg.maxLevelCap, cfg.maxLevel + (bonus.maxLevel ?? 0)); // 영구 강화: 만렙 확장
+    this.xpMul = 1 + (bonus.xpPct ?? 0); // 영구 강화: 경험치 증가
     this.state = state;
     this.level = 0;
     this.xp = 0;
     this.pending = [];
-    bus.on(EV.KILL, (ctx) => this.add(ctx.xp ?? cfg.xpPerBlock));
+    bus.on(EV.KILL, (ctx) => this.add((ctx.xp ?? cfg.xpPerBlock) * this.xpMul));
   }
 
-  get isMax() { return this.level >= this.cfg.maxLevel; }
+  get isMax() { return this.level >= this.maxLevel; }
 
   /** 다음 레벨까지 필요 경험치 (만렙이면 데미지 보너스 주기) */
   get need() {

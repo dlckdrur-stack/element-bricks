@@ -23,8 +23,3 @@ export class ComingSoonScene extends Phaser.Scene {
 export class ShopScene extends ComingSoonScene {
   constructor() { super('Shop', 'shop.title'); }
 }
-
-// 강화는 다음 파트에서 실제 화면으로 바뀐다
-export class UpgradeScene extends ComingSoonScene {
-  constructor() { super('Upgrade', 'upgrade.title'); }
-}

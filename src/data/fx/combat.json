@@ -2,7 +2,11 @@
   "_doc": "스프라이트 효과 {frame, from, to(64px 기준 배율), life(초), alpha, ease: out|in|linear}. 선 굵기는 px. shake: small|mid|big|huge. hitstop: default.json juice.hitstop 키.",
 
   "blockHit": { "particles": "blockHit" },
-  "crit": { "particles": "crit", "shake": "small", "hitstop": "big" },
+  "crit": {
+    "particles": "crit", "shake": "small", "hitstop": "big", "color": "#ffe066",
+    "flash": { "frame": "glow", "from": 1.2, "to": 3.4, "life": 0.12, "alpha": 1, "ease": "out" },
+    "star": { "frame": "star", "from": 0.6, "to": 1.8, "life": 0.16, "alpha": 1, "ease": "out" }
+  },
   "blockBreak": {
     "particles": "shard",
     "outline": { "frame": "box", "color": "#ffffff", "from": 1.0, "to": 1.22, "life": 0.17, "alpha": 1, "ease": "out" },

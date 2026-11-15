@@ -5,9 +5,9 @@ import { hex } from '../core/color.js';
  * 손을 떼면 onFire(angle). 너무 짧게 끌었거나 아래를 향하면 취소.
  */
 export class AimInput {
-  constructor(scene, { layout, balance, theme, onFire }) {
+  constructor(scene, { layout, balance, theme, onFire, bonus }) {
     this.scene = scene;
-    this.cfg = balance.aim;
+    this.cfg = { ...balance.aim, guideLength: balance.aim.guideLength * (bonus?.aimMul ?? 1) }; // 영구 강화: 조준선
     this.minAngle = (balance.ball.minAngleDeg * Math.PI) / 180;
     this.width = layout.width;
     this.top = layout.hudHeight;

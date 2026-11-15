@@ -1,5 +1,6 @@
 {
   "choices": 3,
+  "maxChoices": 5,
   "elementBonus": 0.3,
   "grades": {
     "silver": { "mul": 1, "color": "#c9d3e6" },
@@ -8,7 +9,17 @@
   },
   "luck": 0,
   "luckTable": [
-    { "luck": 0, "silver": 0.6, "gold": 0.32, "prism": 0.08, "pity": 6 }
+    { "luck": 0, "silver": 0.6, "gold": 0.32, "prism": 0.08, "pity": 6 },
+    { "luck": 1, "silver": 0.578, "gold": 0.335, "prism": 0.087, "pity": 6 },
+    { "luck": 2, "silver": 0.556, "gold": 0.35, "prism": 0.094, "pity": 6 },
+    { "luck": 3, "silver": 0.534, "gold": 0.365, "prism": 0.101, "pity": 5 },
+    { "luck": 4, "silver": 0.512, "gold": 0.38, "prism": 0.108, "pity": 5 },
+    { "luck": 5, "silver": 0.49, "gold": 0.395, "prism": 0.115, "pity": 5 },
+    { "luck": 6, "silver": 0.468, "gold": 0.41, "prism": 0.122, "pity": 5 },
+    { "luck": 7, "silver": 0.446, "gold": 0.425, "prism": 0.129, "pity": 4 },
+    { "luck": 8, "silver": 0.424, "gold": 0.44, "prism": 0.136, "pity": 4 },
+    { "luck": 9, "silver": 0.402, "gold": 0.455, "prism": 0.143, "pity": 4 },
+    { "luck": 10, "silver": 0.38, "gold": 0.47, "prism": 0.15, "pity": 4 }
   ],
   "categoryWeights": [
     { "fromLevel": 2, "main": 0.4, "sub": 0, "other": 0.4, "neutral": 0.2 },

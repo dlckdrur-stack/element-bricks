@@ -32,9 +32,10 @@ export function makeButton(scene, x, y, text, { w, h, color = theme.button, size
     if (!box.enabled) return;
     scene.tweens.add({ targets: box, scale: c.pressScale, duration: c.pressMs });
   });
-  bg.on('pointerout', () => box.setScale(1));
+  const reset = () => { scene.tweens.killTweensOf(box); box.setScale(1); };
+  bg.on('pointerout', reset);
   bg.on('pointerup', () => {
-    box.setScale(1);
+    reset();
     if (box.enabled) onClick?.();
   });
   box.setEnabled = (on) => {

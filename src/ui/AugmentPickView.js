@@ -3,6 +3,7 @@ import { hex } from '../core/color.js';
 import { UiOverlay } from './UiOverlay.js';
 import { makePickCard } from './PickCard.js';
 import { levelUpText, awakenCutin } from './Cutin.js';
+import { makeButton } from './widgets.js';
 
 const ms = (s) => s * 1000;
 
@@ -13,7 +14,7 @@ const ms = (s) => s * 1000;
  *  레벨 1 메인 속성: 이어서 "각성" (하얀 번쩍 → 공에 속성 불꽃 폭발 → 속성 이름 컷인 1초)
  *
  * deps = { layout, theme, draftCfg, mgr, fx, fxCfg, look(BallLook), ballPos() → {x,y} }
- * cb   = { onPick(def): 증강 적용, onDone(): 연출이 끝나 게임 재개 }
+ * cb   = { onPick(def): 증강 적용, onDone(): 연출이 끝나 게임 재개, onReroll(): 리롤로 닫힘 }
  */
 export function showAugmentPick(scene, deps, choice, level, cb) {
   const { layout, theme, draftCfg, mgr, fx, fxCfg } = deps;
@@ -54,9 +55,13 @@ export function showAugmentPick(scene, deps, choice, level, cb) {
   let ready = false;
   let flipped = 0;
   let absorbing = null;
+  const fit = fitCards(L, choice.options.length); // 선택지 추가(4~5장)면 카드를 낮게
+  const lay = { ...layout, pick: { ...L, cardH: fit.h } };
   const cards = choice.options.map((def, i) => {
-    const homeY = L.cardTop + i * (L.cardH + L.cardGap) + L.cardH / 2;
-    const card = makePickCard({ scene, ov, def, choice, mgr, layout, theme, draftCfg, cfg: C, x: W / 2, y: homeY + C.flyFrom });
+    const homeY = fit.top + i * (fit.h + fit.gap) + fit.h / 2;
+    const card = makePickCard({
+      scene, ov, def, choice, mgr, layout: lay, theme, draftCfg, cfg: C, x: W / 2, y: homeY + C.flyFrom, pioneer: deps.pioneer,
+    });
     card.homeY = homeY;
     card.index = i;
     card.root.setDepth(65);
@@ -75,7 +80,26 @@ export function showAugmentPick(scene, deps, choice, level, cb) {
       fx.juice.sound(P.sound);
       for (const c of cards) ov.p.emit(P.appearStars, c.root.x, c.root.y, c.borderColor);
     }
-    scene.time.delayedCall(draftCfg.cardInputDelayMs, () => { ready = true; });
+    scene.time.delayedCall(draftCfg.cardInputDelayMs, () => {
+      ready = true;
+      if (deps.rerolls > 0) showReroll();
+    });
+  }
+
+  // 리롤(영구 강화): 카드를 흩어 버리고 같은 레벨 선택을 새로 뽑는다
+  function showReroll() {
+    const btn = ov.add(makeButton(scene, W / 2, L.rerollY, t('pick.reroll', { n: deps.rerolls }), {
+      w: L.rerollW, h: L.rerollH, size: layout.fontSize.cardDesc, color: theme.hudText, depth: 66,
+      onClick: () => {
+        if (!ready) return;
+        ready = false;
+        btn.setEnabled(false);
+        for (const c of cards) c.root.disableInteractive();
+        scene.tweens.add({ targets: [...heads, ...cards.map((c) => c.root), btn], alpha: 0, duration: ms(S.scatterTime) });
+        scene.time.delayedCall(ms(S.scatterTime), () => { ov.close(); cb.onReroll(); });
+      },
+    }).setAlpha(0));
+    scene.tweens.add({ targets: btn, alpha: 1, duration: ms(LV.titleFadeTime) });
   }
 
   cards.forEach((card, i) => {
@@ -164,4 +188,11 @@ export function showAugmentPick(scene, deps, choice, level, cb) {
       title: t('fx.awaken', { name }), sub: t('fx.awakenSub', { name }), color: card.color, fontFamily: f,
     }, cb.onDone);
   }
+}
+
+/** 카드 n장이 화면에 들어가도록 위치·높이 계산 (3장 이하는 기본 배치) */
+function fitCards(L, n) {
+  if (n <= 3) return { top: L.cardTop, h: L.cardH, gap: L.cardGap };
+  const h = Math.min(L.cardH, (L.fitBottom - L.fitTop - L.fitGap * (n - 1)) / n);
+  return { top: L.fitTop, h, gap: L.fitGap };
 }

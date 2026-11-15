@@ -1,6 +1,7 @@
 {
   "ball": {
     "startCount": 1,
+    "maxStartCount": 10,
     "startDamage": 1,
     "speed": 15,
     "launchIntervalSteps": 5,

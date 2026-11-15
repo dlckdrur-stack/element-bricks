@@ -32,6 +32,8 @@ export function saveRun(g) {
     augs: [...mgr.owned.values()].map((a) => ({ id: a.def.id, grade: a.grade })),
     noPrism: mgr.noPrism,
     earned: g.wallet.earned,
+    bonusPct: g.wallet.bonusPct,
+    rerolls: s.rerolls,
     startBest: g.startBest,
     cells: g.grid.snapshot(),
   });
@@ -49,6 +51,8 @@ export function restoreRun(g, r) {
   lv.xp = r.xp;
   lv.pending = r.pending.slice();
   g.wallet.earned = r.earned;
+  g.wallet.bonusPct = r.bonusPct ?? g.wallet.bonusPct;
+  s.rerolls = r.rerolls ?? s.rerolls;
   g.startBest = r.startBest;
   g.grid.restore(r.cells);
 }
