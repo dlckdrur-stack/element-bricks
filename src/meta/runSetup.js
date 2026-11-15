@@ -1,4 +1,5 @@
 import { runBonuses } from './upgrades.js';
+import { dmgMul } from './enhance.js';
 
 /**
  * 판 시작 시 영구 강화를 게임 수치에 반영.
@@ -11,7 +12,7 @@ export function setupRun(balance) {
     ...b,
     critChance: b.critChance + bonus.critChance,
     critDamage: b.critDamage + bonus.critDamage,
-    ballDamageMul: b.ballDamageMul * bonus.damageMul,
+    ballDamageMul: b.ballDamageMul * bonus.damageMul * dmgMul(), // 공 강화
   };
   const ballCount = Math.min(balance.ball.maxStartCount, balance.ball.startCount + bonus.balls);
   return { bonus, baseStats, ballCount, rerolls: bonus.rerolls };

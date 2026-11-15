@@ -1,0 +1,45 @@
+{
+  "unlockTier": "platinum",
+  "maxLevel": 20,
+  "resetFrom": 12,
+  "levels": [
+    { "rate": 1.0,   "reset": 0,    "cost": 0,       "dmgPct": 0 },
+    { "rate": 1.0,   "reset": 0,    "cost": 1000,    "dmgPct": 0.05 },
+    { "rate": 1.0,   "reset": 0,    "cost": 1500,    "dmgPct": 0.1 },
+    { "rate": 1.0,   "reset": 0,    "cost": 2200,    "dmgPct": 0.16 },
+    { "rate": 0.95,  "reset": 0,    "cost": 3000,    "dmgPct": 0.22 },
+    { "rate": 0.9,   "reset": 0,    "cost": 4200,    "dmgPct": 0.3 },
+    { "rate": 0.8,   "reset": 0,    "cost": 5800,    "dmgPct": 0.4 },
+    { "rate": 0.7,   "reset": 0,    "cost": 8000,    "dmgPct": 0.52 },
+    { "rate": 0.6,   "reset": 0,    "cost": 11000,   "dmgPct": 0.66 },
+    { "rate": 0.5,   "reset": 0,    "cost": 15000,   "dmgPct": 0.82 },
+    { "rate": 0.45,  "reset": 0,    "cost": 20000,   "dmgPct": 1.0 },
+    { "rate": 0.4,   "reset": 0,    "cost": 27000,   "dmgPct": 1.25 },
+    { "rate": 0.35,  "reset": 0, "cost": 36000,   "dmgPct": 1.5 },
+    { "rate": 0.3,   "reset": 0.15, "cost": 48000,   "dmgPct": 1.8 },
+    { "rate": 0.27,  "reset": 0.18,  "cost": 64000,   "dmgPct": 2.15 },
+    { "rate": 0.25,  "reset": 0.2, "cost": 85000,   "dmgPct": 2.55 },
+    { "rate": 0.2,   "reset": 0.25, "cost": 115000,  "dmgPct": 3.0 },
+    { "rate": 0.18,  "reset": 0.28,  "cost": 155000,  "dmgPct": 3.55 },
+    { "rate": 0.15,  "reset": 0.3, "cost": 210000,  "dmgPct": 4.2 },
+    { "rate": 0.12,  "reset": 0.32, "cost": 285000,  "dmgPct": 5.0 },
+    { "rate": 0.1,   "reset": 0.35,  "cost": 390000,  "dmgPct": 6.0 }
+  ],
+  "tickets": [
+    { "id": "t12", "from": 12, "to": 14, "price": 20000 },
+    { "id": "t15", "from": 15, "to": 17, "price": 60000 },
+    { "id": "t18", "from": 18, "to": 20, "price": 150000 }
+  ],
+  "fx": {
+    "successRing": { "frame": "ring", "from": 0.6, "to": 6.0, "life": 0.45, "alpha": 1, "ease": "out" },
+    "savedRing": { "frame": "ring", "from": 3.0, "to": 0.5, "life": 0.35, "alpha": 1, "ease": "out" },
+    "savedColor": "#7cf8ff",
+    "glow": { "base": "#9fe8ff", "gold": "#ffd54a", "prism": "#ff7cf5", "goldFrom": 10, "prismFrom": 15, "sizeBase": 2.4, "sizePerLevel": 0.08 }
+  },
+  "screen": {
+    "ballY": 330, "ballR": 46, "levelY": 330, "levelSize": 56,
+    "dmgY": 430, "nextY": 470, "rateY": 520, "costY": 570,
+    "ticketY": 640, "toggleY": 690, "buttonY": 770, "buttonW": 300, "buttonH": 76,
+    "buyW": 200, "buyH": 46, "resultY": 250, "resultSize": 40
+  }
+}

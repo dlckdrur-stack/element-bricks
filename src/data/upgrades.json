@@ -14,7 +14,7 @@
     { "id": "balls",      "levels": 2,  "growth": 3,   "cost": 3000, "per": 1,     "fmt": "count" }
   ],
   "screen": {
-    "tabY": 160, "tabW": 220, "tabH": 56, "tabGap": 236,
+    "tabY": 160, "tabW": 156, "tabH": 56, "tabGap": 164,
     "listTop": 226, "rowH": 56, "nameX": 26, "buyX": 440, "buyW": 170, "buyH": 42,
     "devX": 462, "devY": 92, "devW": 132, "devH": 40, "devAmount": 100000,
     "lockY": 440, "sparkle": "cardSparkle", "sparkleStar": "cardStar", "popScale": 1.18
