@@ -6,6 +6,7 @@ import { LineFx } from './LineFx.js';
 import { Juice } from './Juice.js';
 import { DamageNumbers } from './DamageNumbers.js';
 import { combat } from './combatFx.js';
+import { ultimate } from './ultimateFx.js';
 
 /**
  * 이펙트 엔진 하나 (씬마다 1개). 속성별 차이는 data/fx/*.json 프리셋으로만.
@@ -28,6 +29,7 @@ export class Fx {
     this.juice = new Juice(scene, cfg.juice);
     this.nums = new DamageNumbers(scene, cfg.numbers, fontFamily);
     this.tickers = [];
+    this.fontFamily = fontFamily;
     this.keys = new Set();
     this.bloom = null;
     this.quality = cfg.quality;
@@ -50,7 +52,7 @@ export class Fx {
     return true;
   }
 
-  /** 매 프레임 호출되는 지속 연출(화상 불꽃 등). fn(dt) */
+  /** 매 프레임 호출되는 지속 연출(화상 불꽃 등). fn(dt) 가 false 를 돌려주면 제거 */
   addTicker(fn) { this.tickers.push(fn); }
 
   setupGlow() {
@@ -84,8 +86,10 @@ export class Fx {
     this.sprites.update(d);
     this.lines.update(d);
     this.nums.update(d);
-    for (const t of this.tickers) t(d);
+    let n = 0;
+    for (const t of this.tickers) if (t(d) !== false) this.tickers[n++] = t;
+    this.tickers.length = n;
   }
 }
 
-Object.assign(Fx.prototype, combat);
+Object.assign(Fx.prototype, combat, ultimate);

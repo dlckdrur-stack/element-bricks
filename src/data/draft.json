@@ -1,6 +1,7 @@
 {
   "choices": 3,
   "maxChoices": 5,
+  "awakenNeed": 4,
   "elementBonus": 0.3,
   "grades": {
     "silver": { "mul": 1, "color": "#c9d3e6" },

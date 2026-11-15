@@ -1,5 +1,7 @@
 import { EV } from '../core/events.js';
-import { strike, cx, cy, isBallHit } from './helpers.js';
+import { strike, cx, cy, isBallHit, ultimate, later } from './helpers.js';
+import { stageHp } from '../core/stageLayout.js';
+import { t } from '../ui/i18n.js';
 
 /** 🔥 불 증강. 수치는 data/augments/fire.json, 여기는 효과만. */
 
@@ -40,6 +42,29 @@ function addBurn(api, cell, stacks) {
 }
 
 export const handlers = {
+  /** 각성 필살기 「연옥」: cooldown 턴마다 모든 블록 아래에서 불기둥이 솟구침 (아래 줄부터, waves 연타) */
+  fire_purgatory(api, aug) {
+    ultimate(api, aug, () => {
+      const c = api.fx.cfg.ult.purgatory;
+      api.fx.purgatoryStart(t('aug.fire_purgatory.name'), t('ult.sub'));
+      for (let w = 0; w < aug.v.waves; w++) {
+        later(api, c.startDelay + w * c.waveGap, () => {
+          const dmg = stageHp(api.state.stage) * aug.v.wavePct;
+          const blocks = api.grid.blocks();
+          const maxRow = Math.max(0, ...blocks.map((b) => b.row));
+          api.fx.purgatoryWave();
+          for (const b of blocks) {
+            later(api, (maxRow - b.row) * c.rowDelay, () => {
+              if (b.dead) return;
+              api.fx.hellPillar(cx(api, b), cy(api, b));
+              api.grid.damage(b, dmg, SRC('fire_purgatory', { ult: true }));
+            });
+          }
+        });
+      }
+    });
+  },
+
   fire_explosion(api, aug) {
     api.bus.on(EV.AFTER_HIT, ({ cell, source }) => {
       if (isBallHit(source)) explode(api, cell.col, cell.row, aug.v.dmgPct, 0);

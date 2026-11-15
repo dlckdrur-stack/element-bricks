@@ -29,10 +29,13 @@
       "white": [70, 255, 255, 255],
       "rail": [60, 255, 255, 235],
       "prism": [180, 255, 220, 255],
-      "awaken": [260, 255, 255, 255]
+      "awaken": [260, 255, 255, 255],
+      "hell": [240, 255, 110, 30],
+      "judgment": [220, 190, 200, 255]
     },
     "sounds": {
       "railgun": "sfx_railgun",
+      "ultimate": "sfx_ultimate",
       "explosion": "sfx_explosion",
       "levelUp": "sfx_levelup",
       "cardFlip": "sfx_card_flip",

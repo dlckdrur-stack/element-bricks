@@ -1,5 +1,7 @@
 import { EV } from '../core/events.js';
-import { strike, cx, cy, nearest, randomBlocks, isBallHit } from './helpers.js';
+import { strike, cx, cy, nearest, randomBlocks, isBallHit, ultimate, later } from './helpers.js';
+import { stageHp } from '../core/stageLayout.js';
+import { t } from '../ui/i18n.js';
 
 /** ⚡ 번개 증강. 수치는 data/augments/lightning.json, 여기는 효과만. */
 
@@ -21,6 +23,32 @@ function bolt(api, cell, pct, source) {
 }
 
 export const handlers = {
+  /** 각성 필살기 「뇌신의 심판」: cooldown 턴마다 체력이 가장 높은 블록들에 심판의 낙뢰 + 주변 연쇄 */
+  lightning_judgment(api, aug) {
+    ultimate(api, aug, () => {
+      const c = api.fx.cfg.ult.judgment;
+      const color = api.mgr.color('lightning');
+      api.fx.judgmentStart(t('aug.lightning_judgment.name'), t('ult.sub'));
+      const targets = api.grid.blocks().sort((a, b) => b.hp - a.hp).slice(0, aug.v.targets);
+      targets.forEach((b, i) => later(api, c.startDelay + i * c.boltGap, () => {
+        if (b.dead) return;
+        const x = cx(api, b);
+        const y = cy(api, b);
+        const hp = stageHp(api.state.stage);
+        api.fx.judgmentBolt(x, 0, y, i); // 화면 맨 위(하늘)에서
+        const near = nearest(api, b, aug.v.chains);
+        api.grid.damage(b, hp * aug.v.hitPct, SRC('lightning_judgment', { ult: true }));
+        later(api, c.chainDelay, () => {
+          for (const n of near) {
+            if (n.dead) continue;
+            api.fx.chain(x, y, cx(api, n), cy(api, n), color);
+            api.grid.damage(n, hp * aug.v.chainPct, SRC('lightning_judgment', { ult: true, chain: true }));
+          }
+        });
+      }));
+    });
+  },
+
   lightning_chain(api, aug) {
     const color = api.mgr.color('lightning');
     api.bus.on(EV.AFTER_HIT, ({ cell, source }) => {

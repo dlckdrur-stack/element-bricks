@@ -38,7 +38,7 @@ function weightsFor(level) {
  * 레벨에 맞는 선택지.
  * kind 'main'  : 모든 속성 핵심 중 3개 (등급 없음)
  * kind 'sub'   : 메인이 아닌 속성의 핵심 중 3개 (등급 없음)
- * kind 'graded': 등급 1개를 뽑고, 같은 등급으로 일반 증강 3개 (메인·서브 최소 1개 보장)
+ * kind 'graded': 등급 1개를 뽑고, 같은 등급으로 일반 증강 3개 (메인·서브 최소 1개 보장, 각성 조건이면 각성 1장 확정)
  * @returns {{ kind, grade, options: def[] }}
  */
 export function buildChoices(kind, level, mgr, rng = Math.random) {
@@ -50,7 +50,7 @@ export function buildChoices(kind, level, mgr, rng = Math.random) {
     return { kind, grade: null, options: sample(cores, n, rng) };
   }
 
-  const pool = all.filter((d) => d.tier !== 'core' && (!d.requires || mgr.has(d.requires)));
+  const pool = all.filter((d) => d.tier !== 'core' && d.tier !== 'awaken' && (!d.requires || mgr.has(d.requires)));
   if (!pool.length) return { kind, grade: null, options: [] };
   const grade = rollGrade(mgr, rng);
 
@@ -78,5 +78,17 @@ export function buildChoices(kind, level, mgr, rng = Math.random) {
   if (picked.length && !picked.some(isMine) && spare.length) {
     picked[picked.length - 1] = spare[Math.floor(rng() * spare.length)];
   }
+  // 각성: 같은 속성 증강을 awakenNeed 개 이상 모으면 그 속성 각성 증강이 확정으로 1장
+  const aw = awakenReady(mgr, all);
+  if (aw && picked.length) picked[0] = aw;
   return { kind, grade, options: sample(picked, picked.length, rng) };
+}
+
+/** 조건을 채운 각성 증강 (아직 안 가진 것 중 첫 번째) */
+export function awakenReady(mgr, available) {
+  const count = {};
+  for (const a of mgr.owned.values()) {
+    if (a.def.tier !== 'awaken') count[a.def.element] = (count[a.def.element] ?? 0) + 1;
+  }
+  return available.find((d) => d.tier === 'awaken' && (count[d.element] ?? 0) >= draftCfg.awakenNeed) ?? null;
 }

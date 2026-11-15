@@ -1,4 +1,5 @@
 import { fxCfg } from '../fx/config.js';
+import { t } from './i18n.js';
 
 /**
  * 이펙트 테스트 화면의 버튼 동작. s = FxTestScene.
@@ -141,6 +142,41 @@ export const actions = {
   cardGold: (s) => s.openCards('graded', 'gold'),
   cardPrism: (s) => s.openCards('graded', 'prism'),
   awaken: (s) => s.openCards('main', null),
+
+  // 각성 필살기 (게임과 같은 연출, 피해는 테스트용 고정값)
+  purgatory: (s) => {
+    const c = fxCfg.ult.purgatory;
+    s.fx.purgatoryStart(t('aug.fire_purgatory.name'), t('ult.sub'));
+    for (let w = 0; w < 2; w++) {
+      later(s, c.startDelay + w * c.waveGap, () => {
+        const blocks = s.grid.blocks();
+        const maxRow = Math.max(0, ...blocks.map((b) => b.row));
+        s.fx.purgatoryWave();
+        for (const b of blocks) {
+          later(s, (maxRow - b.row) * c.rowDelay, () => {
+            if (b.dead) return;
+            const p = pos(s, b);
+            s.fx.hellPillar(p.x, p.y);
+            hit(s, b);
+          });
+        }
+      });
+    }
+  },
+  judgment: (s) => {
+    const c = fxCfg.ult.judgment;
+    s.fx.judgmentStart(t('aug.lightning_judgment.name'), t('ult.sub'));
+    s.grid.blocks().sort((a, b) => b.hp - a.hp).slice(0, 6).forEach((b, i) => later(s, c.startDelay + i * c.boltGap, () => {
+      if (b.dead) return;
+      const p = pos(s, b);
+      s.fx.judgmentBolt(p.x, 0, p.y, i);
+      hit(s, b);
+      for (const n of nearest(s, b, 2)) {
+        const q = pos(s, n);
+        s.fx.chain(p.x, p.y, q.x, q.y, s.colors.lightning);
+      }
+    }));
+  },
 };
 
 /** 버튼 배치 순서 (키 = actions 이름 = 문구 fxtest.{키}) */
@@ -149,4 +185,5 @@ export const BUTTONS = [
   'chain', 'bolt', 'pierce', 'break',
   'orb', 'burn', 'look', 'refill',
   'cardSilver', 'cardGold', 'cardPrism', 'awaken',
+  'purgatory', 'judgment',
 ];

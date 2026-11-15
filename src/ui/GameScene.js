@@ -220,6 +220,9 @@ export class GameScene extends Phaser.Scene {
     const lv = this.leveling;
     const color = s.ballFx ? s.ballFx.color : undefined;
     this.hud.setLevel(lv.level, lv.progress, lv.isMax, color);
+    const ults = [...this.augments.owned.values()].filter((a) => a.def.tier === 'awaken')
+      .map((a) => ({ name: t(`aug.${a.def.id}.name`), turns: a.state.turns ?? 0, max: a.v.cooldown }));
+    this.hud.setUlt(ults, theme);
   }
 
   // ---------- 루프 ----------
