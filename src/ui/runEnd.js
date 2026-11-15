@@ -5,6 +5,7 @@ import { markCleared, tierOrder } from '../meta/tiers.js';
 import { showResult } from './ResultView.js';
 import { goTo } from './widgets.js';
 import { t } from './i18n.js';
+import { submit as submitRank } from '../net/ranking.js';
 
 /**
  * 판 끝내기 (GameScene 에 붙는 메서드). 게임오버와 티어 클리어(승리) 둘 다 여기서.
@@ -38,6 +39,7 @@ export const runEnd = {
     this.pioneer.settle();
     commitProfile();
     this.bus.emit(EV.GAME_OVER, info);
+    submitRank({ tier: this.tier.id, stage: s.stage, won }); // 네트워크는 판 종료 때만
 
     const next = tierOrder[this.tier.index + 1];
     showResult(this, info, {

@@ -3,14 +3,15 @@ import layout from './data/layout.json';
 import theme from './data/themes/neon.json';
 import { MenuScene } from './ui/MenuScene.js';
 import { GameScene } from './ui/GameScene.js';
-import { ShopScene } from './ui/ComingSoonScene.js';
+import { ShopScene } from './ui/ShopScene.js';
+import { RankingScene } from './ui/RankingScene.js';
 import { UpgradeScene } from './ui/UpgradeScene.js';
 import { SettingsScene } from './ui/SettingsScene.js';
 import { TierScene } from './ui/TierScene.js';
 
 // 개발 모드에서만: 주소 뒤에 ?fxtest 를 붙이면 이펙트 테스트 화면으로 시작 (배포 빌드에는 포함되지 않음)
 const fxTest = import.meta.env.DEV && new URLSearchParams(location.search).has('fxtest');
-const scenes = { Menu: MenuScene, Tier: TierScene, Game: GameScene, Upgrade: UpgradeScene, Shop: ShopScene, Settings: SettingsScene };
+const scenes = { Menu: MenuScene, Tier: TierScene, Game: GameScene, Upgrade: UpgradeScene, Shop: ShopScene, Ranking: RankingScene, Settings: SettingsScene };
 
 const game = new Phaser.Game({
   type: Phaser.AUTO,

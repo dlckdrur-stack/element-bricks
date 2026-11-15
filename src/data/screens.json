@@ -40,5 +40,7 @@
     "valueH": 52,
     "resetY": 800
   },
+  "ranking": { "headY": 160, "top": 220, "rowH": 56, "padX": 60, "statusY": 600 },
+  "rankButton": { "x": 500, "y": 80, "w": 64, "h": 44 },
   "dialog": { "w": 440, "h": 260, "buttonW": 170, "buttonH": 64, "buttonGapX": 200, "dim": 0.75, "info": { "w": 490, "h": 640 } }
 }

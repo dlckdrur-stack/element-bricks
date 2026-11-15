@@ -19,7 +19,3 @@ export class ComingSoonScene extends Phaser.Scene {
       style(layout.fontSize.body, theme.hudText, true)).setOrigin(0.5);
   }
 }
-
-export class ShopScene extends ComingSoonScene {
-  constructor() { super('Shop', 'shop.title'); }
-}

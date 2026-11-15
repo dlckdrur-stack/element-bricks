@@ -28,6 +28,8 @@ export class MenuScene extends Phaser.Scene {
 
     const profile = getProfile();
     makeCorner(this, profile);
+    const rb = screens.rankButton;
+    makeButton(this, rb.x, rb.y, t('rank.icon'), { w: rb.w, h: rb.h, size: layout.fontSize.cardDesc, color: theme.currency, onClick: () => goTo(this, 'Ranking'), depth: 30 });
     this.add.text(W / 2, m.titleY, t('menu.title'), style(layout.fontSize.title, theme.text, true))
       .setOrigin(0.5).setDepth(30);
     this.add.text(W / 2, m.subtitleY, t('menu.subtitle'), style(layout.fontSize.body, theme.hudText))
