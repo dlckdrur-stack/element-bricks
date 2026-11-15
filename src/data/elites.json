@@ -1,0 +1,14 @@
+{
+  "fromStage": 10,
+  "xp": 10,
+  "currencyMul": 3,
+  "color": "#ff4d6d",
+  "types": {
+    "giant":    { "icon": "🗿", "hpMul": 5 },
+    "summoner": { "icon": "👥", "hpMul": 2, "minions": 2, "minionHpMul": 0.4 },
+    "regen":    { "icon": "💚", "hpMul": 2, "healPct": 0.2 },
+    "steel":    { "icon": "🛡", "hpMul": 2, "dmgMul": 0.5 },
+    "runner":   { "icon": "💨", "hpMul": 1.5 }
+  },
+  "fx": { "ring": { "frame": "ring", "from": 0.4, "to": 2.2, "life": 0.3, "alpha": 0.9, "ease": "out" }, "heal": "leafBurst", "summon": "darkWisp" }
+}

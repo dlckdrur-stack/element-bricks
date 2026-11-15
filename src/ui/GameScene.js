@@ -8,6 +8,7 @@ import { EV, GameEvents } from '../core/events.js';
 import { Grid } from '../core/Grid.js';
 import { BallSystem } from '../core/BallSystem.js';
 import { Leveling } from '../core/Leveling.js';
+import { Elites } from '../core/elites.js';
 import { buildStageRow, stageHp, setStageMods } from '../core/stageLayout.js';
 import { hex } from '../core/color.js';
 import { Fx } from '../fx/Fx.js';
@@ -79,6 +80,7 @@ export class GameScene extends Phaser.Scene {
     this.grid = new Grid(this, deps);
     this.augments = new AugmentManager({ ...deps, grid: this.grid, fx: this.fx });
     this.balls = new BallSystem(this, { ...deps, grid: this.grid, fx: this.fx });
+    this.elites = new Elites({ ...deps, grid: this.grid, fx: this.fx, mgr: this.augments }); // Leveling 보다 먼저 (처치 경험치)
     this.leveling = new Leveling(this.bus, levelsCfg, this.state, meta.bonus);
     this.wallet = new RunWallet(this.bus, balance.currency);
     this.wallet.tierMul = this.tier.currencyMul;

@@ -1,4 +1,6 @@
 import balance from '../data/balance.json';
+import elites from '../data/elites.json';
+import { hex } from './color.js';
 
 /** 후반 체력 배율 (기획서: 1~30 ×1, 31~60 직선 증가해 60에서 ×3, 61~ ×3×1.1^(s−60)) */
 export function hpMultiplier(stage, s = balance.hpScale) {
@@ -11,8 +13,17 @@ export function hpMultiplier(stage, s = balance.hpScale) {
 }
 
 /** 판의 티어 난이도 (GameScene 이 판 시작 때 설정) */
-let mods = { hpMul: 1, extraBlocks: 0 };
-export function setStageMods(m) { mods = { hpMul: m.hpMul ?? 1, extraBlocks: m.extraBlocks ?? 0 }; }
+let mods = { hpMul: 1, extraBlocks: 0, eliteChance: 0 };
+export function setStageMods(m) { mods = { hpMul: m.hpMul ?? 1, extraBlocks: m.extraBlocks ?? 0, eliteChance: m.eliteChance ?? 0 }; }
+
+/** 티어 확률로 블록을 엘리트로 (종류는 무작위, 체력 배율·아이콘·고정 색) */
+function makeElite(def, stage, rng) {
+  if (stage < elites.fromStage || !(rng() < mods.eliteChance)) return def;
+  const names = Object.keys(elites.types);
+  const name = names[Math.floor(rng() * names.length)];
+  const t = elites.types[name];
+  return { ...def, hp: Math.ceil(def.hp * t.hpMul), elite: name, icon: t.icon, fixedColor: hex(elites.color) };
+}
 
 /** 스테이지 기본 체력 × 티어 체력 배율 (재화 계산에는 배율 없는 stage 를 쓸 것) */
 export function stageHp(stage) {
@@ -55,7 +66,7 @@ export function buildStageRow(stage, cols, rng = Math.random) {
   for (let i = 0; i < count; i++) {
     const double = rng() < cfg.doubleChance;
     // base = 기본 체력(스테이지 숫자). 깨면 이만큼 재화
-    row[order[i]] = { kind: 'block', hp: double ? hp * cfg.doubleMultiplier : hp, double, base: stage };
+    row[order[i]] = makeElite({ kind: 'block', hp: double ? hp * cfg.doubleMultiplier : hp, double, base: stage }, stage, rng);
   }
   if (rng() < balance.orb.chance) row[order[count]] = { kind: 'orb' };
   return row;

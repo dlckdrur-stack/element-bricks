@@ -97,6 +97,7 @@ export class Grid {
     const out = [];
     this.forEachCell((c) => out.push({
       kind: c.kind, col: c.col, row: c.row, hp: c.hp, maxHp: c.maxHp, double: c.double, base: c.base,
+      elite: c.elite, icon: c.icon, fixedColor: c.fixedColor,
     }));
     return out;
   }
@@ -251,10 +252,10 @@ export class Grid {
   refreshBlock(cell) {
     const v = cell.view;
     if (!v) return;
-    cell.color = this.colorFor(cell.hp);
+    cell.color = cell.fixedColor ?? this.colorFor(cell.hp); // 엘리트는 고정 색
     v.rect.setFillStyle(cell.color, this.theme.blockFillAlpha);
     v.rect.setStrokeStyle(this.theme.blockStroke, cell.color, 1);
-    v.label.setText(String(Math.ceil(cell.hp)));
+    v.label.setText(`${cell.icon ?? ''}${Math.ceil(cell.hp)}`); // 엘리트 아이콘
     v.label.setColor(cell.labelColor ?? this.theme.text); // 화상 등 상태 표시
   }
 
