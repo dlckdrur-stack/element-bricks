@@ -156,9 +156,11 @@ export const handlers = {
     });
   },
 
-  /** 최후의 방벽: 바닥 바로 위 두 줄의 블록에 데미지 +dmgPct */
+  /** 최후의 방벽: 턴 시작 시 바닥 2줄 안의 블록을 1턴 얼리고, 그 블록들이 받는 피해 +dmgPct */
   ice_lastStand(api, aug) {
-    api.bus.on(EV.HIT, (ctx) => { if (ctx.cell.row >= api.grid.rows - 2) ctx.damage *= 1 + aug.v.dmgPct; });
+    const danger = (c) => !c.boss && c.row >= api.grid.rows - 2;
+    api.bus.on(EV.TURN_START, () => { for (const b of api.grid.blocks().filter(danger)) { iceHit(api, b); freeze(api, b, 1); } });
+    api.bus.on(EV.HIT, (ctx) => { if (danger(ctx.cell)) ctx.damage *= 1 + aug.v.dmgPct; });
   },
 
   /** 한파: 턴 시작 시 무작위 count 개 블록에 서리 (1턴 얼림 + dmgPct) */

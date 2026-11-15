@@ -157,16 +157,22 @@ export const handlers = {
     });
   },
 
-  /** 공생: 풀이 아닌 속성 효과 피해 +dmgPct */
+  /** 공생: 다른 속성 효과로 블록을 깨면 chancePct 확률로 그 자리에 데미지 구슬 */
   grass_symbiosis(api, aug) {
-    api.bus.on(EV.HIT, (ctx) => { if (OTHER.includes(ctx.source?.type)) ctx.damage *= 1 + aug.v.dmgPct; });
+    api.bus.on(EV.KILL, ({ cell, source }) => {
+      if (!OTHER.includes(source?.type) || cell.boss || api.grid.cells[cell.row][cell.col]) return;
+      if (Math.random() < aug.v.chancePct) api.grid.placeAt(cell.col, cell.row, { kind: 'orb' });
+    });
   },
 
-  /** 새싹의 축복: 레벨업할 때마다 공 데미지 +perLevelPct */
+  /** 새싹의 축복: 레벨업할 때마다 체력 낮은 블록 count 개를 덩굴로 1턴 묶고 dmgPct */
   grass_sprout(api, aug) {
-    aug.state.n = 0;
-    api.bus.on(EV.LEVEL_UP, () => { aug.state.n++; });
-    ballBonus(api, 'sprout', () => aug.v.perLevelPct * aug.state.n);
+    api.bus.on(EV.LEVEL_UP, () => {
+      for (const b of blocks(api).sort((a, c) => a.hp - c.hp).slice(0, aug.v.count)) {
+        bind(api, b, 1, 0);
+        strike(api, b, aug.v.dmgPct, SRC('grass_sprout'));
+      }
+    });
   },
 
   /** 광합성: 이번 턴 깬 블록 1개당 다음 턴 공 데미지 +perKillPct (최대 maxPct) */
@@ -178,11 +184,14 @@ export const handlers = {
     ballBonus(api, 'photo', () => bonus);
   },
 
-  /** 풍요: 재화 +currencyPct, 경험치 +xpPct */
+  /** 풍요: every 레벨마다 이번 판 공 +1개 (최대 max) */
   grass_abundance(api, aug) {
-    api.bus.on(EV.KILL, (ctx) => {
-      ctx.currencyBonus += aug.v.currencyPct;
-      ctx.xp = (ctx.xp ?? 1) * (1 + aug.v.xpPct);
+    aug.state.n = 0;
+    api.bus.on(EV.LEVEL_UP, ({ level }) => {
+      if (level % aug.v.every || aug.state.n >= aug.v.max) return;
+      aug.state.n++;
+      api.state.ballCount++;
+      api.scene.look.flareUp('pick');
     });
   },
 

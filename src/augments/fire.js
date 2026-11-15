@@ -119,10 +119,20 @@ export const handlers = {
     api.bus.on(EV.TURN_END, () => { aug.state.hits = 0; });
   },
 
+  /** 낙인: 공이 체력 최고 블록을 맞히면 낙인. 낙인 블록이 깨지면 3×3 에 그 블록 최대 체력의 maxHpPct 폭발 */
   fire_giantHunt(api, aug) {
-    api.bus.on(EV.HIT, (ctx) => {
-      const c = ctx.cell;
-      if (c.elite || c.special || c.shield) ctx.damage *= 1 + aug.v.dmgPct; // 엘리트·보물·분열·방패·보호막
+    api.bus.on(EV.AFTER_HIT, ({ cell, source, killed }) => {
+      if (!isBallHit(source) || killed || cell.boss || cell.branded) return;
+      const top = api.grid.blocks().filter((b) => !b.boss).sort((a, b) => b.hp - a.hp)[0];
+      if (top !== cell) return;
+      cell.branded = true;
+      cell.labelColor = api.theme.burnLabel;
+      api.grid.refreshBlock(cell);
+    });
+    api.bus.on(EV.KILL, ({ cell }) => {
+      if (!cell.branded) return;
+      api.fx.explosion(cx(api, cell), cy(api, cell), api.mgr.color('fire'), 1);
+      for (const b of api.grid.around(cell.col, cell.row, 1)) api.grid.damage(b, cell.maxHp * aug.v.maxHpPct, SRC('fire_giantHunt'));
     });
   },
 
@@ -137,9 +147,16 @@ export const handlers = {
     });
   },
 
+  /** 불씨 수확: 불 효과로 블록을 every 개 깰 때마다 공 데미지 +gain (그 판 계속) */
   fire_emberHarvest(api, aug) {
-    api.bus.on(EV.KILL, (ctx) => {
-      if (ctx.source?.type === 'fire') ctx.currencyBonus += aug.v.currencyPct;
+    aug.state.n = 0;
+    api.bus.on(EV.KILL, ({ cell, source }) => {
+      if (source?.type !== 'fire') return;
+      api.fx.p.emit('fireHitEmber', cx(api, cell), cy(api, cell), api.mgr.color('fire'));
+      if (++aug.state.n < aug.v.every) return;
+      aug.state.n = 0;
+      api.state.damage += aug.v.gain;
+      api.scene.look.flareUp('orb');
     });
   },
 

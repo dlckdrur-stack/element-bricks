@@ -17,7 +17,6 @@ export function stats(aug, s, mgr) {
     case 'earth_drill': s.pierce += v.pierce + mgr.val('earth_steelDrill', 'extra', 0); break;
     case 'earth_bore': s.pierceBonus += v.bonusPct; break;
     case 'earth_weight': s.ballScale += v.sizePct; break;
-    case 'earth_bedrock': s.ballScale += v.sizePct; s.ballDamageMul *= 1 + v.dmgPct; break;
     default:
   }
 }
@@ -91,6 +90,17 @@ export const handlers = {
       for (const dc of [-1, 1]) {
         const b = api.grid.blockAt(cell.col + dc, cell.row);
         if (b) { rock(api, b); strike(api, b, aug.v.dmgPct, SRC('earth_rubble')); }
+      }
+    });
+  },
+
+  /** 무게: (크기는 stats) 공이 블록을 맞힐 때마다 양옆 블록에 충격 */
+  earth_weight(api, aug) {
+    api.bus.on(EV.AFTER_HIT, ({ cell, source }) => {
+      if (!isBallHit(source)) return;
+      for (const dc of [-1, 1]) {
+        const b = api.grid.blockAt(cell.col + dc, cell.row);
+        if (b) strike(api, b, aug.v.dmgPct, SRC('earth_weight'));
       }
     });
   },
@@ -179,12 +189,24 @@ export const handlers = {
     });
   },
 
-  /** 정동석: 균열 cracks 개 이상인 블록을 깨면 재화 +currencyPct, 경험치 +xp */
+  /** 기반암: 공이 돌아올 때마다 그 열의 가장 아래 블록에 바위 기둥 */
+  earth_bedrock(api, aug) {
+    api.bus.on(EV.BALL_RETURN, ({ ball }) => {
+      const col = Math.floor(ball.x / api.grid.cellW);
+      const [b] = blocks(api).filter((x) => x.col === col).sort((a, c) => c.row - a.row);
+      if (b) strike(api, b, aug.v.dmgPct, SRC('earth_bedrock'));
+    });
+  },
+
+  /** 정동석: 균열 cracks 개 이상인 블록이 깨지면 터지며 주변에 균열 spread + dmgPct */
   earth_geode(api, aug) {
-    api.bus.on(EV.KILL, (ctx) => {
-      if ((ctx.cell.cracks ?? 0) < aug.v.cracks) return;
-      ctx.currencyBonus += aug.v.currencyPct;
-      ctx.xp = (ctx.xp ?? 1) + aug.v.xp;
+    api.bus.on(EV.KILL, ({ cell }) => {
+      if ((cell.cracks ?? 0) < aug.v.cracks) return;
+      api.fx.juice.shake('small');
+      for (const b of api.grid.around(cell.col, cell.row, 1)) {
+        crack(api, b, aug.v.spread);
+        strike(api, b, aug.v.dmgPct, SRC('earth_geode'));
+      }
     });
   },
 };

@@ -14,10 +14,10 @@
     { "id": "grass_pollen", "tier": "exclusive", "requires": "grass_seed", "values": { "count": 3, "dmgPct": 0.3 }, "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
     { "id": "grass_canopy", "tier": "exclusive", "requires": "grass_tree", "values": { "sharePct": 0.3 }, "gradeKeys": ["sharePct"] },
 
-    { "id": "grass_symbiosis", "tier": "common", "values": { "dmgPct": 0.12 }, "gradeKeys": ["dmgPct"] },
-    { "id": "grass_sprout", "tier": "common", "values": { "perLevelPct": 0.03 }, "gradeKeys": ["perLevelPct"] },
+    { "id": "grass_symbiosis", "tier": "common", "values": { "chancePct": 0.06 }, "gradeKeys": ["chancePct"] },
+    { "id": "grass_sprout", "tier": "common", "values": { "count": 4, "dmgPct": 1.2 }, "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
     { "id": "grass_photosynthesis", "tier": "common", "values": { "perKillPct": 0.01, "maxPct": 0.2 }, "gradeKeys": ["maxPct"] },
-    { "id": "grass_abundance", "tier": "common", "values": { "currencyPct": 0.2, "xpPct": 0.1 }, "gradeKeys": ["currencyPct"] },
+    { "id": "grass_abundance", "tier": "common", "values": { "every": 5, "max": 2 } },
     { "id": "grass_growth", "tier": "common", "values": { "perHitPct": 0.01, "maxPct": 0.6, "dmgShare": 0.25 }, "gradeKeys": ["maxPct"] },
     { "id": "grass_thorns", "tier": "common", "values": { "dmgPct": 0.3 }, "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
     { "id": "grass_overgrowth", "tier": "common", "values": { "every": 3, "dmgPct": 0.5 }, "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },

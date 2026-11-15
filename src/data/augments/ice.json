@@ -17,7 +17,7 @@
     { "id": "ice_frostbite", "tier": "common", "values": { "dmgPct": 0.3 }, "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
     { "id": "ice_shards", "tier": "common", "values": { "dmgPct": 0.5 }, "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
     { "id": "ice_deepCold", "tier": "common", "values": { "extraTurns": 1, "chancePct": 0.1 }, "gradeKeys": ["chancePct"] },
-    { "id": "ice_lastStand", "tier": "common", "values": { "dmgPct": 0.5 }, "gradeKeys": ["dmgPct"] },
+    { "id": "ice_lastStand", "tier": "common", "values": { "dmgPct": 0.6 }, "gradeKeys": ["dmgPct"] },
     { "id": "ice_coldSnap", "tier": "common", "values": { "count": 4, "dmgPct": 0.4 }, "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
     { "id": "ice_avalanche", "tier": "common", "values": { "kills": 12, "dmgPct": 1.0 }, "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
     { "id": "ice_mirrorIce", "tier": "common", "values": { "dmgPct": 0.6 }, "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },

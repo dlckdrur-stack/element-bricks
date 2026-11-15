@@ -23,7 +23,7 @@
     { "id": "dark_ambush", "tier": "common", "values": { "critChancePct": 0.2 }, "gradeKeys": ["critChancePct"] },
     { "id": "dark_execute", "tier": "common", "values": { "thresholdPct": 0.15, "eliteThresholdPct": 0.07 } },
     { "id": "dark_mark", "tier": "common", "values": { "bonusPct": 1.0 }, "gradeKeys": ["bonusPct"] },
-    { "id": "dark_soulDrain", "tier": "common", "values": { "every": 50, "gain": 1 } },
+    { "id": "dark_soulDrain", "tier": "common", "values": { "every": 25, "gain": 1 } },
     { "id": "dark_void", "tier": "common", "values": { "transferPct": 1.0 }, "gradeKeys": ["transferPct"] },
     { "id": "dark_curse", "tier": "common", "values": { "dmgPct": 0.2 }, "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
     { "id": "dark_nightfall", "tier": "common", "values": { "count": 3, "dmgPct": 0.6 }, "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },

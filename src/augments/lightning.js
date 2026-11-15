@@ -126,8 +126,19 @@ export const handlers = {
     });
   },
 
-  lightning_conductive(api) {
-    api.bus.on(EV.HIT, (ctx) => { if (ctx.source?.type === 'lightning') ctx.ignoreShield = true; });
+  /** 전도체: 번개 효과에 need 번 맞은 블록이 과충전 폭발 (주변 1칸 dmgPct). 번개는 방패·강철도 무시 (elites.js) */
+  lightning_conductive(api, aug) {
+    api.bus.on(EV.AFTER_HIT, ({ cell, source }) => {
+      if (source?.type !== 'lightning' || source.aug === 'lightning_conductive' || cell.dead) return;
+      cell.charge = (cell.charge ?? 0) + 1;
+      if (cell.charge < aug.v.need) return;
+      cell.charge = 0;
+      api.fx.pierce(cx(api, cell), cy(api, cell), api.mgr.color('lightning'));
+      for (const b of api.grid.around(cell.col, cell.row, 1)) {
+        api.fx.chain(cx(api, cell), cy(api, cell), cx(api, b), cy(api, b), api.mgr.color('lightning'));
+        strike(api, b, aug.v.dmgPct, SRC('lightning_conductive'));
+      }
+    });
   },
 
   // ---------- 추가 증강 10종 ----------
@@ -227,9 +238,20 @@ export const handlers = {
     });
   },
 
-  /** 뇌성: 모든 번개 효과 피해 +dmgPct */
+  /** 뇌성: 번개 효과도 치명타가 터지고, 번개 치명타 시 가까운 블록으로 한 갈래 더 (dmgPct) */
   lightning_resonance(api, aug) {
-    api.bus.on(EV.HIT, (ctx) => { if (ctx.source?.type === 'lightning') ctx.damage *= 1 + aug.v.dmgPct; });
+    api.bus.on(EV.HIT, (ctx) => {
+      const s = ctx.source;
+      if (s?.type !== 'lightning' || s.crit || s.ult) return;
+      if (Math.random() < api.state.stats.critChance) { s.crit = true; ctx.damage *= api.state.stats.critDamage; }
+    });
+    api.bus.on(EV.AFTER_HIT, ({ cell, source }) => {
+      if (source?.type !== 'lightning' || !source.crit || source.aug === 'lightning_resonance') return;
+      const [b] = nearest(api, cell, 1);
+      if (!b) return;
+      api.fx.chain(cx(api, cell), cy(api, cell), cx(api, b), cy(api, b), api.mgr.color('lightning'));
+      strike(api, b, aug.v.dmgPct, SRC('lightning_resonance'));
+    });
   },
 
   /** 피뢰침: 턴 시작 시 바닥에서 rows 줄 안에 들어온 블록에 낙뢰 */

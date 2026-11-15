@@ -17,11 +17,11 @@
 
     { "id": "fire_overheat", "tier": "common", "values": { "perHitPct": 0.03 },
       "gradeKeys": ["perHitPct"], "bonusKeys": ["perHitPct"] },
-    { "id": "fire_giantHunt", "tier": "common", "feature": "specialBlocks", "values": { "dmgPct": 0.5 },
+    { "id": "fire_giantHunt", "tier": "common", "values": { "maxHpPct": 0.4 },
       "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
     { "id": "fire_flameReturn", "tier": "common", "values": { "dmgPct": 1.0 },
       "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
-    { "id": "fire_emberHarvest", "tier": "common", "feature": "currency", "values": { "currencyPct": 0.5 },
+    { "id": "fire_emberHarvest", "tier": "common", "feature": "currency", "values": { "every": 8, "gain": 1 },
       "gradeKeys": ["currencyPct"], "bonusKeys": ["currencyPct"] },
     { "id": "fire_meteor", "tier": "common", "values": {"dmgPct": 1.2}, "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
     { "id": "fire_phoenix", "tier": "common", "values": {"mulPct": 0.8}, "gradeKeys": ["mulPct"], "bonusKeys": ["mulPct"] },
