@@ -1,0 +1,32 @@
+{
+  "element": "earth",
+  "color": "#c98a4b",
+  "auraColor": "#e0a060",
+  "augments": [
+    { "id": "earth_drill", "tier": "core", "values": { "pierce": 2 } },
+    { "id": "earth_crack", "tier": "core", "values": { "perPct": 0.12, "max": 5 }, "bonusKeys": ["perPct"] },
+    { "id": "earth_quake", "tier": "core", "values": { "ballPct": 0.5, "rows": 1 }, "bonusKeys": ["ballPct"] },
+
+    { "id": "earth_steelDrill", "tier": "exclusive", "requires": "earth_drill", "values": { "extra": 1 } },
+    { "id": "earth_deepCrack", "tier": "exclusive", "requires": "earth_crack", "values": { "extraMax": 3 } },
+    { "id": "earth_aftershock", "tier": "exclusive", "requires": "earth_quake", "values": { "extraRows": 2 } },
+    { "id": "earth_bore", "tier": "exclusive", "requires": "earth_drill", "values": { "bonusPct": 0.25 }, "gradeKeys": ["bonusPct"] },
+    { "id": "earth_fracture", "tier": "exclusive", "requires": "earth_crack", "values": { "extra": 1 } },
+    { "id": "earth_tremor", "tier": "exclusive", "requires": "earth_quake", "values": { "dmgPct": 0.3 }, "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
+
+    { "id": "earth_rubble", "tier": "common", "values": { "dmgPct": 0.3 }, "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
+    { "id": "earth_shieldBreak", "tier": "common", "values": {} },
+    { "id": "earth_erosion", "tier": "common", "values": { "maxHpPct": 0.03 }, "gradeKeys": ["maxHpPct"] },
+    { "id": "earth_weight", "tier": "common", "values": { "sizePct": 0.3 }, "gradeKeys": ["sizePct"] },
+    { "id": "earth_landslide", "tier": "common", "values": { "every": 3, "dmgPct": 0.8 }, "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
+    { "id": "earth_boulder", "tier": "common", "values": { "hits": 8, "dmgPct": 1.5 }, "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
+    { "id": "earth_fault", "tier": "common", "values": { "cracks": 2, "dmgPct": 0.4 }, "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
+    { "id": "earth_gravel", "tier": "common", "values": { "count": 2, "dmgPct": 0.2 }, "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
+    { "id": "earth_bedrock", "tier": "common", "values": { "sizePct": 0.15, "dmgPct": 0.15 }, "gradeKeys": ["dmgPct"] },
+    { "id": "earth_seismic", "tier": "common", "values": { "every": 20, "dmgPct": 0.5 }, "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
+    { "id": "earth_geode", "tier": "common", "values": { "cracks": 3, "currencyPct": 0.5, "xp": 1 }, "gradeKeys": ["currencyPct"] },
+
+    { "id": "earth_greatQuake", "tier": "awaken", "ult": "greatQuake",
+      "values": { "need": 60, "cols": 3, "colPct": 1.8, "otherPct": 0.4, "vulnPct": 0.3, "turns": 2 } }
+  ]
+}

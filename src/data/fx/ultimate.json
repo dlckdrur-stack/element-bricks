@@ -35,6 +35,34 @@
     "cellParticles": "iceShatter"
   },
 
+  "greatQuake": {
+    "color": "#e0a060", "hot": "#ffe2b8",
+    "tint": "#1a0c00", "tintAlpha": 0.6, "tintIn": 0.12, "tintHold": 1.0, "tintOut": 0.5,
+    "flash": "hell", "hitstop": "awaken", "shake": "huge",
+    "startDelay": 0.65, "finaleTime": 0.6,
+    "rain": "rockChip", "rainTime": 1.2, "rainEvery": 0.03,
+    "finaleRing": { "frame": "ring", "from": 1.5, "to": 20.0, "life": 0.7, "alpha": 1, "ease": "out" },
+    "finaleRing2": { "frame": "ring", "from": 1.0, "to": 12.0, "life": 0.5, "alpha": 1, "ease": "out" },
+    "finaleCore": { "frame": "glow", "from": 3.0, "to": 12.0, "life": 0.45, "alpha": 0.9, "ease": "out" },
+    "burst": ["rockChip", "smoke", "awakenBurst"],
+    "cellSprite": { "frame": "shard", "from": 1.0, "to": 3.0, "life": 0.35, "alpha": 1, "ease": "out" },
+    "cellParticles": "rockChip"
+  },
+
+  "worldTree": {
+    "color": "#5dff7a", "hot": "#eaffc2",
+    "tint": "#001a06", "tintAlpha": 0.55, "tintIn": 0.15, "tintHold": 1.1, "tintOut": 0.6,
+    "flash": "white", "hitstop": "awaken", "shake": "big",
+    "startDelay": 0.75, "finaleTime": 0.6,
+    "rain": "leafBurst", "rainTime": 2.0, "rainEvery": 0.04,
+    "finaleRing": { "frame": "ring", "from": 1.0, "to": 18.0, "life": 0.8, "alpha": 1, "ease": "out" },
+    "finaleRing2": { "frame": "ring", "from": 0.6, "to": 10.0, "life": 0.6, "alpha": 1, "ease": "out" },
+    "finaleCore": { "frame": "glow", "from": 3.0, "to": 14.0, "life": 0.7, "alpha": 0.9, "ease": "out" },
+    "burst": ["leafBurst", "awakenGlow", "prismStar"],
+    "cellSprite": { "frame": "glow", "from": 0.8, "to": 2.6, "life": 0.4, "alpha": 1, "ease": "out" },
+    "cellParticles": "leafBurst"
+  },
+
   "eclipse": {
     "color": "#b45cff", "sun": "#ff3b5c", "white": "#ffffff",
     "tint": "#000000", "tintAlpha": 0.78, "tintIn": 0.15, "tintHold": 1.0, "tintOut": 0.5,
