@@ -42,6 +42,6 @@
   },
   "ranking": { "headY": 160, "top": 220, "rowH": 56, "padX": 60, "statusY": 600 },
   "rankButton": { "x": 500, "y": 80, "w": 64, "h": 44 },
-  "pause": { "dim": 0.9, "titleY": 64, "statsHeadY": 116, "statsTop": 148, "rowH": 28, "rows": 9, "barX": 250, "barW": 230, "barH": 14, "augHeadY": 420, "augY": 448, "augW": 490, "buttonsY": 700, "buttonW": 300, "buttonH": 62, "gap": 12, "noteY": 918 },
+  "pause": { "dim": 0.9, "titleY": 64, "statsHeadY": 116, "statsTop": 148, "rowH": 28, "rows": 9, "barX": 176, "barW": 180, "barH": 14, "augHeadY": 420, "augY": 448, "augW": 490, "buttonsY": 700, "buttonW": 300, "buttonH": 62, "gap": 12, "noteY": 918 },
   "dialog": { "w": 440, "h": 260, "buttonW": 170, "buttonH": 64, "buttonGapX": 200, "dim": 0.75, "info": { "w": 490, "h": 640 } }
 }

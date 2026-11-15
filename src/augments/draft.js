@@ -42,7 +42,7 @@ function weightsFor(level, mgr) {
  * kind 'core'  : 11·16레벨. 메인·서브 속성의 남은 핵심
  * kind 'duo'   : 17레벨. 내 핵심 조합의 듀오 (없으면 각성 → 등급)
  * kind 'awaken': 18레벨. 메인·서브 속성의 각성 (플래티넘 클리어 후, 없으면 듀오 → 등급)
- * kind 'graded': 등급 1개를 뽑고, 같은 등급으로 일반 증강 3개 (메인·서브 최소 1개 보장)
+ * kind 'graded': 등급 1개를 뽑고, 같은 등급으로 메인·서브 속성 일반 증강 (메인 최대 caps.main, 서브 최대 caps.sub 개까지)
  * @returns {{ kind, grade, options: def[] }}
  */
 export function buildChoices(kind, level, mgr, rng = Math.random) {
@@ -71,7 +71,10 @@ export function buildChoices(kind, level, mgr, rng = Math.random) {
   if (kind === 'awaken' && duos.length) return { kind: 'duo', grade: null, options: sample(duos, n, rng) };
   // 고를 핵심·듀오·각성이 없으면 일반 등급 선택으로
 
-  const pool = all.filter((d) => !['core', 'awaken', 'duo'].includes(d.tier) && (!d.requires || mgr.has(d.requires)));
+  const cnt = mgr.pickCounts();
+  const room = { main: cnt.main < draftCfg.caps.main, sub: cnt.sub < draftCfg.caps.sub }; // 메인 10 · 서브 5, 다른 속성은 안 나옴
+  const pool = all.filter((d) => !['core', 'awaken', 'duo'].includes(d.tier) && (!d.requires || mgr.has(d.requires))
+    && room[categoryOf(d, mgr)]);
   if (!pool.length) return { kind, grade: null, options: [] };
   const grade = rollGrade(mgr, rng);
 

@@ -4,7 +4,7 @@ import theme from '../data/themes/neon.json';
 import screens from '../data/screens.json';
 import { hex } from '../core/color.js';
 import { applyFxSettings, getSettings } from '../meta/settings.js';
-import { makeButton, style } from './widgets.js';
+import { makeButton, style, fmtShort } from './widgets.js';
 import { t } from './i18n.js';
 
 /**
@@ -38,7 +38,9 @@ export class PauseScene extends Phaser.Scene {
     const g = this.gameScene();
     const fs = layout.fontSize;
     const mgr = g.augments;
-    this.add.text(P.barX - 230, P.statsHeadY, t('pause.dmgHead'), style(fs.cardDesc, theme.accent, true)).setOrigin(0, 0.5);
+    const left = layout.width / 2 - P.augW / 2;
+    this.add.text(left, P.statsHeadY, t('pause.dmgHead'), style(fs.cardDesc, theme.accent, true)).setOrigin(0, 0.5);
+    this.add.text(left + P.augW, P.statsHeadY, t('pause.dmgTotal', { n: fmtShort(g.dmgStats.total) }), style(fs.cardDesc, theme.currency, true)).setOrigin(1, 0.5);
     const rows = g.dmgStats.top(P.rows);
     if (!rows.length) this.add.text(layout.width / 2, P.statsTop + 20, t('pause.noDmg'), style(fs.small, theme.hudText)).setOrigin(0.5);
     rows.forEach((r, i) => {
@@ -49,14 +51,16 @@ export class PauseScene extends Phaser.Scene {
       this.add.text(P.barX - 12, y, name, style(fs.small, theme.text)).setOrigin(1, 0.5);
       this.add.rectangle(P.barX, y, P.barW, P.barH, 0x000000, 0.5).setOrigin(0, 0.5);
       this.add.rectangle(P.barX, y, Math.max(2, P.barW * r.share), P.barH, color).setOrigin(0, 0.5);
-      this.add.text(P.barX + P.barW + 8, y, `${Math.round(r.share * 1000) / 10}%`, style(fs.small, theme.hudText)).setOrigin(0, 0.5);
+      this.add.text(P.barX + P.barW + 8, y, t('pause.dmgRow', { n: fmtShort(r.dmg), p: Math.round(r.share * 1000) / 10 }), style(fs.small, theme.hudText)).setOrigin(0, 0.5);
     });
     const owned = [...mgr.owned.values()].map((a) => t(`aug.${a.def.id}.name`) + (a.grade ? `(${t(`grade.${a.grade}`)})` : ''));
-    this.add.text(P.barX - 230, P.augHeadY, t('pause.augHead', { n: owned.length }), style(fs.cardDesc, theme.accent, true)).setOrigin(0, 0.5);
+    const cnt = mgr.pickCounts();
+    const caps = mgr.caps;
+    this.add.text(left, P.augHeadY, t('pause.augHead', { n: owned.length, m: cnt.main, mm: caps.main, s: cnt.sub, sm: caps.sub }), style(fs.cardDesc, theme.accent, true)).setOrigin(0, 0.5);
     this.add.text(layout.width / 2, P.augY, owned.join('  ·  ') || t('pause.noAug'), {
       ...style(fs.small, theme.text), align: 'center', wordWrap: { width: P.augW, useAdvancedWrap: true }, lineSpacing: 4,
     }).setOrigin(0.5, 0);
-    this.add.text(layout.width / 2, P.augHeadY, mgr.roleText(t), style(fs.small, theme.currency, true)).setOrigin(0, 0.5);
+    this.add.text(layout.width / 2, P.statsTop + P.rows * P.rowH + 4, mgr.roleText(t), style(fs.small, theme.currency, true)).setOrigin(0.5);
   }
 
   gameScene() { return this.scene.get('Game'); } // (this.game 은 Phaser 예약어)

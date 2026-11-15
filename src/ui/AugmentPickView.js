@@ -40,7 +40,9 @@ export function showAugmentPick(scene, deps, choice, level, cb) {
   const gradeName = choice.grade ? t(`grade.${choice.grade}`) : '';
   const gradeColor = choice.grade ? draftCfg.grades[choice.grade].color : theme.text;
   const title = choice.grade ? t('pick.title.graded', { n: level }) : t(`pick.title.${choice.kind}`, { n: level });
-  const sub = choice.grade ? t('pick.sub.graded', { grade: gradeName }) : t(`pick.sub.${choice.kind}`);
+  const cnt = mgr.pickCounts();
+  const capsTxt = t('pick.caps', { m: cnt.main, mm: mgr.caps.main, s: cnt.sub, sm: mgr.caps.sub });
+  const sub = choice.grade ? `${t('pick.sub.graded', { grade: gradeName })} · ${capsTxt}` : t(`pick.sub.${choice.kind}`);
   const heads = [
     ov.add(scene.add.text(W / 2, L.titleY, title, {
       fontFamily: f, fontSize: `${layout.fontSize.title * 0.75}px`, fontStyle: 'bold', color: gradeColor,

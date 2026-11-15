@@ -129,6 +129,19 @@ export class AugmentManager {
     return Math.min(f.maxPct, f.perAugPct * (this.counts[el] ?? 0));
   }
 
+  get caps() { return draftCfg.caps; }
+
+  /** 핵심·듀오·각성을 뺀 보유 증강 수 (메인·서브 속성별) */
+  pickCounts() {
+    const out = { main: 0, sub: 0 };
+    for (const a of this.owned.values()) {
+      if (['core', 'duo', 'awaken'].includes(a.def.tier)) continue;
+      const st = this.elementStatus(a.def.element);
+      if (st) out[st]++;
+    }
+    return out;
+  }
+
   /** 서브 역할: 서브 속성 증강 1개당 메인 속성 효과 +subAmpPerAug (최대 subAmpMax) */
   get subAmp() {
     const r = draftCfg.roles;

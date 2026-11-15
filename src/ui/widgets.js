@@ -14,6 +14,12 @@ export function fmtNum(n) {
   return Math.floor(n).toLocaleString();
 }
 
+/** 1234 → 1.2K, 3456789 → 3.5M */
+export function fmtShort(n) {
+  const u = [[1e12, 'T'], [1e9, 'B'], [1e6, 'M'], [1e3, 'K']].find(([v]) => n >= v);
+  return u ? `${Math.round((n / u[0]) * 10) / 10}${u[1]}` : String(Math.round(n));
+}
+
 /**
  * 네온 버튼. 누르면 살짝 작아지고, 손을 떼면 onClick.
  * 반환값: container (.bg .label, setEnabled(bool))

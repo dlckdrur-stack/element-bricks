@@ -4,6 +4,7 @@
   "awakenNeed": 4,
   "elementBonus": 0.3,
   "focus": { "perAugPct": 0.04, "maxPct": 0.6, "purePerAugPct": 0, "pureMaxPct": 0 },
+  "caps": { "main": 10, "sub": 5 },
   "roles": { "subAmpPerAug": 0.05, "subAmpMax": 0.5 },
   "grades": {
     "silver": { "mul": 1, "color": "#c9d3e6" },
