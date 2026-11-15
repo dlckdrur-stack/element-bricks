@@ -58,8 +58,10 @@ export class Hud {
     if (color !== undefined) this.bar.setFillStyle(color);
   }
 
-  setFps(fps, particles) {
-    this.fps.setText(t('hud.fps', { n: Math.round(fps), p: particles }));
+  /** 개발용 FPS 표시 (환경설정에서 켜고 끔) */
+  setFps(on, fps, particles, quality) {
+    this.fps.setVisible(on);
+    if (on) this.fps.setText(t('hud.fps', { n: Math.round(fps), p: particles, q: t(`settings.q.${quality}`) }));
   }
 
   setSpeed(mult) {

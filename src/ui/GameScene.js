@@ -21,6 +21,8 @@ import { RunWallet } from '../meta/RunWallet.js';
 import { goTo, fadeIn } from './widgets.js';
 import { t } from './i18n.js';
 import { pickFlow } from './pickFlow.js';
+import { applyFxSettings, getSettings, settingsCfg } from '../meta/settings.js';
+import { AutoQuality } from '../fx/AutoQuality.js';
 
 const STEP_MS = 1000 / balance.physics.stepHz;
 
@@ -38,6 +40,10 @@ export class GameScene extends Phaser.Scene {
   create() {
     fadeIn(this);
     this.fx = new Fx(this, fxCfg, { fontFamily: theme.fontFamily }); // 입자 텍스처·글로우(화면 1곳)도 여기서
+    applyFxSettings(this.fx);
+    const opt = getSettings();
+    this.showFps = opt.showFps;
+    this.autoQ = new AutoQuality(this.fx, fxCfg.qualities, settingsCfg.autoQuality, { enabled: opt.autoQuality, ceiling: opt.quality });
 
     this.bus = new GameEvents();
     this.saveData = getProfile();
@@ -242,10 +248,12 @@ export class GameScene extends Phaser.Scene {
     }
     if (this.hudDirty) this.refreshHud();
 
+    const fps = this.game.loop.actualFps;
+    this.autoQ.update(delta / 1000, fps);
     this.fpsTimer += delta;
     if (this.fpsTimer > 500) {
       this.fpsTimer = 0;
-      this.hud.setFps(this.game.loop.actualFps, this.fx.count);
+      this.hud.setFps(this.showFps, fps, this.fx.count, this.fx.quality);
     }
   }
 }
