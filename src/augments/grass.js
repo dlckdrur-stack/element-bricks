@@ -37,7 +37,7 @@ function ballBonus(api, key, fn) {
 }
 
 /** 묶기: 그 블록의 열을 turns 턴 멈춤 + 최대 체력 비율 피해 */
-function bind(api, b, turns, pct, src) {
+export function bind(api, b, turns, pct, src) {
   api.grid.held[b.col] = Math.max(api.grid.held[b.col], turns);
   leaf(api, b);
   if (pct) api.grid.damage(b, b.maxHp * pct, src);

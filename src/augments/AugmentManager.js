@@ -100,7 +100,8 @@ export class AugmentManager {
     const aug = { def, grade, v: {}, state: {} };
     this.owned.set(id, aug);
     this.recompute();
-    MODULES[def.element].handlers[id]?.(this.api, aug);
+    const mod = MODULES[def.element];
+    (mod.handlers[id] ?? (def.from ? mod.generic : null))?.(this.api, aug); // 자동 생성 듀오는 공용 처리
     this.api.bus.emit(EV.AUGMENT, { aug });
     return aug;
   }

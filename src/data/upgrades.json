@@ -1,22 +1,38 @@
 {
   "costRound": 10,
   "list": [
-    { "id": "damage",      "levels": 20, "growth": 1.45, "cost": 300, "per": 0.12, "fmt": "pct" },
-    { "id": "critDamage",  "levels": 15, "growth": 1.5, "cost": 300, "per": 0.1, "fmt": "pct" },
-    { "id": "critChance",  "levels": 10, "growth": 1.6, "cost": 500, "per": 0.02, "fmt": "pct" },
-    { "id": "ballSpeed",   "levels": 5, "growth": 1.8, "cost": 300, "per": 0.06, "fmt": "pct" },
-    { "id": "xp",          "levels": 10, "growth": 1.55, "cost": 300, "per": 0.08, "fmt": "pct" },
-    { "id": "currency",    "levels": 15, "growth": 1.5, "cost": 500, "per": 0.1, "fmt": "pct" },
-    { "id": "balls",       "levels": 2, "growth": 6, "cost": 15000, "per": 1, "fmt": "count" },
-    { "id": "reroll",      "levels": 3, "growth": 4, "cost": 3000, "per": 1, "fmt": "count" },
-    { "id": "choices",     "levels": 2, "growth": 6, "cost": 40000, "per": 1, "fmt": "count" },
-    { "id": "maxLevel",    "levels": 2, "growth": 6, "cost": 60000, "per": 1, "fmt": "count" },
-    { "id": "luck",        "levels": 10, "growth": 1.6, "cost": 1500, "per": 1, "fmt": "level" }
+    { "id": "damage", "levels": 20, "growth": 1.545, "cost": 200, "per": 0.12, "fmt": "pct" },
+    { "id": "critDamage", "levels": 15, "growth": 1.786, "cost": 200, "per": 0.1, "fmt": "pct" },
+    { "id": "critChance", "levels": 10, "growth": 2.387, "cost": 240, "per": 0.02, "fmt": "pct" },
+    { "id": "ballSpeed", "levels": 5, "growth": 5.697, "cost": 160, "per": 0.06, "fmt": "pct" },
+    { "id": "xp", "levels": 10, "growth": 2.387, "cost": 160, "per": 0.08, "fmt": "pct" },
+    { "id": "currency", "levels": 15, "growth": 1.786, "cost": 200, "per": 0.1, "fmt": "pct" },
+    { "id": "balls", "levels": 2, "growth": 77.46, "cost": 4000, "per": 1, "fmt": "count" },
+    { "id": "reroll", "levels": 3, "growth": 18.171, "cost": 1000, "per": 1, "fmt": "count" },
+    { "id": "choices", "levels": 2, "growth": 77.46, "cost": 6000, "per": 1, "fmt": "count" },
+    { "id": "maxLevel", "levels": 2, "growth": 77.46, "cost": 6000, "per": 1, "fmt": "count" },
+    { "id": "luck", "levels": 10, "growth": 2.387, "cost": 300, "per": 1, "fmt": "level" }
   ],
   "screen": {
-    "tabY": 160, "tabW": 156, "tabH": 56, "tabGap": 164,
-    "listTop": 226, "rowH": 56, "nameX": 26, "buyX": 440, "buyW": 170, "buyH": 42,
-    "devX": 462, "devY": 92, "devW": 132, "devH": 40, "devAmount": 100000,
-    "lockY": 440, "sparkle": "cardSparkle", "sparkleStar": "cardStar", "popScale": 1.18
-  }
+    "tabY": 160,
+    "tabW": 156,
+    "tabH": 56,
+    "tabGap": 164,
+    "listTop": 226,
+    "rowH": 56,
+    "nameX": 26,
+    "buyX": 440,
+    "buyW": 170,
+    "buyH": 42,
+    "devX": 462,
+    "devY": 92,
+    "devW": 132,
+    "devH": 40,
+    "devAmount": 100000,
+    "lockY": 440,
+    "sparkle": "cardSparkle",
+    "sparkleStar": "cardStar",
+    "popScale": 1.18
+  },
+  "priceNote": "진행도(단계/최대단계) 0→1 에 비용 200 → 약 120만 (×6000). 판당 평균 약 5단계 (티어가 오른 첫 판은 더 많이). 항목별 무게: 공 추가 ×20, 선택지·만렙 ×30, 리롤 ×5"
 }

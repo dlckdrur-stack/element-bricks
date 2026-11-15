@@ -22,7 +22,7 @@ export function stats(aug, s, mgr) {
 }
 
 /** 균열 추가 (최대치까지) */
-function crack(api, cell, n) {
+export function crack(api, cell, n) {
   if (!cell || cell.dead) return;
   const v = api.mgr.owned.get('earth_crack')?.v;
   const max = (v?.max ?? 5) + api.mgr.val('earth_deepCrack', 'extraMax', 0);

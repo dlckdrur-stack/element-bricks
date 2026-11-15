@@ -2,15 +2,207 @@
   "element": "duo",
   "color": "#ffb347",
   "auraColor": "#ffd27a",
+  "triggers": {
+    "fire_explosion": {
+        "aug": true
+    },
+    "fire_burn": {
+        "aug": true
+    },
+    "fire_fireball": {
+        "ball": true,
+        "every": 3
+    },
+    "lightning_chain": {
+        "aug": true
+    },
+    "lightning_railgun": {
+        "aug": true
+    },
+    "lightning_pierce": {
+        "ball": true,
+        "pierce": true,
+        "every": 2
+    },
+    "dark_clone": {
+        "ball": true,
+        "clone": true
+    },
+    "dark_blackhole": {
+        "aug": true
+    },
+    "dark_blade": {
+        "aug": true
+    },
+    "ice_glacier": {
+        "aug": true
+    },
+    "ice_shatter": {
+        "ball": true,
+        "frozen": true
+    },
+    "ice_spear": {
+        "aug": true
+    },
+    "earth_drill": {
+        "ball": true,
+        "pierce": true,
+        "every": 2
+    },
+    "earth_crack": {
+        "ball": true,
+        "cracks": 3
+    },
+    "earth_quake": {
+        "aug": true
+    },
+    "grass_vine": {
+        "aug": true
+    },
+    "grass_seed": {
+        "ball": true,
+        "bloomed": true
+    },
+    "grass_tree": {
+        "ball": true,
+        "every": 8
+    }
+  },
   "augments": [
-    { "id": "duo_thunderBlast", "tier": "duo", "requiresAll": ["fire_explosion", "lightning_chain"], "values": { "dmgPct": 0.2 }, "gradeKeys": ["dmgPct"] },
-    { "id": "duo_railBlast", "tier": "duo", "requiresAll": ["fire_explosion", "lightning_railgun"], "values": { "dmgPct": 0.35 }, "gradeKeys": ["dmgPct"] },
-    { "id": "duo_pierceBlast", "tier": "duo", "requiresAll": ["fire_explosion", "lightning_pierce"], "values": { "dmgPct": 0.4 }, "gradeKeys": ["dmgPct"] },
-    { "id": "duo_shockBurn", "tier": "duo", "requiresAll": ["fire_burn", "lightning_chain"], "values": { "stacks": 1 } },
-    { "id": "duo_heatRay", "tier": "duo", "requiresAll": ["fire_burn", "lightning_railgun"], "values": { "stacks": 2 } },
-    { "id": "duo_searPierce", "tier": "duo", "requiresAll": ["fire_burn", "lightning_pierce"], "values": { "stacks": 1, "burnBonusPct": 0.3 }, "gradeKeys": ["burnBonusPct"] },
-    { "id": "duo_stormball", "tier": "duo", "requiresAll": ["fire_fireball", "lightning_chain"], "values": { "targets": 4, "dmgPct": 0.4, "chainBonusPct": 0.3 }, "gradeKeys": ["dmgPct", "chainBonusPct"] },
-    { "id": "duo_solarRail", "tier": "duo", "requiresAll": ["fire_fireball", "lightning_railgun"], "values": { "railBonusPct": 0.5 }, "gradeKeys": ["railBonusPct"] },
-    { "id": "duo_meteorPierce", "tier": "duo", "requiresAll": ["fire_fireball", "lightning_pierce"], "values": { "extraPierce": 2, "dmgPct": 0.3 }, "gradeKeys": ["dmgPct"] }
+    {"id": "duo_thunderBlast", "tier": "duo", "requiresAll": ["fire_explosion", "lightning_chain"], "values": {"dmgPct": 0.2}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_railBlast", "tier": "duo", "requiresAll": ["fire_explosion", "lightning_railgun"], "values": {"dmgPct": 0.35}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_pierceBlast", "tier": "duo", "requiresAll": ["fire_explosion", "lightning_pierce"], "values": {"dmgPct": 0.4}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_shockBurn", "tier": "duo", "requiresAll": ["fire_burn", "lightning_chain"], "values": {"stacks": 1}},
+    {"id": "duo_heatRay", "tier": "duo", "requiresAll": ["fire_burn", "lightning_railgun"], "values": {"stacks": 2}},
+    {"id": "duo_searPierce", "tier": "duo", "requiresAll": ["fire_burn", "lightning_pierce"], "values": {"stacks": 1, "burnBonusPct": 0.3}, "gradeKeys": ["burnBonusPct"]},
+    {"id": "duo_stormball", "tier": "duo", "requiresAll": ["fire_fireball", "lightning_chain"], "values": {"targets": 4, "dmgPct": 0.4, "chainBonusPct": 0.3}, "gradeKeys": ["dmgPct", "chainBonusPct"]},
+    {"id": "duo_solarRail", "tier": "duo", "requiresAll": ["fire_fireball", "lightning_railgun"], "values": {"railBonusPct": 0.5}, "gradeKeys": ["railBonusPct"]},
+    {"id": "duo_meteorPierce", "tier": "duo", "requiresAll": ["fire_fireball", "lightning_pierce"], "values": {"extraPierce": 2, "dmgPct": 0.3}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_explosion_clone_fd", "tier": "duo", "requiresAll": ["fire_explosion", "dark_clone"], "from": "fire_explosion", "to": "dark_clone", "values": {"every": 4, "mulPct": 0.3, "hits": 2}},
+    {"id": "duo_blackhole_explosion_df", "tier": "duo", "requiresAll": ["fire_explosion", "dark_blackhole"], "from": "dark_blackhole", "to": "fire_explosion", "values": {"dmgPct": 0.25}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_explosion_blade_fd", "tier": "duo", "requiresAll": ["fire_explosion", "dark_blade"], "from": "fire_explosion", "to": "dark_blade", "values": {"count": 2, "dmgPct": 0.25}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_clone_burn_df", "tier": "duo", "requiresAll": ["fire_burn", "dark_clone"], "from": "dark_clone", "to": "fire_burn", "values": {"stacks": 1}},
+    {"id": "duo_burn_blackhole_fd", "tier": "duo", "requiresAll": ["fire_burn", "dark_blackhole"], "from": "fire_burn", "to": "dark_blackhole", "values": {"dmgPct": 0.3}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_blade_burn_df", "tier": "duo", "requiresAll": ["fire_burn", "dark_blade"], "from": "dark_blade", "to": "fire_burn", "values": {"stacks": 1}},
+    {"id": "duo_fireball_clone_fd", "tier": "duo", "requiresAll": ["fire_fireball", "dark_clone"], "from": "fire_fireball", "to": "dark_clone", "values": {"every": 4, "mulPct": 0.3, "hits": 2}},
+    {"id": "duo_blackhole_fireball_df", "tier": "duo", "requiresAll": ["fire_fireball", "dark_blackhole"], "from": "dark_blackhole", "to": "fire_fireball", "values": {"dmgPct": 0.5}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_fireball_blade_fd", "tier": "duo", "requiresAll": ["fire_fireball", "dark_blade"], "from": "fire_fireball", "to": "dark_blade", "values": {"count": 2, "dmgPct": 0.25}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_explosion_glacier_fi", "tier": "duo", "requiresAll": ["fire_explosion", "ice_glacier"], "from": "fire_explosion", "to": "ice_glacier", "values": {"turns": 1, "maxHpPct": 0.1}},
+    {"id": "duo_shatter_explosion_if", "tier": "duo", "requiresAll": ["fire_explosion", "ice_shatter"], "from": "ice_shatter", "to": "fire_explosion", "values": {"dmgPct": 0.25}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_explosion_spear_fi", "tier": "duo", "requiresAll": ["fire_explosion", "ice_spear"], "from": "fire_explosion", "to": "ice_spear", "values": {"dmgPct": 0.6}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_glacier_burn_if", "tier": "duo", "requiresAll": ["fire_burn", "ice_glacier"], "from": "ice_glacier", "to": "fire_burn", "values": {"stacks": 1}},
+    {"id": "duo_burn_shatter_fi", "tier": "duo", "requiresAll": ["fire_burn", "ice_shatter"], "from": "fire_burn", "to": "ice_shatter", "values": {"dmgPct": 0.8}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_spear_burn_if", "tier": "duo", "requiresAll": ["fire_burn", "ice_spear"], "from": "ice_spear", "to": "fire_burn", "values": {"stacks": 1}},
+    {"id": "duo_fireball_glacier_fi", "tier": "duo", "requiresAll": ["fire_fireball", "ice_glacier"], "from": "fire_fireball", "to": "ice_glacier", "values": {"turns": 1, "maxHpPct": 0.1}},
+    {"id": "duo_shatter_fireball_if", "tier": "duo", "requiresAll": ["fire_fireball", "ice_shatter"], "from": "ice_shatter", "to": "fire_fireball", "values": {"dmgPct": 0.5}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_fireball_spear_fi", "tier": "duo", "requiresAll": ["fire_fireball", "ice_spear"], "from": "fire_fireball", "to": "ice_spear", "values": {"dmgPct": 0.6}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_explosion_drill_fe", "tier": "duo", "requiresAll": ["fire_explosion", "earth_drill"], "from": "fire_explosion", "to": "earth_drill", "values": {"dmgPct": 0.5}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_crack_explosion_ef", "tier": "duo", "requiresAll": ["fire_explosion", "earth_crack"], "from": "earth_crack", "to": "fire_explosion", "values": {"dmgPct": 0.25}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_explosion_quake_fe", "tier": "duo", "requiresAll": ["fire_explosion", "earth_quake"], "from": "fire_explosion", "to": "earth_quake", "values": {"dmgPct": 0.25}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_drill_burn_ef", "tier": "duo", "requiresAll": ["fire_burn", "earth_drill"], "from": "earth_drill", "to": "fire_burn", "values": {"stacks": 1}},
+    {"id": "duo_burn_crack_fe", "tier": "duo", "requiresAll": ["fire_burn", "earth_crack"], "from": "fire_burn", "to": "earth_crack", "values": {"cracks": 2}},
+    {"id": "duo_quake_burn_ef", "tier": "duo", "requiresAll": ["fire_burn", "earth_quake"], "from": "earth_quake", "to": "fire_burn", "values": {"stacks": 1}},
+    {"id": "duo_fireball_drill_fe", "tier": "duo", "requiresAll": ["fire_fireball", "earth_drill"], "from": "fire_fireball", "to": "earth_drill", "values": {"dmgPct": 0.5}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_crack_fireball_ef", "tier": "duo", "requiresAll": ["fire_fireball", "earth_crack"], "from": "earth_crack", "to": "fire_fireball", "values": {"dmgPct": 0.5}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_fireball_quake_fe", "tier": "duo", "requiresAll": ["fire_fireball", "earth_quake"], "from": "fire_fireball", "to": "earth_quake", "values": {"dmgPct": 0.25}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_explosion_vine_fg", "tier": "duo", "requiresAll": ["fire_explosion", "grass_vine"], "from": "fire_explosion", "to": "grass_vine", "values": {"turns": 1}},
+    {"id": "duo_seed_explosion_gf", "tier": "duo", "requiresAll": ["fire_explosion", "grass_seed"], "from": "grass_seed", "to": "fire_explosion", "values": {"dmgPct": 0.25}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_explosion_tree_fg", "tier": "duo", "requiresAll": ["fire_explosion", "grass_tree"], "from": "fire_explosion", "to": "grass_tree", "values": {"perPct": 0.003}},
+    {"id": "duo_vine_burn_gf", "tier": "duo", "requiresAll": ["fire_burn", "grass_vine"], "from": "grass_vine", "to": "fire_burn", "values": {"stacks": 1}},
+    {"id": "duo_burn_seed_fg", "tier": "duo", "requiresAll": ["fire_burn", "grass_seed"], "from": "fire_burn", "to": "grass_seed", "values": {"targets": 2, "dmgPct": 0.25}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_tree_burn_gf", "tier": "duo", "requiresAll": ["fire_burn", "grass_tree"], "from": "grass_tree", "to": "fire_burn", "values": {"stacks": 1}},
+    {"id": "duo_fireball_vine_fg", "tier": "duo", "requiresAll": ["fire_fireball", "grass_vine"], "from": "fire_fireball", "to": "grass_vine", "values": {"turns": 1}},
+    {"id": "duo_seed_fireball_gf", "tier": "duo", "requiresAll": ["fire_fireball", "grass_seed"], "from": "grass_seed", "to": "fire_fireball", "values": {"dmgPct": 0.5}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_fireball_tree_fg", "tier": "duo", "requiresAll": ["fire_fireball", "grass_tree"], "from": "fire_fireball", "to": "grass_tree", "values": {"perPct": 0.003}},
+    {"id": "duo_chain_clone_ld", "tier": "duo", "requiresAll": ["lightning_chain", "dark_clone"], "from": "lightning_chain", "to": "dark_clone", "values": {"every": 4, "mulPct": 0.3, "hits": 2}},
+    {"id": "duo_blackhole_chain_dl", "tier": "duo", "requiresAll": ["lightning_chain", "dark_blackhole"], "from": "dark_blackhole", "to": "lightning_chain", "values": {"targets": 2, "dmgPct": 0.25}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_chain_blade_ld", "tier": "duo", "requiresAll": ["lightning_chain", "dark_blade"], "from": "lightning_chain", "to": "dark_blade", "values": {"count": 2, "dmgPct": 0.25}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_clone_railgun_dl", "tier": "duo", "requiresAll": ["lightning_railgun", "dark_clone"], "from": "dark_clone", "to": "lightning_railgun", "values": {"dmgPct": 0.5}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_railgun_blackhole_ld", "tier": "duo", "requiresAll": ["lightning_railgun", "dark_blackhole"], "from": "lightning_railgun", "to": "dark_blackhole", "values": {"dmgPct": 0.3}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_blade_railgun_dl", "tier": "duo", "requiresAll": ["lightning_railgun", "dark_blade"], "from": "dark_blade", "to": "lightning_railgun", "values": {"dmgPct": 0.5}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_pierce_clone_ld", "tier": "duo", "requiresAll": ["lightning_pierce", "dark_clone"], "from": "lightning_pierce", "to": "dark_clone", "values": {"every": 4, "mulPct": 0.3, "hits": 2}},
+    {"id": "duo_blackhole_pierce_dl", "tier": "duo", "requiresAll": ["lightning_pierce", "dark_blackhole"], "from": "dark_blackhole", "to": "lightning_pierce", "values": {"dmgPct": 0.4}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_pierce_blade_ld", "tier": "duo", "requiresAll": ["lightning_pierce", "dark_blade"], "from": "lightning_pierce", "to": "dark_blade", "values": {"count": 2, "dmgPct": 0.25}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_chain_glacier_li", "tier": "duo", "requiresAll": ["lightning_chain", "ice_glacier"], "from": "lightning_chain", "to": "ice_glacier", "values": {"turns": 1, "maxHpPct": 0.1}},
+    {"id": "duo_shatter_chain_il", "tier": "duo", "requiresAll": ["lightning_chain", "ice_shatter"], "from": "ice_shatter", "to": "lightning_chain", "values": {"targets": 2, "dmgPct": 0.25}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_chain_spear_li", "tier": "duo", "requiresAll": ["lightning_chain", "ice_spear"], "from": "lightning_chain", "to": "ice_spear", "values": {"dmgPct": 0.6}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_glacier_railgun_il", "tier": "duo", "requiresAll": ["lightning_railgun", "ice_glacier"], "from": "ice_glacier", "to": "lightning_railgun", "values": {"dmgPct": 0.5}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_railgun_shatter_li", "tier": "duo", "requiresAll": ["lightning_railgun", "ice_shatter"], "from": "lightning_railgun", "to": "ice_shatter", "values": {"dmgPct": 0.8}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_spear_railgun_il", "tier": "duo", "requiresAll": ["lightning_railgun", "ice_spear"], "from": "ice_spear", "to": "lightning_railgun", "values": {"dmgPct": 0.5}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_pierce_glacier_li", "tier": "duo", "requiresAll": ["lightning_pierce", "ice_glacier"], "from": "lightning_pierce", "to": "ice_glacier", "values": {"turns": 1, "maxHpPct": 0.1}},
+    {"id": "duo_shatter_pierce_il", "tier": "duo", "requiresAll": ["lightning_pierce", "ice_shatter"], "from": "ice_shatter", "to": "lightning_pierce", "values": {"dmgPct": 0.4}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_pierce_spear_li", "tier": "duo", "requiresAll": ["lightning_pierce", "ice_spear"], "from": "lightning_pierce", "to": "ice_spear", "values": {"dmgPct": 0.6}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_chain_drill_le", "tier": "duo", "requiresAll": ["lightning_chain", "earth_drill"], "from": "lightning_chain", "to": "earth_drill", "values": {"dmgPct": 0.5}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_crack_chain_el", "tier": "duo", "requiresAll": ["lightning_chain", "earth_crack"], "from": "earth_crack", "to": "lightning_chain", "values": {"targets": 2, "dmgPct": 0.25}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_chain_quake_le", "tier": "duo", "requiresAll": ["lightning_chain", "earth_quake"], "from": "lightning_chain", "to": "earth_quake", "values": {"dmgPct": 0.25}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_drill_railgun_el", "tier": "duo", "requiresAll": ["lightning_railgun", "earth_drill"], "from": "earth_drill", "to": "lightning_railgun", "values": {"dmgPct": 0.5}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_railgun_crack_le", "tier": "duo", "requiresAll": ["lightning_railgun", "earth_crack"], "from": "lightning_railgun", "to": "earth_crack", "values": {"cracks": 2}},
+    {"id": "duo_quake_railgun_el", "tier": "duo", "requiresAll": ["lightning_railgun", "earth_quake"], "from": "earth_quake", "to": "lightning_railgun", "values": {"dmgPct": 0.5}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_pierce_drill_le", "tier": "duo", "requiresAll": ["lightning_pierce", "earth_drill"], "from": "lightning_pierce", "to": "earth_drill", "values": {"dmgPct": 0.5}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_crack_pierce_el", "tier": "duo", "requiresAll": ["lightning_pierce", "earth_crack"], "from": "earth_crack", "to": "lightning_pierce", "values": {"dmgPct": 0.4}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_pierce_quake_le", "tier": "duo", "requiresAll": ["lightning_pierce", "earth_quake"], "from": "lightning_pierce", "to": "earth_quake", "values": {"dmgPct": 0.25}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_chain_vine_lg", "tier": "duo", "requiresAll": ["lightning_chain", "grass_vine"], "from": "lightning_chain", "to": "grass_vine", "values": {"turns": 1}},
+    {"id": "duo_seed_chain_gl", "tier": "duo", "requiresAll": ["lightning_chain", "grass_seed"], "from": "grass_seed", "to": "lightning_chain", "values": {"targets": 2, "dmgPct": 0.25}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_chain_tree_lg", "tier": "duo", "requiresAll": ["lightning_chain", "grass_tree"], "from": "lightning_chain", "to": "grass_tree", "values": {"perPct": 0.003}},
+    {"id": "duo_vine_railgun_gl", "tier": "duo", "requiresAll": ["lightning_railgun", "grass_vine"], "from": "grass_vine", "to": "lightning_railgun", "values": {"dmgPct": 0.5}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_railgun_seed_lg", "tier": "duo", "requiresAll": ["lightning_railgun", "grass_seed"], "from": "lightning_railgun", "to": "grass_seed", "values": {"targets": 2, "dmgPct": 0.25}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_tree_railgun_gl", "tier": "duo", "requiresAll": ["lightning_railgun", "grass_tree"], "from": "grass_tree", "to": "lightning_railgun", "values": {"dmgPct": 0.5}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_pierce_vine_lg", "tier": "duo", "requiresAll": ["lightning_pierce", "grass_vine"], "from": "lightning_pierce", "to": "grass_vine", "values": {"turns": 1}},
+    {"id": "duo_seed_pierce_gl", "tier": "duo", "requiresAll": ["lightning_pierce", "grass_seed"], "from": "grass_seed", "to": "lightning_pierce", "values": {"dmgPct": 0.4}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_pierce_tree_lg", "tier": "duo", "requiresAll": ["lightning_pierce", "grass_tree"], "from": "lightning_pierce", "to": "grass_tree", "values": {"perPct": 0.003}},
+    {"id": "duo_clone_glacier_di", "tier": "duo", "requiresAll": ["dark_clone", "ice_glacier"], "from": "dark_clone", "to": "ice_glacier", "values": {"turns": 1, "maxHpPct": 0.1}},
+    {"id": "duo_shatter_clone_id", "tier": "duo", "requiresAll": ["dark_clone", "ice_shatter"], "from": "ice_shatter", "to": "dark_clone", "values": {"every": 4, "mulPct": 0.3, "hits": 2}},
+    {"id": "duo_clone_spear_di", "tier": "duo", "requiresAll": ["dark_clone", "ice_spear"], "from": "dark_clone", "to": "ice_spear", "values": {"dmgPct": 0.6}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_glacier_blackhole_id", "tier": "duo", "requiresAll": ["dark_blackhole", "ice_glacier"], "from": "ice_glacier", "to": "dark_blackhole", "values": {"dmgPct": 0.3}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_blackhole_shatter_di", "tier": "duo", "requiresAll": ["dark_blackhole", "ice_shatter"], "from": "dark_blackhole", "to": "ice_shatter", "values": {"dmgPct": 0.8}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_spear_blackhole_id", "tier": "duo", "requiresAll": ["dark_blackhole", "ice_spear"], "from": "ice_spear", "to": "dark_blackhole", "values": {"dmgPct": 0.3}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_blade_glacier_di", "tier": "duo", "requiresAll": ["dark_blade", "ice_glacier"], "from": "dark_blade", "to": "ice_glacier", "values": {"turns": 1, "maxHpPct": 0.1}},
+    {"id": "duo_shatter_blade_id", "tier": "duo", "requiresAll": ["dark_blade", "ice_shatter"], "from": "ice_shatter", "to": "dark_blade", "values": {"count": 2, "dmgPct": 0.25}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_blade_spear_di", "tier": "duo", "requiresAll": ["dark_blade", "ice_spear"], "from": "dark_blade", "to": "ice_spear", "values": {"dmgPct": 0.6}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_clone_drill_de", "tier": "duo", "requiresAll": ["dark_clone", "earth_drill"], "from": "dark_clone", "to": "earth_drill", "values": {"dmgPct": 0.5}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_crack_clone_ed", "tier": "duo", "requiresAll": ["dark_clone", "earth_crack"], "from": "earth_crack", "to": "dark_clone", "values": {"every": 4, "mulPct": 0.3, "hits": 2}},
+    {"id": "duo_clone_quake_de", "tier": "duo", "requiresAll": ["dark_clone", "earth_quake"], "from": "dark_clone", "to": "earth_quake", "values": {"dmgPct": 0.25}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_drill_blackhole_ed", "tier": "duo", "requiresAll": ["dark_blackhole", "earth_drill"], "from": "earth_drill", "to": "dark_blackhole", "values": {"dmgPct": 0.3}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_blackhole_crack_de", "tier": "duo", "requiresAll": ["dark_blackhole", "earth_crack"], "from": "dark_blackhole", "to": "earth_crack", "values": {"cracks": 2}},
+    {"id": "duo_quake_blackhole_ed", "tier": "duo", "requiresAll": ["dark_blackhole", "earth_quake"], "from": "earth_quake", "to": "dark_blackhole", "values": {"dmgPct": 0.3}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_blade_drill_de", "tier": "duo", "requiresAll": ["dark_blade", "earth_drill"], "from": "dark_blade", "to": "earth_drill", "values": {"dmgPct": 0.5}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_crack_blade_ed", "tier": "duo", "requiresAll": ["dark_blade", "earth_crack"], "from": "earth_crack", "to": "dark_blade", "values": {"count": 2, "dmgPct": 0.25}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_blade_quake_de", "tier": "duo", "requiresAll": ["dark_blade", "earth_quake"], "from": "dark_blade", "to": "earth_quake", "values": {"dmgPct": 0.25}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_clone_vine_dg", "tier": "duo", "requiresAll": ["dark_clone", "grass_vine"], "from": "dark_clone", "to": "grass_vine", "values": {"turns": 1}},
+    {"id": "duo_seed_clone_gd", "tier": "duo", "requiresAll": ["dark_clone", "grass_seed"], "from": "grass_seed", "to": "dark_clone", "values": {"every": 4, "mulPct": 0.3, "hits": 2}},
+    {"id": "duo_clone_tree_dg", "tier": "duo", "requiresAll": ["dark_clone", "grass_tree"], "from": "dark_clone", "to": "grass_tree", "values": {"perPct": 0.003}},
+    {"id": "duo_vine_blackhole_gd", "tier": "duo", "requiresAll": ["dark_blackhole", "grass_vine"], "from": "grass_vine", "to": "dark_blackhole", "values": {"dmgPct": 0.3}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_blackhole_seed_dg", "tier": "duo", "requiresAll": ["dark_blackhole", "grass_seed"], "from": "dark_blackhole", "to": "grass_seed", "values": {"targets": 2, "dmgPct": 0.25}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_tree_blackhole_gd", "tier": "duo", "requiresAll": ["dark_blackhole", "grass_tree"], "from": "grass_tree", "to": "dark_blackhole", "values": {"dmgPct": 0.3}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_blade_vine_dg", "tier": "duo", "requiresAll": ["dark_blade", "grass_vine"], "from": "dark_blade", "to": "grass_vine", "values": {"turns": 1}},
+    {"id": "duo_seed_blade_gd", "tier": "duo", "requiresAll": ["dark_blade", "grass_seed"], "from": "grass_seed", "to": "dark_blade", "values": {"count": 2, "dmgPct": 0.25}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_blade_tree_dg", "tier": "duo", "requiresAll": ["dark_blade", "grass_tree"], "from": "dark_blade", "to": "grass_tree", "values": {"perPct": 0.003}},
+    {"id": "duo_glacier_drill_ie", "tier": "duo", "requiresAll": ["ice_glacier", "earth_drill"], "from": "ice_glacier", "to": "earth_drill", "values": {"dmgPct": 0.5}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_crack_glacier_ei", "tier": "duo", "requiresAll": ["ice_glacier", "earth_crack"], "from": "earth_crack", "to": "ice_glacier", "values": {"turns": 1, "maxHpPct": 0.1}},
+    {"id": "duo_glacier_quake_ie", "tier": "duo", "requiresAll": ["ice_glacier", "earth_quake"], "from": "ice_glacier", "to": "earth_quake", "values": {"dmgPct": 0.25}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_drill_shatter_ei", "tier": "duo", "requiresAll": ["ice_shatter", "earth_drill"], "from": "earth_drill", "to": "ice_shatter", "values": {"dmgPct": 0.8}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_shatter_crack_ie", "tier": "duo", "requiresAll": ["ice_shatter", "earth_crack"], "from": "ice_shatter", "to": "earth_crack", "values": {"cracks": 2}},
+    {"id": "duo_quake_shatter_ei", "tier": "duo", "requiresAll": ["ice_shatter", "earth_quake"], "from": "earth_quake", "to": "ice_shatter", "values": {"dmgPct": 0.8}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_spear_drill_ie", "tier": "duo", "requiresAll": ["ice_spear", "earth_drill"], "from": "ice_spear", "to": "earth_drill", "values": {"dmgPct": 0.5}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_crack_spear_ei", "tier": "duo", "requiresAll": ["ice_spear", "earth_crack"], "from": "earth_crack", "to": "ice_spear", "values": {"dmgPct": 0.6}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_spear_quake_ie", "tier": "duo", "requiresAll": ["ice_spear", "earth_quake"], "from": "ice_spear", "to": "earth_quake", "values": {"dmgPct": 0.25}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_glacier_vine_ig", "tier": "duo", "requiresAll": ["ice_glacier", "grass_vine"], "from": "ice_glacier", "to": "grass_vine", "values": {"turns": 1}},
+    {"id": "duo_seed_glacier_gi", "tier": "duo", "requiresAll": ["ice_glacier", "grass_seed"], "from": "grass_seed", "to": "ice_glacier", "values": {"turns": 1, "maxHpPct": 0.1}},
+    {"id": "duo_glacier_tree_ig", "tier": "duo", "requiresAll": ["ice_glacier", "grass_tree"], "from": "ice_glacier", "to": "grass_tree", "values": {"perPct": 0.003}},
+    {"id": "duo_vine_shatter_gi", "tier": "duo", "requiresAll": ["ice_shatter", "grass_vine"], "from": "grass_vine", "to": "ice_shatter", "values": {"dmgPct": 0.8}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_shatter_seed_ig", "tier": "duo", "requiresAll": ["ice_shatter", "grass_seed"], "from": "ice_shatter", "to": "grass_seed", "values": {"targets": 2, "dmgPct": 0.25}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_tree_shatter_gi", "tier": "duo", "requiresAll": ["ice_shatter", "grass_tree"], "from": "grass_tree", "to": "ice_shatter", "values": {"dmgPct": 0.8}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_spear_vine_ig", "tier": "duo", "requiresAll": ["ice_spear", "grass_vine"], "from": "ice_spear", "to": "grass_vine", "values": {"turns": 1}},
+    {"id": "duo_seed_spear_gi", "tier": "duo", "requiresAll": ["ice_spear", "grass_seed"], "from": "grass_seed", "to": "ice_spear", "values": {"dmgPct": 0.6}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_spear_tree_ig", "tier": "duo", "requiresAll": ["ice_spear", "grass_tree"], "from": "ice_spear", "to": "grass_tree", "values": {"perPct": 0.003}},
+    {"id": "duo_drill_vine_eg", "tier": "duo", "requiresAll": ["earth_drill", "grass_vine"], "from": "earth_drill", "to": "grass_vine", "values": {"turns": 1}},
+    {"id": "duo_seed_drill_ge", "tier": "duo", "requiresAll": ["earth_drill", "grass_seed"], "from": "grass_seed", "to": "earth_drill", "values": {"dmgPct": 0.5}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_drill_tree_eg", "tier": "duo", "requiresAll": ["earth_drill", "grass_tree"], "from": "earth_drill", "to": "grass_tree", "values": {"perPct": 0.003}},
+    {"id": "duo_vine_crack_ge", "tier": "duo", "requiresAll": ["earth_crack", "grass_vine"], "from": "grass_vine", "to": "earth_crack", "values": {"cracks": 2}},
+    {"id": "duo_crack_seed_eg", "tier": "duo", "requiresAll": ["earth_crack", "grass_seed"], "from": "earth_crack", "to": "grass_seed", "values": {"targets": 2, "dmgPct": 0.25}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_tree_crack_ge", "tier": "duo", "requiresAll": ["earth_crack", "grass_tree"], "from": "grass_tree", "to": "earth_crack", "values": {"cracks": 2}},
+    {"id": "duo_quake_vine_eg", "tier": "duo", "requiresAll": ["earth_quake", "grass_vine"], "from": "earth_quake", "to": "grass_vine", "values": {"turns": 1}},
+    {"id": "duo_seed_quake_ge", "tier": "duo", "requiresAll": ["earth_quake", "grass_seed"], "from": "grass_seed", "to": "earth_quake", "values": {"dmgPct": 0.25}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_quake_tree_eg", "tier": "duo", "requiresAll": ["earth_quake", "grass_tree"], "from": "earth_quake", "to": "grass_tree", "values": {"perPct": 0.003}}
   ]
 }
