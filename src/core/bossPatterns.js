@@ -40,8 +40,9 @@ export const patterns = {
     bonus: (b, src) => isBall(src) && src.ball.walls === 0,
   },
 
-  /** 소환: 보스 턴마다 보스 아래 줄에 작은 블록 */
+  /** 소환: 등장할 때와 보스 턴마다 보스 아래 줄에 단단한 블록 */
   summon: {
+    spawn(b, g) { patterns.summon.turn(b, g); },
     turn(b, g) {
       const c = cfg.summon;
       const free = [];

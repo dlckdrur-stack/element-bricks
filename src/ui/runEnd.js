@@ -17,6 +17,7 @@ export const runEnd = {
 
   finishRun(won) {
     const s = this.state;
+    if (s.phase === 'over') return; // 한 번만
     const p = this.saveData;
     s.phase = 'over';
     clearRun();

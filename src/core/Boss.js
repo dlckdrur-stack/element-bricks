@@ -17,7 +17,8 @@ const V = cfg.view;
  * turnsLeft 턴 안에 못 깨면 패배.
  */
 export class Boss {
-  constructor(scene, { grid, bus, fx, state, theme, tier, rng = Math.random }) {
+  constructor(scene, { grid, bus, fx, state, theme, tier, rng = Math.random, onDefeat }) {
+    this.onDefeat = onDefeat;
     this.kind = 'block';
     this.boss = true;
     this.scene = scene;
@@ -26,8 +27,9 @@ export class Boss {
     this.theme = theme;
     this.tier = tier;
     this.rng = rng;
-    this.cols = cfg.size.cols;
-    this.rows = cfg.size.rows;
+    this.size = { ...cfg.size, ...cfg.tiers[tier.id].size }; // 티어별 크기 (반사의 거울은 1칸)
+    this.cols = this.size.cols;
+    this.rows = this.size.rows;
     const stage = state.stage;
     const extra = tier.stages ? 0 : Math.max(0, stage / cfg.challengerEvery - 1) * cfg.challengerGrowth;
     this.maxHp = Math.ceil(stageHp(stage) * cfg.hpMul[tier.id] * (1 + extra));
@@ -43,7 +45,7 @@ export class Boss {
       grid, state, fx, rng, now: () => scene.time.now / 1000, stageHp: () => stageHp(state.stage),
     };
     this.makeView();
-    this.moveTo(cfg.size.col, cfg.size.row, false);
+    this.moveTo(this.size.col, this.size.row, false);
     this.clearArea();
     grid.boss = this;
     for (const p of this.list) p.spawn?.(this, this.g);
@@ -68,8 +70,8 @@ export class Boss {
 
   /** 등장할 때 보스 자리의 블록은 흡수 */
   clearArea() {
-    const c0 = cfg.size.col;
-    for (let r = cfg.size.row; r < cfg.size.row + this.rows; r++) {
+    const c0 = this.size.col;
+    for (let r = this.size.row; r < this.size.row + this.rows; r++) {
       for (let c = c0; c < c0 + this.cols; c++) {
         const cell = this.grid.cells[r][c];
         if (cell) { cell.dead = true; this.grid.remove(cell, true); }
@@ -89,9 +91,10 @@ export class Boss {
     this.rect = s.add.rectangle(0, 0, w, h, this.color, V.fillAlpha).setStrokeStyle(V.stroke, this.color);
     this.nameT = s.add.text(0, -h / 2 + V.pad + 6, t(`boss.name.${this.tier.id}`), {
       fontFamily: f, fontSize: `${V.nameSize}px`, fontStyle: 'bold', color: this.colorHex,
-    }).setOrigin(0.5, 0);
-    this.hpT = s.add.text(0, 6, '', {
-      fontFamily: f, fontSize: `${V.hpSize}px`, fontStyle: 'bold', color: this.theme.text, stroke: '#05050c', strokeThickness: 4,
+    }).setOrigin(0.5, 0).setVisible(this.rows > 1); // 작은 보스는 이름 생략 (컷인·안내에 나옴)
+    const small = this.rows < 2;
+    this.hpT = s.add.text(0, small ? -2 : 6, '', {
+      fontFamily: f, fontSize: `${small ? V.hpSizeSmall : V.hpSize}px`, fontStyle: 'bold', color: this.theme.text, stroke: '#05050c', strokeThickness: 4,
     }).setOrigin(0.5);
     this.barBack = s.add.rectangle(0, h / 2 - V.pad - V.barH / 2, w - V.pad * 2, V.barH, 0x000000, 0.6);
     this.bar = s.add.rectangle(-(w - V.pad * 2) / 2, h / 2 - V.pad - V.barH / 2, w - V.pad * 2, V.barH, this.color).setOrigin(0, 0.5);
@@ -178,6 +181,7 @@ export class Boss {
 
   die() {
     this.dead = true;
+    this.onDefeat?.();
     const c = cfg.fx;
     const cx = this.x + this.w / 2;
     const cy = this.y + this.h / 2;

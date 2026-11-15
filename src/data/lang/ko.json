@@ -40,7 +40,7 @@
   "boss.hint.bounce3": "벽을 3번 이상 튕긴 공만 ×2.5",
   "boss.hint.straight": "벽을 안 튕긴 일직선 공만 ×2.5",
   "boss.hint.teleport": "순간이동 직후 맞히면 ×2.5",
-  "boss.hint.summon": "매 턴 블록 소환",
+  "boss.hint.summon": "매 턴 보스 아래에 단단한 블록 소환",
   "boss.hint.heal": "매 턴 체력 회복",
   "boss.hint.shield": "보호막 블록을 먼저 깨세요",
   "boss.turns": "남은 턴 {n}/{max}",
