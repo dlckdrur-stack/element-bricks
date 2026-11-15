@@ -15,6 +15,15 @@ function displayValues(v) {
   return out;
 }
 
+/** 글씨 높이가 maxH 를 넘으면 글자 크기를 1px씩 줄임 (min 까지) */
+function fitText(txt, maxH, size, min) {
+  let sz = size;
+  while (txt.height > maxH && sz > min) {
+    sz -= 1;
+    txt.setFontSize(sz);
+  }
+}
+
 /** 둥근 사각형 둘레 위의 점 (u: 0~1, 위쪽 왼편부터 시계방향) — 테두리 연출용 근사 */
 function perim(u, w, h) {
   let d = (((u % 1) + 1) % 1) * 2 * (w + h);
@@ -56,8 +65,11 @@ export function makePickCard(o) {
   // 앞면 (이전 카드 내용과 같음)
   const status = choice.kind === 'main' ? 'main' : choice.kind === 'sub' ? 'sub' : mgr.elementStatus(def.element);
   const v = displayValues(mgr.valuesFor(def, choice.grade, status !== null));
+  // 카드가 낮아지면(선택지 4~5장) 글씨도 같은 비율로 작게. 설명이 넘치면 들어갈 때까지 더 줄임
+  const k = Math.max(cfg.text.minScale, Math.min(1, H / cfg.text.baseH));
+  const px = (n) => `${Math.round(n * k)}px`;
   const left = -W / 2 + 22;
-  const top = -H / 2 + 14;
+  const top = -H / 2 + 12 * k;
   const tags = [t(`element.${def.element}`), t(`tier.${def.tier}`)];
   if (def.requires) tags.push(t('pick.requires', { name: t(`aug.${def.requires}.name`) }));
   if (choice.grade) tags.push(t(`grade.${choice.grade}`));
@@ -65,25 +77,27 @@ export function makePickCard(o) {
     scene.add.rectangle(0, 0, W, H, hex(theme.cardBackground)),
     scene.add.rectangle(-W / 2 + 5, 0, 6, H - 16, elColor),
     scene.add.text(left, top, tags.join(' · '), {
-      fontFamily: f, fontSize: `${fs.cardTag}px`, color: `#${elColor.toString(16).padStart(6, '0')}`,
+      fontFamily: f, fontSize: px(fs.cardTag), color: `#${elColor.toString(16).padStart(6, '0')}`,
     }),
-    scene.add.text(left, top + 26, t(`aug.${def.id}.name`), {
-      fontFamily: f, fontSize: `${fs.cardName}px`, fontStyle: 'bold', color: theme.text,
-    }),
-    scene.add.text(left, top + 68, t(`aug.${def.id}.desc`, v), {
-      fontFamily: f, fontSize: `${fs.cardDesc}px`, color: theme.hudText,
-      wordWrap: { width: W - 44, useAdvancedWrap: true }, lineSpacing: 4,
+    scene.add.text(left, top + 24 * k, t(`aug.${def.id}.name`), {
+      fontFamily: f, fontSize: px(fs.cardName), fontStyle: 'bold', color: theme.text,
     }),
   ];
+  const desc = scene.add.text(left, top + 62 * k, t(`aug.${def.id}.desc`, v), {
+    fontFamily: f, fontSize: px(fs.cardDesc), color: theme.hudText,
+    wordWrap: { width: W - 44, useAdvancedWrap: true }, lineSpacing: 3,
+  });
+  fitText(desc, H / 2 - cfg.text.padBottom - desc.y, Math.round(fs.cardDesc * k), cfg.text.minDesc);
+  parts.push(desc);
   if (status) {
     parts.push(scene.add.text(W / 2 - 14, top, t(`pick.tag.${status}`, { n: Math.round(draftCfg.elementBonus * 100) }), {
-      fontFamily: f, fontSize: `${fs.cardTag}px`, color: theme.orb,
+      fontFamily: f, fontSize: px(fs.cardTag), color: theme.orb,
     }).setOrigin(1, 0));
   }
   if (o.pioneer) { // 개척 보너스 (레벨 1 카드): 그 판 재화 +N%
     const pct = Math.round(o.pioneer(def.id) * 100);
-    parts.push(scene.add.text(W / 2 - 14, top + 30, t('pick.pioneer', { n: pct }), {
-      fontFamily: f, fontSize: `${fs.cardDesc + 2}px`, fontStyle: 'bold', color: theme.currency,
+    parts.push(scene.add.text(W / 2 - 14, top + 28 * k, t('pick.pioneer', { n: pct }), {
+      fontFamily: f, fontSize: px(fs.cardDesc + 2), fontStyle: 'bold', color: theme.currency,
     }).setOrigin(1, 0));
   }
   const front = scene.add.container(0, 0, parts).setVisible(false);

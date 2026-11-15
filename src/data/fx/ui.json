@@ -14,6 +14,7 @@
     "startDelay": 0.25, "stagger": 0.08, "flyTime": 0.32, "flyFrom": 600, "flipTime": 0.14, "flipDelay": 0.04,
     "radius": 12, "borderWidth": 4, "glowPad": 26, "backColor": "#1a1840", "backMarkSize": 54,
     "hoverScale": 1.05, "hoverTime": 0.1, "tilt": 3.5,
+    "text": { "baseH": 158, "minScale": 0.72, "padBottom": 8, "minDesc": 12 },
     "glowAlpha": { "none": 0.3, "silver": 0.38, "gold": 0.55, "prism": 0.65 },
     "glowPulse": { "speed": 2.2, "amount": 0.25 },
     "silver": { "color": "#ffffff", "innerAlpha": 0.6 },
