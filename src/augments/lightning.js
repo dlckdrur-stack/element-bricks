@@ -1,5 +1,5 @@
 import { EV } from '../core/events.js';
-import { strike, cx, cy, nearest, randomBlocks, isBallHit, ultimate, later } from './helpers.js';
+import { strike, cx, cy, nearest, randomBlocks, isBallHit, ultimateGauge, later } from './helpers.js';
 import { stageHp } from '../core/stageLayout.js';
 import { t } from '../ui/i18n.js';
 
@@ -23,9 +23,12 @@ function bolt(api, cell, pct, source) {
 }
 
 export const handlers = {
-  /** 각성 필살기 「뇌신」: cooldown 턴마다 체력이 가장 높은 블록들에 심판의 낙뢰 + 주변 연쇄 */
+  /**
+   * 각성 필살기 「뇌신」: 공이 블록을 need 번 칠 때마다 반드시, 그 자리에서 즉시 발동.
+   * 하늘이 갈라지고 체력이 가장 높은 블록 targets 개에 굵은 낙뢰 + 주변 chains 개 연쇄 → 마지막에 하늘 전체 낙뢰
+   */
   lightning_judgment(api, aug) {
-    ultimate(api, aug, () => {
+    ultimateGauge(api, aug, EV.AFTER_HIT, ({ source }) => isBallHit(source), () => {
       const c = api.fx.cfg.ult.judgment;
       const color = api.mgr.color('lightning');
       api.fx.judgmentStart(t('aug.lightning_judgment.name'), t('ult.sub'));
@@ -46,6 +49,9 @@ export const handlers = {
           }
         });
       }));
+      const end = c.startDelay + targets.length * c.boltGap;
+      later(api, end, () => api.fx.judgmentFinale(api.grid.top + api.grid.rows * api.grid.cellH)); // 바닥 선
+      return end + c.finaleTime;
     });
   },
 

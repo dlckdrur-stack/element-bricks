@@ -22,6 +22,6 @@
       "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
     { "id": "lightning_conductive", "tier": "common", "feature": "specialBlocks", "values": {} },
     { "id": "lightning_judgment", "tier": "awaken", "ult": "judgment",
-      "values": { "cooldown": 3, "targets": 6, "hitPct": 1.2, "chains": 2, "chainPct": 0.4 } }
+      "values": { "need": 100, "targets": 8, "hitPct": 1.5, "chains": 3, "chainPct": 0.5 } }
   ]
 }

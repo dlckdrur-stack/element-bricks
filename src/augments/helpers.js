@@ -43,6 +43,24 @@ export function ultimate(api, aug, fire) {
   });
 }
 
+/**
+ * 각성(필살기) 게이지: event 가 filter 를 통과할 때마다 +1, need 에 닿으면 반드시 발동 (확률 없음).
+ * 속성마다 조건이 다르다 (불=블록 처치, 번개=공 타격 …). 필살기 자신의 피해는 게이지에 안 들어감.
+ * 연출이 끝날 때까지(busy) 다시 발동하지 않음. HUD 배지는 aug.state.count / aug.v.need 를 읽음.
+ */
+export function ultimateGauge(api, aug, event, filter, fire) {
+  aug.state.count = 0;
+  aug.state.busy = false;
+  api.bus.on(event, (ctx) => {
+    if (aug.state.busy || ctx.source?.ult || !filter(ctx)) return;
+    aug.state.count++;
+    if (aug.state.count < aug.v.need) return;
+    aug.state.count = 0;
+    aug.state.busy = true;
+    later(api, fire(), () => { aug.state.busy = false; });
+  });
+}
+
 /** sec 초 뒤 fn (씬이 바뀌면 자동 취소) */
 export function later(api, sec, fn) {
   api.scene.time.delayedCall(sec * 1000, fn);

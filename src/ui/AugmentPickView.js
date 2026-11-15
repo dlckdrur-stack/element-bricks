@@ -187,7 +187,7 @@ export function showAugmentPick(scene, deps, choice, level, cb) {
     const ult = card.def.tier === 'awaken'; // 각성 증강: 필살기 이름 컷인
     awakenCutin(scene, A.cutin, {
       title: ult ? t(`aug.${card.def.id}.name`) : t('fx.awaken', { name }),
-      sub: ult ? t('fx.ultLearn', { n: card.def.values.cooldown }) : t('fx.awakenSub', { name }),
+      sub: ult ? t('fx.ultLearn') : t('fx.awakenSub', { name }),
       color: card.color, fontFamily: f,
     }, cb.onDone);
   }

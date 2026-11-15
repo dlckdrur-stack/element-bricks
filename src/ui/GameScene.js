@@ -221,8 +221,13 @@ export class GameScene extends Phaser.Scene {
     const lv = this.leveling;
     const color = s.ballFx ? s.ballFx.color : undefined;
     this.hud.setLevel(lv.level, lv.progress, lv.isMax, color);
+    this.refreshUlt();
+  }
+
+  /** 필살기 게이지 배지 (타격 수 게이지는 자주 바뀌어서 0.5초마다도 갱신) */
+  refreshUlt() {
     const ults = [...this.augments.owned.values()].filter((a) => a.def.tier === 'awaken')
-      .map((a) => ({ name: t(`aug.${a.def.id}.name`), turns: a.state.turns ?? 0, max: a.v.cooldown }));
+      .map((a) => ({ name: t(`aug.${a.def.id}.name`), n: a.state.count ?? 0, max: a.v.need }));
     this.hud.setUlt(ults, theme);
   }
 
@@ -268,6 +273,7 @@ export class GameScene extends Phaser.Scene {
     if (this.fpsTimer > 500) {
       this.fpsTimer = 0;
       this.hud.setFps(this.showFps, fps, this.fx.count, this.fx.quality);
+      this.refreshUlt();
     }
   }
 }

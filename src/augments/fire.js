@@ -1,5 +1,5 @@
 import { EV } from '../core/events.js';
-import { strike, cx, cy, isBallHit, ultimate, later } from './helpers.js';
+import { strike, cx, cy, isBallHit, ultimateGauge, later } from './helpers.js';
 import { stageHp } from '../core/stageLayout.js';
 import { t } from '../ui/i18n.js';
 
@@ -42,9 +42,12 @@ function addBurn(api, cell, stacks) {
 }
 
 export const handlers = {
-  /** 각성 필살기 「연옥」: cooldown 턴마다 모든 블록 아래에서 불기둥이 솟구침 (아래 줄부터, waves 연타) */
+  /**
+   * 각성 필살기 「연옥」: 블록을 need 개 깰 때마다 반드시 발동.
+   * 모든 블록 아래에서 불기둥(아래 줄부터) waves 연타 → 화면 중앙 대폭발. 피해 = 스테이지 체력 × wavePct
+   */
   fire_purgatory(api, aug) {
-    ultimate(api, aug, () => {
+    ultimateGauge(api, aug, EV.KILL, () => true, () => {
       const c = api.fx.cfg.ult.purgatory;
       api.fx.purgatoryStart(t('aug.fire_purgatory.name'), t('ult.sub'));
       for (let w = 0; w < aug.v.waves; w++) {
@@ -52,7 +55,7 @@ export const handlers = {
           const dmg = stageHp(api.state.stage) * aug.v.wavePct;
           const blocks = api.grid.blocks();
           const maxRow = Math.max(0, ...blocks.map((b) => b.row));
-          api.fx.purgatoryWave();
+          api.fx.purgatoryWave(w);
           for (const b of blocks) {
             later(api, (maxRow - b.row) * c.rowDelay, () => {
               if (b.dead) return;
@@ -62,6 +65,9 @@ export const handlers = {
           }
         });
       }
+      const end = c.startDelay + aug.v.waves * c.waveGap;
+      later(api, end, () => api.fx.purgatoryFinale(api.grid.centerY(Math.floor(api.grid.rows / 3))));
+      return end + c.finaleTime;
     });
   },
 

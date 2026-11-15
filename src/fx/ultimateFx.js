@@ -77,10 +77,41 @@ export const ultimate = {
     this.juice.shake(this.cfg.ult.purgatory.waveShake);
   },
 
+  /** 마지막: 화면 중앙 대폭발 (거대한 불의 고리 2겹 + 섬광 + 불티 폭풍) */
+  purgatoryFinale(y) {
+    const c = this.cfg.ult.purgatory;
+    const x = this.scene.scale.width / 2;
+    this.sprites.play(c.finaleRing, x, y, col(c.color), { priority: 2 });
+    this.sprites.play(c.finaleRing2, x, y, col(c.hot), { priority: 2 });
+    this.sprites.play(c.finaleCore, x, y, col(c.hot), { priority: 2 });
+    for (const name of c.finaleBurst) this.p.emit(name, x, y, col(c.color));
+    this.juice.flash(c.finaleFlash);
+    this.juice.shake(c.finaleShake);
+  },
+
   // ---------- ⚡ 뇌신 ----------
   judgmentStart(title, sub) {
     const c = this.cfg.ult.judgment;
+    const { width: W, height: H } = this.scene.scale;
     this.ultStart(c, title, sub, col(c.color));
+    for (let i = 0; i < c.preBolts; i++) { // 하늘이 갈라지듯 화면 끝까지 내려치는 낙뢰
+      const x = (W * (i + 0.5)) / c.preBolts + (Math.random() - 0.5) * 60;
+      this.lines.bolt(x, 0, x + (Math.random() - 0.5) * 80, H, col(c.color), c.bolt);
+    }
+  },
+
+  /** 마지막: 하늘 전체에 낙뢰가 쏟아지고 바닥에서 거대한 전기 고리 */
+  judgmentFinale(floorY) {
+    const c = this.cfg.ult.judgment;
+    const W = this.scene.scale.width;
+    for (let i = 0; i < c.finaleBolts; i++) {
+      const x = Math.random() * W;
+      this.lines.bolt(x, 0, x + (Math.random() - 0.5) * 60, floorY, col(c.color), c.bolt);
+      this.p.emit(c.arc, x, floorY, col(c.white));
+    }
+    this.sprites.play(c.finaleRing, W / 2, floorY, col(c.color), { priority: 2 });
+    this.juice.flash(c.finaleFlash);
+    this.juice.shake(c.finaleShake);
   },
 
   /** 하늘에서 굵은 심판의 낙뢰 + 별 폭발. i = 몇 번째 낙뢰 (가끔 화면 번쩍) */

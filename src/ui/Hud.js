@@ -62,13 +62,12 @@ export class Hud {
     if (color !== undefined) this.bar.setFillStyle(color);
   }
 
-  /** 필살기 배지. list = [{ name, turns, max }] — 다음 턴 발동이면 크게·노랗게 */
+  /** 필살기 게이지 배지. list = [{ name, n, max }] — readyAt(80%) 이상이면 크게·노랗게 */
   setUlt(list, theme) {
     if (!list.length) { this.ult.setText(''); return; }
-    const ready = list.some((u) => u.turns >= u.max - 1);
-    this.ult.setText(list.map((u) => (u.turns >= u.max - 1
-      ? t('ult.ready', { name: u.name })
-      : t('ult.badge', { name: u.name, n: u.turns, max: u.max }))).join('   '));
+    const near = (u) => u.n >= u.max * this.ultCfg.readyAt;
+    this.ult.setText(list.map((u) => t(near(u) ? 'ult.ready' : 'ult.badge', u)).join('   '));
+    const ready = list.some(near);
     this.ult.setColor(ready ? theme.currency : theme.hudText);
     this.ult.setScale(ready ? this.ultCfg.readyScale : 1);
   }

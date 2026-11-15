@@ -24,6 +24,6 @@
     { "id": "fire_emberHarvest", "tier": "common", "feature": "currency", "values": { "currencyPct": 0.5 },
       "gradeKeys": ["currencyPct"], "bonusKeys": ["currencyPct"] },
     { "id": "fire_purgatory", "tier": "awaken", "ult": "purgatory",
-      "values": { "cooldown": 4, "wavePct": 0.45, "waves": 2 } }
+      "values": { "need": 20, "wavePct": 0.4, "waves": 3 } }
   ]
 }

@@ -147,7 +147,7 @@ export const actions = {
   purgatory: (s) => {
     const c = fxCfg.ult.purgatory;
     s.fx.purgatoryStart(t('aug.fire_purgatory.name'), t('ult.sub'));
-    for (let w = 0; w < 2; w++) {
+    for (let w = 0; w < 3; w++) {
       later(s, c.startDelay + w * c.waveGap, () => {
         const blocks = s.grid.blocks();
         const maxRow = Math.max(0, ...blocks.map((b) => b.row));
@@ -162,11 +162,12 @@ export const actions = {
         }
       });
     }
+    later(s, c.startDelay + 3 * c.waveGap, () => s.fx.purgatoryFinale(s.grid.centerY(3)));
   },
   judgment: (s) => {
     const c = fxCfg.ult.judgment;
     s.fx.judgmentStart(t('aug.lightning_judgment.name'), t('ult.sub'));
-    s.grid.blocks().sort((a, b) => b.hp - a.hp).slice(0, 6).forEach((b, i) => later(s, c.startDelay + i * c.boltGap, () => {
+    s.grid.blocks().sort((a, b) => b.hp - a.hp).slice(0, 8).forEach((b, i) => later(s, c.startDelay + i * c.boltGap, () => {
       if (b.dead) return;
       const p = pos(s, b);
       s.fx.judgmentBolt(p.x, 0, p.y, i);
@@ -176,6 +177,7 @@ export const actions = {
         s.fx.chain(p.x, p.y, q.x, q.y, s.colors.lightning);
       }
     }));
+    later(s, c.startDelay + 8 * c.boltGap, () => s.fx.judgmentFinale(s.grid.top + s.grid.rows * s.grid.cellH));
   },
 };
 
