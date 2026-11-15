@@ -33,13 +33,9 @@
   "fontFamily": "system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans KR', sans-serif",
   "displayFont": "'Black Han Sans', system-ui, 'Noto Sans KR', sans-serif",
   "titleFont": "Orbitron, 'Black Han Sans', sans-serif",
-  "elementColors": [
-    "#ff7a1a",
-    "#ffe14a",
-    "#b45cff",
-    "#8fe9ff",
-    "#c98a4b",
-    "#5dff7a"
-  ],
-  "titleGlow": "#ff4dff"
+  "titleGlow": "rgba(255,77,255,0.35)",
+  "textSoft": "#d4daf0",
+  "textDim": "#8890b4",
+  "currencySoft": "#e3c25e",
+  "labelText": "#e4e8f6"
 }

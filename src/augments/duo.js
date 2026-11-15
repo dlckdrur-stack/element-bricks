@@ -12,11 +12,9 @@ import duoData from '../data/augments/duo.json';
  */
 const fromRail = (s) => s?.aug === 'lightning_railgun';
 const fromChain = (s) => s?.aug === 'lightning_chain';
-const fromPierce = (s) => isBallHit(s) && s.pierce;
+const fromPierce = (s) => s?.aug === 'lightning_pierce' && s.center; // 뇌격 방전 중심
 
-export function stats(aug, s) {
-  if (aug.def.id === 'duo_meteorPierce') s.pierce += aug.v.extraPierce;
-}
+export function stats() {}
 
 export const handlers = {
   /** 뇌폭: 연쇄 번개가 튄 블록에서 폭발 */
@@ -27,7 +25,7 @@ export const handlers = {
   duo_railBlast(api, aug) {
     api.bus.on(EV.AFTER_HIT, ({ cell, source }) => { if (fromRail(source)) explode(api, cell.col, cell.row, aug.v.dmgPct, 1); });
   },
-  /** 관통 폭뢰: 관통할 때마다 그 블록에서 폭발 */
+  /** 방전 폭뢰: 뇌격 방전이 터진 블록에서 폭발 */
   duo_pierceBlast(api, aug) {
     api.bus.on(EV.AFTER_HIT, ({ cell, source }) => { if (fromPierce(source)) explode(api, cell.col, cell.row, aug.v.dmgPct, 1); });
   },
@@ -39,7 +37,7 @@ export const handlers = {
   duo_heatRay(api, aug) {
     api.bus.on(EV.AFTER_HIT, ({ cell, source, killed }) => { if (fromRail(source) && !killed) addBurn(api, cell, aug.v.stacks); });
   },
-  /** 작열 관통: 관통한 블록에 화상, 화상 블록은 관통 피해 증가 */
+  /** 작열 방전: 방전 맞은 블록에 화상, 화상 블록은 방전 피해 증가 */
   duo_searPierce(api, aug) {
     api.bus.on(EV.HIT, (ctx) => { if (fromPierce(ctx.source) && ctx.cell.burn) ctx.damage *= 1 + aug.v.burnBonusPct; });
     api.bus.on(EV.AFTER_HIT, ({ cell, source, killed }) => { if (fromPierce(source) && !killed) addBurn(api, cell, aug.v.stacks); });
@@ -62,7 +60,7 @@ export const handlers = {
       if (fromRail(source)) api.fx.elementHit(cx(api, cell), cy(api, cell), 'fire', `s${cell.col},${cell.row}`);
     });
   },
-  /** 유성 관통: 관통 +2, 관통한 블록에 불꽃 */
+  /** 유성 방전: 방전 맞은 블록에 불꽃 */
   duo_meteorPierce(api, aug) {
     api.bus.on(EV.AFTER_HIT, ({ cell, source, killed }) => {
       if (!fromPierce(source) || killed) return;
@@ -82,6 +80,7 @@ function triggered(tr, from, aug, cell, source) {
   if (tr.aug) return source.aug === from;
   if (!isBallHit(source)) return false;
   if (tr.pierce && !source.pierce) return false;
+  if (tr.center && !source.center) return false;
   if (tr.clone && source.ball.extra !== 'shadow') return false;
   if (tr.frozen && !(cell.frozen > 0)) return false;
   if (tr.cracks && (cell.cracks ?? 0) < tr.cracks) return false;

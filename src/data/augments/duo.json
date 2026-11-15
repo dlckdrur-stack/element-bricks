@@ -20,9 +20,8 @@
         "aug": true
     },
     "lightning_pierce": {
-        "ball": true,
-        "pierce": true,
-        "every": 2
+        "aug": true,
+        "center": true
     },
     "dark_clone": {
         "ball": true,
@@ -77,7 +76,7 @@
     {"id": "duo_searPierce", "tier": "duo", "requiresAll": ["fire_burn", "lightning_pierce"], "values": {"stacks": 1, "burnBonusPct": 0.3}, "gradeKeys": ["burnBonusPct"]},
     {"id": "duo_stormball", "tier": "duo", "requiresAll": ["fire_fireball", "lightning_chain"], "values": {"targets": 4, "dmgPct": 0.4, "chainBonusPct": 0.3}, "gradeKeys": ["dmgPct", "chainBonusPct"]},
     {"id": "duo_solarRail", "tier": "duo", "requiresAll": ["fire_fireball", "lightning_railgun"], "values": {"railBonusPct": 0.5}, "gradeKeys": ["railBonusPct"]},
-    {"id": "duo_meteorPierce", "tier": "duo", "requiresAll": ["fire_fireball", "lightning_pierce"], "values": {"extraPierce": 2, "dmgPct": 0.3}, "gradeKeys": ["dmgPct"]},
+    {"id": "duo_meteorPierce", "tier": "duo", "requiresAll": ["fire_fireball", "lightning_pierce"], "values": {"dmgPct": 0.5}, "gradeKeys": ["dmgPct"]},
     {"id": "duo_explosion_clone_fd", "tier": "duo", "requiresAll": ["fire_explosion", "dark_clone"], "from": "fire_explosion", "to": "dark_clone", "values": {"every": 4, "mulPct": 0.3, "hits": 2}},
     {"id": "duo_blackhole_explosion_df", "tier": "duo", "requiresAll": ["fire_explosion", "dark_blackhole"], "from": "dark_blackhole", "to": "fire_explosion", "values": {"dmgPct": 0.25}, "gradeKeys": ["dmgPct"]},
     {"id": "duo_explosion_blade_fd", "tier": "duo", "requiresAll": ["fire_explosion", "dark_blade"], "from": "fire_explosion", "to": "dark_blade", "values": {"count": 2, "dmgPct": 0.25}, "gradeKeys": ["dmgPct"]},

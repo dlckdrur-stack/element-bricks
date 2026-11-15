@@ -1,17 +1,16 @@
 {
   "fadeMs": 220,
-  "button": { "fill": 0.16, "stroke": 3, "pressScale": 0.94, "pressMs": 70, "disabledAlpha": 0.35, "glowPad": 10, "glowWidth": 6, "glowAlpha": 0.22, "shineInset": 6, "shineAlpha": 0.35, "cornerLen": 14, "cornerWidth": 3, "cornerAlpha": 0.9, "textGlow": 10 },
+  "button": { "fill": 0.16, "stroke": 3, "pressScale": 0.94, "pressMs": 70, "disabledAlpha": 0.35, "glowPad": 10, "glowWidth": 6, "glowAlpha": 0.22, "shineInset": 6, "shineAlpha": 0.35, "cornerLen": 14, "cornerWidth": 3, "cornerAlpha": 0.9, "textGlow": 4 },
   "corner": { "pad": 20, "y": 34 },
   "menu": {
     "titleY": 200,
     "titleSize": 54,
-    "titleGlow": 22,
+    "titleGlow": 10,
+    "titleAlpha": 0.9,
     "subtitleY": 256,
     "subtitleSize": 15,
     "subtitleSpacing": 3,
-    "descY": 300,
-    "descSize": 15,
-    "ring": { "r": 150, "orb": 84, "hexR": 128, "spinSec": 24, "alpha": 0.55 },
+    "ring": { "r": 150, "orb": 70, "dot": 14, "hexR": 128, "spinSec": 24, "alpha": 0.55 },
     "buttonsY": 450,
     "buttonW": 340,
     "buttonH": 78,
@@ -49,6 +48,6 @@
   },
   "ranking": { "headY": 160, "top": 220, "rowH": 56, "padX": 60, "statusY": 600 },
   "rankButton": { "x": 500, "y": 80, "w": 64, "h": 44 },
-  "pause": { "dim": 0.9, "titleY": 64, "statsHeadY": 116, "statsTop": 148, "rowH": 28, "rows": 9, "barX": 176, "barW": 180, "barH": 14, "augHeadY": 420, "augY": 448, "augW": 490, "buttonsY": 700, "buttonW": 300, "buttonH": 62, "gap": 12, "noteY": 918 },
+  "pause": { "dim": 0.93, "titleY": 50, "infoY": 96, "cardW": 504, "cardAlpha": 0.92, "cardStroke": 0.22, "radius": 12, "pad": 16, "headY": 24, "card1Top": 120, "card1H": 288, "rowTop": 56, "rowH": 26, "rows": 9, "nameW": 128, "barW": 160, "barH": 10, "pctW": 58, "card2Top": 420, "card2H": 268, "roleGap": 30, "lineGap": 26, "tagW": 54, "buttonsY": 726, "buttonW": 300, "buttonH": 54, "gap": 10, "noteY": 912 },
   "dialog": { "w": 440, "h": 260, "buttonW": 170, "buttonH": 64, "buttonGapX": 200, "dim": 0.75, "info": { "w": 490, "h": 640 } }
 }

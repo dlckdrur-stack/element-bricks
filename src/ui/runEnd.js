@@ -36,7 +36,6 @@ export const runEnd = {
       clearBonus: clear.bonus, unlocked: clear.reward ? t(`tier.unlocked.${clear.reward}`) : null,
     };
     p.currency += info.total;
-    this.pioneer.settle();
     commitProfile();
     this.bus.emit(EV.GAME_OVER, info);
     submitRank({ tier: this.tier.id, stage: s.stage, won }); // 네트워크는 판 종료 때만

@@ -1,6 +1,6 @@
 import { t } from './i18n.js';
 import { hex } from '../core/color.js';
-import { makeButton } from './widgets.js';
+import { makeButton, fmtNum, fmtShort } from './widgets.js';
 
 /** 상단 정보(스테이지·데미지·최고·레벨·경험치 바)·발사대 공 개수·FPS·배속·조준 안내 */
 export class Hud {
@@ -21,7 +21,7 @@ export class Hud {
 
     this.stage = scene.add.text(16, h.row1Y, '', big).setOrigin(0, 0.5).setDepth(D);
     this.damage = scene.add.text(W / 2, h.row1Y, '', { ...big, color: theme.orb }).setOrigin(0.5).setDepth(D);
-    this.best = scene.add.text(W - 16, h.row1Y, '', sub).setOrigin(1, 0.5).setDepth(D);
+    this.earned = scene.add.text(W - 16, h.row1Y, '', { ...sub, color: theme.currencySoft }).setOrigin(1, 0.5).setDepth(D); // 이번 판 획득 재화 (실시간)
 
     // 레벨 + 경험치 바
     this.level = scene.add.text(16, h.row2Y, '', { ...small, fontFamily: theme.titleFont, fontStyle: 'bold', color: theme.text })
@@ -52,13 +52,14 @@ export class Hud {
       .setOrigin(0, 0.5).setDepth(D);
   }
 
-  setInfo({ stage, tier, damage, best }) {
+  setInfo({ stage, tier, damage }) {
     const name = t(`tier.${tier.id}`);
     this.stage.setText(tier.stages ? t('hud.stageOf', { tier: name, n: stage, max: tier.stages }) : t('hud.stageInf', { tier: name, n: stage }));
     this.stage.setColor(tier.color);
     this.damage.setText(t('hud.damage', { n: Math.round(damage * 10) / 10 }));
-    this.best.setText(t('hud.best', { n: best }));
   }
+
+  setEarned(n) { this.earned.setText(t('hud.earned', { n: n < 1e6 ? fmtNum(n) : fmtShort(n) })); }
 
   /** 구슬을 먹었을 때 공 데미지 숫자가 통 튀며 커졌다 돌아옴. c = { scale, time(ms) } */
   popDamage(c) {

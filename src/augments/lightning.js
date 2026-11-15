@@ -7,14 +7,7 @@ import { t } from '../ui/i18n.js';
 
 const SRC = (aug, extra) => ({ type: 'lightning', aug, ...extra });
 
-export function stats(aug, s, mgr) {
-  const v = aug.v;
-  if (aug.def.id === 'lightning_pierce') {
-    s.pierce += v.count + mgr.val('lightning_plasma', 'extraPierce', 0);
-    s.pierceBonus += v.bonusPct;
-    s.pierceRefillOnWall = v.refillOnWall;
-  }
-}
+export function stats() {} // 번개는 관통 없음 (관통은 땅 속성)
 
 /** 낙뢰 한 방 (위에서 떨어지는 선 + 충격) */
 function bolt(api, cell, pct, source) {
@@ -94,11 +87,24 @@ export const handlers = {
     });
   },
 
-  // lightning_pierce: 공 관통은 stats() → BallSystem 에서 처리. 여기는 관통 순간 스파크 폭발만
-  lightning_pierce(api) {
+  /**
+   * 뇌격 방전 (id 는 예전 lightning_pierce 유지): 공이 같은 블록을 need 번 치면 방전.
+   * 그 블록 dmgPct(+플라즈마) + 주변 1칸 splashPct. 방전 중심 타격은 source.center = true (듀오 발동 기준)
+   */
+  lightning_pierce(api, aug) {
     const color = api.mgr.color('lightning');
-    api.bus.on(EV.AFTER_HIT, ({ source }) => {
-      if (isBallHit(source) && source.pierce) api.fx.pierce(source.ball.x, source.ball.y, color);
+    api.bus.on(EV.AFTER_HIT, ({ cell, source }) => {
+      if (!isBallHit(source) || cell.dead) return;
+      cell.charge = (cell.charge ?? 0) + 1;
+      if (cell.charge < aug.v.need) return;
+      cell.charge = 0;
+      const x = cx(api, cell);
+      const y = cy(api, cell);
+      api.fx.pierce(x, y, color);
+      api.fx.bolt(x, api.grid.top, y, color);
+      const around = cell.boss ? [] : api.grid.around(cell.col, cell.row, 1);
+      strike(api, cell, aug.v.dmgPct + api.mgr.val('lightning_plasma', 'dmgPct', 0), SRC('lightning_pierce', { center: true }));
+      for (const b of around) strike(api, b, aug.v.splashPct, SRC('lightning_pierce'));
     });
   },
 
@@ -220,7 +226,7 @@ export const handlers = {
   /** 아크 관통: 관통할 때마다 관통한 블록에서 번개 targets 갈래 */
   lightning_arcPierce(api, aug) {
     api.bus.on(EV.AFTER_HIT, ({ cell, source }) => {
-      if (!isBallHit(source) || !source.pierce) return;
+      if (source?.aug !== 'lightning_pierce' || !source.center) return; // 방전할 때
       for (const b of nearest(api, cell, aug.v.targets)) {
         api.fx.chain(cx(api, cell), cy(api, cell), cx(api, b), cy(api, b), api.mgr.color('lightning'));
         strike(api, b, aug.v.dmgPct, SRC('lightning_arcPierce'));

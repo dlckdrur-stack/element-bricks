@@ -35,7 +35,7 @@ export function makeButton(scene, x, y, text, { w, h, color = theme.button, size
   const glow = scene.add.rectangle(0, 0, w + c.glowPad, h + c.glowPad, col, 0).setStrokeStyle(c.glowWidth, col, c.glowAlpha);
   const bg = scene.add.rectangle(0, 0, w, h, col, c.fill).setStrokeStyle(c.stroke, col);
   const shine = scene.add.rectangle(0, -h / 2 + c.shineInset, w - c.shineInset * 4, 2, 0xffffff, c.shineAlpha);
-  const label = scene.add.text(0, 0, text, styleD(size)).setOrigin(0.5).setShadow(0, 0, color, c.textGlow, false, true);
+  const label = scene.add.text(0, 0, text, styleD(size, theme.labelText)).setOrigin(0.5).setShadow(0, 0, color, c.textGlow, false, true);
   const box = scene.add.container(x, y, [glow, bg, shine, cornerMarks(scene, w, h, c), label]).setDepth(depth);
   box.bg = bg;
   box.label = label;
@@ -92,8 +92,8 @@ export function fadeIn(scene) {
 export function makePanel(scene, titleKey, backKey = 'Menu', onBack = null) {
   const p = screens.panel;
   const W = layout.width;
-  scene.add.text(W / 2, p.titleY, t(titleKey), styleD(layout.fontSize.title * 0.7, theme.text)).setOrigin(0.5)
-    .setShadow(0, 0, theme.accent, p.titleGlow, false, true);
+  scene.add.text(W / 2, p.titleY, t(titleKey), styleD(layout.fontSize.title * 0.7, theme.textSoft)).setOrigin(0.5)
+    .setShadow(0, 0, theme.titleGlow, p.titleGlow, false, true);
   const lineY = p.titleY + p.lineGap;
   scene.add.rectangle(W / 2, lineY, p.lineW, 3, hex(theme.accent)); // 제목 밑줄 + 양끝 마름모
   for (const s of [-1, 1]) scene.add.rectangle(W / 2 + (s * p.lineW) / 2, lineY, 9, 9, hex(theme.accent)).setAngle(45);

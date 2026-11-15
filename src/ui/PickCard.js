@@ -96,10 +96,10 @@ export function makePickCard(o) {
       fontFamily: f, fontSize: px(fs.cardTag), color: theme.orb,
     }).setOrigin(1, 0));
   }
-  if (o.pioneer) { // 개척 보너스 (레벨 1 카드): 그 판 재화 +N%
-    const pct = Math.round(o.pioneer(def.id) * 100);
-    parts.push(scene.add.text(W / 2 - 14, top + 28 * k, t('pick.pioneer', { n: pct }), {
-      fontFamily: f, fontSize: px(fs.cardDesc + 2), fontStyle: 'bold', color: theme.currency,
+  if (o.pioneer) { // 레벨 1 카드: 그 판 재화 200% (1장) / 100%
+    const bonus = o.pioneer(def.id);
+    parts.push(scene.add.text(W / 2 - 14, top + 28 * k, t('pick.pioneer', { n: Math.round((1 + bonus) * 100) }), {
+      fontFamily: f, fontSize: px(fs.cardDesc + 2), fontStyle: 'bold', color: bonus > 0 ? theme.currency : theme.textDim,
     }).setOrigin(1, 0));
   }
   const front = scene.add.container(0, 0, parts).setVisible(false);

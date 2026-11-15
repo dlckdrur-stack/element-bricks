@@ -89,9 +89,8 @@ export class GameScene extends Phaser.Scene {
     this.bus.on(EV.LEVEL_UP, ({ level }) => setPowerLevel(level)); // 성장한 만큼 블록 체력도
     this.wallet = new RunWallet(this.bus, balance.currency);
     this.wallet.tierMul = this.tier.currencyMul;
-    this.wallet.bonusPct = meta.bonus.currencyPct; // 개척 보너스는 레벨 1 선택 때 더함
-    const cores = [...this.augments.defs.values()].filter((d) => d.tier === 'core').map((d) => d.id);
-    this.pioneer = new Pioneer(this.bus, this.saveData, cores, balance.pioneer);
+    this.wallet.bonusPct = meta.bonus.currencyPct; // 재화 200% 카드는 레벨 1 선택 때 더함
+    this.pioneer = new Pioneer(balance.pioneer); // 레벨 1 카드 중 1장만 재화 200%
     this.hud = new Hud(this, deps);
     this.aim = new AimInput(this, { ...deps, onFire: (a) => this.fire(a) });
 
@@ -273,6 +272,7 @@ export class GameScene extends Phaser.Scene {
       if (s.phase === 'fire' && this.balls.isDone()) this.endTurn();
     }
     if (this.hudDirty) this.refreshHud();
+    if (this.wallet.total !== this.shownEarned) this.hud.setEarned((this.shownEarned = this.wallet.total));
 
     const fps = this.game.loop.actualFps;
     this.autoQ.update(delta / 1000, fps);

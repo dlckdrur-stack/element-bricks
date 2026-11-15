@@ -1,8 +1,8 @@
 {
   "xpPerBlock": 1,
   "xpToNext": [2, 3, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 12, 14, 14, 16],
-  "maxLevel": 18,
-  "maxLevelCap": 20,
+  "maxLevel": 16,
+  "maxLevelCap": 18,
   "afterMaxXpPerDamage": 60,
   "afterMaxDamageGain": 1,
   "coreLevels": {
@@ -13,5 +13,5 @@
     "17": "duo",
     "18": "awaken"
   },
-  "note": "18레벨까지 경험치 125: 50스테이지까지 생기는 블록 약 180개 중 실제로 깨는 약 140개 기준 (경험치 강화 없이 45~50스테이지에 만렙)"
+  "note": "기본 만렙 16, 영구 강화 만렙 확장 2단계로 18 (17 듀오, 18 각성은 확장해야 열림). 18레벨까지 경험치 125 ≈ 50스테이지"
 }

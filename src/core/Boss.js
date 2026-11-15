@@ -181,7 +181,7 @@ export class Boss {
     this.pulse += dt * 4;
     this.glow.setAlpha(V.glowAlpha * (0.8 + 0.2 * Math.sin(this.pulse)));
     if (this.weak) this.weakBar.setAlpha(0.6 + 0.4 * Math.sin(this.pulse * 2));
-    const guarded = this.list.some((p) => p.guard?.(this, this.g));
+    const guarded = this.list.some((p) => p.shielded?.(this, this.g));
     this.shieldRect.setVisible(guarded).setAlpha(0.5 + 0.5 * Math.sin(this.pulse * 1.5));
   }
 

@@ -17,6 +17,7 @@ export const pickFlow = {
     const choice = buildChoices(kind, level, this.augments);
     if (!choice.options.length) return; // 고를 게 없으면 건너뜀
 
+    if (kind === 'main') this.pioneer.feature(choice.options); // 재화 200% 카드 1장
     this.resumePhase = s.phase;
     s.phase = 'pick';
     this.aim.disable();
@@ -30,7 +31,7 @@ export const pickFlow = {
     };
     showAugmentPick(this, deps, choice, level, {
       onPick: (def) => { // 카드가 공에 닿는 순간: 증강 적용 → 공 불꽃이 바로 바뀜
-        if (kind === 'main') this.wallet.bonusPct += this.pioneer.bonusFor(def.id); // 개척 보너스 (재화 보너스끼리 더함)
+        if (kind === 'main') this.wallet.bonusPct += this.pioneer.bonusFor(def.id); // 재화 200% 카드 (다른 재화 보너스와 더함)
         this.augments.add(def.id, choice.grade);
         s.ballFx = this.augments.ballFx;
         if (this.resumePhase === 'aim') {

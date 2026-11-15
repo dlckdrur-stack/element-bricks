@@ -15,7 +15,7 @@
       { "name": "slime", "patterns": ["split"], "turns": 7 }
     ] },
     "platinum":   { "patterns": ["teleport"] },
-    "diamond":    { "patterns": ["shield", "weakSide"] },
+    "diamond":    { "patterns": ["shield"] },
     "challenger": { "patterns": [], "random": 2, "pool": ["weakSide", "bounce3", "straight", "teleport", "split"] }
   },
   "weakSide": { "sides": ["bottom", "left", "right"], "barW": 10, "color": "#fff27a" },

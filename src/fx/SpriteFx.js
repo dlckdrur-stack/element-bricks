@@ -11,7 +11,7 @@ const EASE = {
 
 /**
  * 한 번 커졌다 사라지는 스프라이트(충격파 링·빛 번쩍·블록 테두리).
- * spec = { frame, color?, from, to, life, alpha, ease, spin? }  from/to 는 64px 기준 배율.
+ * spec = { frame, color?, from, to, life, alpha, ease, spin?, blend?('normal' = 가산 혼합 안 함 → 색이 진함) }  from/to 는 64px 기준 배율.
  * 예산: spriteBudget[quality]. 큰 연출(priority 2)은 상한의 1.5배까지 유지.
  */
 export class SpriteFx {
@@ -40,7 +40,8 @@ export class SpriteFx {
     if (this.live.length >= limit) return null;
     const sz = (o.scale ?? 1) * (o.w ? 1 : this.size);
     const s = this.pool.get().setVisible(true).setFrame(spec.frame ?? 'ring').setPosition(x, y)
-      .setTint(spec.color ? hex(spec.color) : color).setAlpha(spec.alpha ?? 1).setRotation(o.rot ?? 0);
+      .setTint(spec.color ? hex(spec.color) : color).setAlpha(spec.alpha ?? 1).setRotation(o.rot ?? 0)
+      .setBlendMode(spec.blend === 'normal' ? Phaser.BlendModes.NORMAL : Phaser.BlendModes.ADD); // normal = 색이 진하게
     const e = {
       s, t: 0, life: spec.life ?? 0.2, from: spec.from ?? 1, to: spec.to ?? 2, a: spec.alpha ?? 1,
       ease: EASE[spec.ease] ?? EASE.out, w: (o.w ?? FRAME) * sz, h: (o.h ?? FRAME) * sz,

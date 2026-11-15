@@ -79,14 +79,15 @@ export const patterns = {
     spawn(b) { b.splitsLeft = cfg.split.sizes.length - 1; },
   },
 
-  /** 보호막: 보호막 블록이 하나라도 남아 있으면 본체 피해 무효. every 턴마다 빈 자리에 다시 생김 */
+  /** 보호막: 보호막 블록을 모두 깨면 본체 피해 ×bonus (남아 있으면 보통 피해). every 턴마다 빈 자리에 다시 생김 */
   shield: {
     spawn(b, g) { b.shieldTurn = 0; placeShields(g); },
     turn(b, g) {
       b.shieldTurn++;
       if (b.shieldTurn % cfg.shield.every === 0) placeShields(g);
     },
-    guard: (b, g) => g.grid.blocks().some((x) => x.shield && !x.dead),
+    shielded: (b, g) => g.grid.blocks().some((x) => x.shield && !x.dead),
+    bonus: (b, src, g) => !g.grid.blocks().some((x) => x.shield && !x.dead),
   },
 };
 
