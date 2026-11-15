@@ -5,13 +5,13 @@
   "sizeRange": { "min": 0.5, "max": 1.5, "step": 0.25 },
 
   "budget": { "low": 100, "mid": 300, "high": 600, "ultra": 1000 },
-  "countMul": { "low": 0.45, "mid": 0.75, "high": 1, "ultra": 1.35 },
+  "countMul": { "low": 0.5, "mid": 0.9, "high": 1.3, "ultra": 1.7 },
   "spawnPerFrame": { "low": 40, "mid": 90, "high": 150, "ultra": 220 },
   "priorityCaps": [0.5, 0.85, 1.0],
   "spriteBudget": { "low": 24, "mid": 48, "high": 80, "ultra": 120 },
   "lineBudget": { "low": 10, "mid": 20, "high": 32, "ultra": 48 },
 
-  "glow": { "offQualities": ["low"], "blurStrength": 1.15, "strength": 1.3, "steps": 4 },
+  "glow": { "offQualities": ["low"], "blurStrength": 1.15, "strength": 1.5, "steps": 4 },
 
   "juice": {
     "hitstop": { "big": 0.05, "railgun": 0.06, "awaken": 0.08 },
@@ -64,8 +64,10 @@
   },
 
   "ball": {
-    "coreHalo": { "scale": 1.7, "alpha": 0.95 },
-    "aura": { "scale": 3.0, "alpha": 0.8, "flicker": 0.14, "defaultColor": "#7fe9ff", "defaultAlpha": 0.38 },
+    "core": { "scale": 1.15 },
+    "rim": { "radius": 1.22, "peak": 0.84, "alpha": 1 },
+    "coreHalo": { "scale": 1.4, "alpha": 0.5 },
+    "aura": { "scale": 2.5, "alpha": 0.6, "flicker": 0.14, "defaultColor": "#7fe9ff", "defaultAlpha": 0.38 },
     "trail": "trail",
     "elementTrail": "flameTrail",
     "trailEverySteps": 1,

@@ -44,9 +44,9 @@
 
   "orb": {
     "labelSize": 20, "labelColor": "#ffffff",
-    "bodyAlpha": 0.28, "stroke": 3,
+    "bodyAlpha": 0.5, "stroke": 0, "pulseFrame": "glow",
     "glowScale": 1.4, "glowAlpha": 0.35,
     "bobAmp": 3.5, "bobTime": 900,
-    "ringFrom": 0.5, "ringTo": 0.68, "ringAlphaFrom": 0.9, "ringAlphaTo": 0.25, "pulseTime": 620
+    "ringFrom": 0.75, "ringTo": 1.05, "ringAlphaFrom": 0.55, "ringAlphaTo": 0.2, "pulseTime": 620
   }
 }

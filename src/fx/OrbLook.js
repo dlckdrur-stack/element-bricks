@@ -5,7 +5,8 @@ import { FRAME } from './atlas.js';
 const ADD = Phaser.BlendModes.ADD;
 
 /**
- * 데미지 구슬 표시: 동그라미 안에 "+1", 둥둥 떠 있고 바깥 링이 맥박처럼 커졌다 작아짐.
+ * 데미지 구슬 표시: 동그라미 안에 "+1", 둥둥 떠 있고 바깥 빛(pulseFrame)이 맥박처럼 커졌다 작아짐.
+ * 선 모양 테두리는 거슬려서 기본은 끔(stroke 0, pulseFrame glow).
  * root(격자 위치·하강 트윈용) > inner(둥둥) > glow·ring·body·label. 수치는 ui.json 의 orb.
  */
 export class OrbLook {
@@ -24,8 +25,9 @@ export class OrbLook {
     const c = this.cfg;
     const glow = s.add.image(0, 0, 'fx', 'glow').setBlendMode(ADD).setTint(this.color)
       .setAlpha(c.glowAlpha).setScale((this.r * 2 * c.glowScale) / FRAME * 2);
-    const ring = s.add.image(0, 0, 'fx', 'ring').setBlendMode(ADD).setTint(this.color);
-    const body = s.add.circle(0, 0, this.r).setFillStyle(this.color, c.bodyAlpha).setStrokeStyle(c.stroke, this.color, 1);
+    const ring = s.add.image(0, 0, 'fx', c.pulseFrame).setBlendMode(ADD).setTint(this.color);
+    const body = s.add.circle(0, 0, this.r).setFillStyle(this.color, c.bodyAlpha);
+    if (c.stroke > 0) body.setStrokeStyle(c.stroke, this.color, 1);
     const label = s.add.text(0, 0, this.label, {
       fontFamily: this.font, fontSize: `${c.labelSize}px`, fontStyle: 'bold', color: c.labelColor,
     }).setOrigin(0.5);

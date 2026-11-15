@@ -7,7 +7,7 @@ const HALF = FRAME / 2;
 const R2D = 180 / Math.PI;
 
 /**
- * 공 겉모습 4겹: 밝은 흰 중심(core+halo) + 속성색 글로우(aura) + 튀는 불티 + 꼬리 잔상.
+ * 공 겉모습 4겹: 밝은 흰 중심(core+rim 테두리+halo) + 속성색 글로우(aura) + 튀는 불티 + 꼬리 잔상.
  * 뇌격 관통이 있으면 전기 갑옷(armor) 링이 하나 더.
  * state.ballFx = AugmentManager.ballFx ({ color, trail, auraScale, spark, armor, armorColor … })
  * 수치는 default.json 의 ball.
@@ -30,18 +30,20 @@ export class BallLook {
       aura: s.add.image(0, 0, 'fx', 'glow').setBlendMode(ADD).setDepth(19),
       armor: s.add.image(0, 0, 'fx', 'ring').setBlendMode(ADD).setDepth(19.5),
       core: s.add.image(0, 0, 'fx', 'core').setDepth(20),
+      rim: s.add.image(0, 0, 'fx', 'ring').setDepth(20.2), // 또렷한 테두리 (가산 혼합 아님)
       halo: s.add.image(0, 0, 'fx', 'glow').setBlendMode(ADD).setDepth(20.5),
       r: 9,
     };
   }
 
-  layers(v) { return [v.aura, v.armor, v.core, v.halo]; }
+  layers(v) { return [v.aura, v.armor, v.core, v.rim, v.halo]; }
 
   hide(v) { for (const o of this.layers(v)) o.setVisible(false); }
 
   setVisible(v, on) {
     const bfx = this.state.ballFx;
     v.core.setVisible(on);
+    v.rim.setVisible(on);
     v.halo.setVisible(on);
     v.aura.setVisible(on);
     v.armor.setVisible(on && !!bfx?.armor);
@@ -54,7 +56,10 @@ export class BallLook {
     this.setVisible(v, true);
     v.aura.setTint(bfx ? bfx.color : this.defaultColor);
     if (bfx?.armor) v.armor.setTint(bfx.armorColor);
-    v.core.setScale((r * 2) / (FRAME - 2));
+    v.core.setScale((r * 2 * this.c.core.scale) / (FRAME - 2));
+    const rim = this.c.rim;
+    v.rim.setTint(bfx ? bfx.color : this.defaultColor).setAlpha(rim.alpha)
+      .setScale((r * rim.radius) / (rim.peak * HALF));
     v.halo.setScale((r * this.c.coreHalo.scale) / HALF).setAlpha(this.c.coreHalo.alpha);
     this.animate(v);
     return v;
@@ -64,6 +69,7 @@ export class BallLook {
     v.aura.setPosition(x, y);
     v.armor.setPosition(x, y);
     v.core.setPosition(x, y);
+    v.rim.setPosition(x, y);
     v.halo.setPosition(x, y);
   }
 
