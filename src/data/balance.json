@@ -37,10 +37,11 @@
     "doubleMultiplier": 2
   },
   "hpScale": {
-    "flatUntil": 30,
-    "rampUntil": 60,
+    "flatUntil": 15,
+    "rampUntil": 50,
     "rampTarget": 3,
-    "lateGrowth": 1.1
+    "lateGrowth": 1.065,
+    "perLevel": 0.15
   },
   "orb": {
     "chance": 0.9,

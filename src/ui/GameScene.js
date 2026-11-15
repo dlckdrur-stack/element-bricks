@@ -9,7 +9,7 @@ import { Grid } from '../core/Grid.js';
 import { BallSystem } from '../core/BallSystem.js';
 import { Leveling } from '../core/Leveling.js';
 import { Elites } from '../core/elites.js';
-import { buildStageRow, stageHp, setStageMods } from '../core/stageLayout.js';
+import { buildStageRow, stageHp, setStageMods, setPowerLevel } from '../core/stageLayout.js';
 import { hex } from '../core/color.js';
 import { Fx } from '../fx/Fx.js';
 import { AugmentManager } from '../augments/AugmentManager.js';
@@ -84,6 +84,7 @@ export class GameScene extends Phaser.Scene {
     hookResonance(this.bus, this.state, meta.res); // 각인: 모든 피해·속성 효과·엘리트·방어 무시·구슬
     this.elites = new Elites({ ...deps, grid: this.grid, fx: this.fx, mgr: this.augments }); // Leveling 보다 먼저 (처치 경험치)
     this.leveling = new Leveling(this.bus, levelsCfg, this.state, meta.bonus);
+    this.bus.on(EV.LEVEL_UP, ({ level }) => setPowerLevel(level)); // 성장한 만큼 블록 체력도
     this.wallet = new RunWallet(this.bus, balance.currency);
     this.wallet.tierMul = this.tier.currencyMul;
     this.wallet.bonusPct = meta.bonus.currencyPct; // 개척 보너스는 레벨 1 선택 때 더함
@@ -103,6 +104,7 @@ export class GameScene extends Phaser.Scene {
     this.fpsTimer = 0;
     if (run) {
       restoreRun(this, run);
+      setPowerLevel(this.leveling.level);
       this.grid.setRefHp(stageHp(run.stage) * balance.blocks.doubleMultiplier);
       this.beginAim();
     } else {

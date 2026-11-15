@@ -2,7 +2,7 @@ import balance from '../data/balance.json';
 import elites from '../data/elites.json';
 import { hex } from './color.js';
 
-/** 후반 체력 배율 (기획서: 1~30 ×1, 31~60 직선 증가해 60에서 ×3, 61~ ×3×1.1^(s−60)) */
+/** 스테이지 체력 배율: flatUntil 까지 ×1, rampUntil 까지 직선으로 ×rampTarget, 그 뒤 ×lateGrowth^(s−rampUntil) (수치는 balance.hpScale) */
 export function hpMultiplier(stage, s = balance.hpScale) {
   if (stage <= s.flatUntil) return 1;
   if (stage <= s.rampUntil) {
@@ -14,7 +14,16 @@ export function hpMultiplier(stage, s = balance.hpScale) {
 
 /** 판의 티어 난이도 (GameScene 이 판 시작 때 설정) */
 let mods = { hpMul: 1, extraBlocks: 0, eliteChance: 0 };
-export function setStageMods(m) { mods = { hpMul: m.hpMul ?? 1, extraBlocks: m.extraBlocks ?? 0, eliteChance: m.eliteChance ?? 0 }; }
+let power = 1; // 내 레벨(= 고른 증강 수)만큼 블록도 단단해짐
+export function setStageMods(m) {
+  mods = { hpMul: m.hpMul ?? 1, extraBlocks: m.extraBlocks ?? 0, eliteChance: m.eliteChance ?? 0 };
+  power = 1;
+}
+
+/** 레벨이 오를 때마다 새로 내려오는 블록 체력 +perLevel (영구 강화·공 강화는 반영하지 않음) */
+export function setPowerLevel(level) {
+  power = 1 + balance.hpScale.perLevel * Math.max(0, level - 1);
+}
 
 /** 특수 블록: 보물(체력 2배·재화 5배) · 분열(깨지면 둘로) · 방패(아래에서 맞으면 -50%) */
 function makeSpecial(def, stage, rng) {
@@ -35,9 +44,9 @@ function makeElite(def, stage, rng) {
   return { ...def, hp: Math.ceil(def.hp * t.hpMul), elite: name, icon: t.icon, fixedColor: hex(elites.color) };
 }
 
-/** 스테이지 기본 체력 × 티어 체력 배율 (재화 계산에는 배율 없는 stage 를 쓸 것) */
+/** 스테이지 기본 체력 × 티어 배율 × 레벨 배율 (재화 계산에는 배율 없는 stage 를 쓸 것) */
 export function stageHp(stage) {
-  return Math.max(1, Math.round(stage * hpMultiplier(stage) * mods.hpMul));
+  return Math.max(1, Math.round(stage * hpMultiplier(stage) * mods.hpMul * power));
 }
 
 function tierFor(stage, tiers) {
