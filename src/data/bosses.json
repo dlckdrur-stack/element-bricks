@@ -15,7 +15,7 @@
     "diamond":    { "patterns": ["shield", "weakSide"] },
     "challenger": { "patterns": [], "random": 2, "pool": ["weakSide", "bounce3", "straight", "teleport"] }
   },
-  "weakSide": { "sides": ["bottom", "left", "right", "top"], "barW": 10, "color": "#fff27a" },
+  "weakSide": { "sides": ["bottom", "left", "right"], "barW": 10, "color": "#fff27a" },
   "bounce3": { "need": 3 },
   "summon": { "row": 1, "count": 4, "hpMul": 1.5 },
   "heal": { "pct": 0.06 },
