@@ -16,6 +16,7 @@ import { Hud } from './Hud.js';
 import { showAugmentPick } from './AugmentPickView.js';
 import { actions, BUTTONS } from './fxTestActions.js';
 import { t } from './i18n.js';
+import { getTier } from '../meta/tiers.js';
 
 const STEP = 1 / balance.physics.stepHz;
 
@@ -87,7 +88,7 @@ export class FxTestScene extends Phaser.Scene {
   }
 
   refreshHud() {
-    this.hud.setInfo({ stage: this.state.stage, damage: this.state.damage, best: 0 });
+    this.hud.setInfo({ stage: this.state.stage, tier: getTier('bronze'), damage: this.state.damage, best: 0 });
     this.hud.setLevel(1, 0, false, this.state.ballFx?.color);
   }
 

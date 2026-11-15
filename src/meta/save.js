@@ -14,6 +14,8 @@ const defaults = () => ({
   upgrades: {},  // { id: 단계 }
   pioneer: {},   // { 핵심 증강 id: { bonus, picked } }
   settings: {},  // 기본값과 다른 것만이 아니라 전부 (settings.js 가 기본값과 합침)
+  tierCleared: -1, // 깬 가장 높은 티어 번호 (tiers.js)
+  tierBest: {},    // { 티어: 그 티어 최고 스테이지 }
 });
 
 /** 버전이 다르면 여기서 이전 데이터를 옮긴다 */

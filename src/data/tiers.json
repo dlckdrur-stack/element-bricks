@@ -1,0 +1,22 @@
+{
+  "order": ["bronze", "silver", "gold", "platinum", "diamond", "challenger"],
+  "list": {
+    "bronze":     { "stages": 20,  "hpMul": 0.7,  "extraBlocks": 0, "eliteChance": 0,    "currencyMul": 1.0, "clearBonus": 300,   "color": "#e09a5a", "unlock": "augments1" },
+    "silver":     { "stages": 40,  "hpMul": 0.85, "extraBlocks": 0, "eliteChance": 0.03, "currencyMul": 1.2, "clearBonus": 1000,  "color": "#c9d3e6", "unlock": "augments2" },
+    "gold":       { "stages": 60,  "hpMul": 1.0,  "extraBlocks": 1, "eliteChance": 0.06, "currencyMul": 1.5, "clearBonus": 3000,  "color": "#ffd54a", "unlock": "dark" },
+    "platinum":   { "stages": 80,  "hpMul": 1.2,  "extraBlocks": 1, "eliteChance": 0.1,  "currencyMul": 1.8, "clearBonus": 8000,  "color": "#5fe3c9", "unlock": "awaken" },
+    "diamond":    { "stages": 100, "hpMul": 1.45, "extraBlocks": 1, "eliteChance": 0.15, "currencyMul": 2.2, "clearBonus": 20000, "color": "#7cc7ff", "unlock": "resonance" },
+    "challenger": { "stages": 0,   "hpMul": 1.7,  "extraBlocks": 2, "eliteChance": 0.2,  "currencyMul": 2.6, "clearBonus": 0,     "color": "#ff6b8a", "unlock": null }
+  },
+  "unlocks": {
+    "augments1": { "augments": ["fire_overheat", "fire_flameReturn", "lightning_storm", "lightning_capacitor"] },
+    "augments2": { "augments": ["fire_wildfire", "fire_scorch", "lightning_plasma", "lightning_fastCharge"] },
+    "dark": { "element": "dark" },
+    "awaken": { "tier": "awaken" },
+    "resonance": { "feature": "resonance" }
+  },
+  "screen": {
+    "top": 170, "rowH": 104, "rowW": 488, "rowInnerH": 92,
+    "nameSize": 30, "infoSize": 16, "padX": 22
+  }
+}

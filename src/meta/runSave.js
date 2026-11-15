@@ -22,6 +22,7 @@ export function saveRun(g) {
   const lv = g.leveling;
   const mgr = g.augments;
   writeKey(RUN_KEY, {
+    tier: g.tier.id,
     stage: s.stage,
     damage: s.damage,
     ballCount: s.ballCount,

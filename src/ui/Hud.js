@@ -42,8 +42,10 @@ export class Hud {
       .setOrigin(0, 0.5).setDepth(D);
   }
 
-  setInfo({ stage, damage, best }) {
-    this.stage.setText(t('hud.stage', { n: stage }));
+  setInfo({ stage, tier, damage, best }) {
+    const name = t(`tier.${tier.id}`);
+    this.stage.setText(tier.stages ? t('hud.stageOf', { tier: name, n: stage, max: tier.stages }) : t('hud.stageInf', { tier: name, n: stage }));
+    this.stage.setColor(tier.color);
     this.damage.setText(t('hud.damage', { n: Math.round(damage * 10) / 10 }));
     this.best.setText(t('hud.best', { n: best }));
   }

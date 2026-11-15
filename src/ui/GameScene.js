@@ -8,7 +8,7 @@ import { EV, GameEvents } from '../core/events.js';
 import { Grid } from '../core/Grid.js';
 import { BallSystem } from '../core/BallSystem.js';
 import { Leveling } from '../core/Leveling.js';
-import { buildStageRow, stageHp } from '../core/stageLayout.js';
+import { buildStageRow, stageHp, setStageMods } from '../core/stageLayout.js';
 import { hex } from '../core/color.js';
 import { Fx } from '../fx/Fx.js';
 import { AugmentManager } from '../augments/AugmentManager.js';
@@ -16,11 +16,12 @@ import { getProfile, commitProfile } from '../meta/save.js';
 import { loadRun, saveRun, restoreRun, clearRun } from '../meta/runSave.js';
 import { AimInput } from './AimInput.js';
 import { Hud } from './Hud.js';
-import { showResult } from './ResultView.js';
 import { RunWallet } from '../meta/RunWallet.js';
-import { goTo, fadeIn } from './widgets.js';
+import { fadeIn } from './widgets.js';
 import { t } from './i18n.js';
 import { pickFlow } from './pickFlow.js';
+import { runEnd } from './runEnd.js';
+import { getTier } from '../meta/tiers.js';
 import { applyFxSettings, getSettings, settingsCfg } from '../meta/settings.js';
 import { AutoQuality } from '../fx/AutoQuality.js';
 import { setupRun } from '../meta/runSetup.js';
@@ -36,8 +37,11 @@ const STEP_MS = 1000 / balance.physics.stepHz;
 export class GameScene extends Phaser.Scene {
   constructor() { super('Game'); }
 
-  /** data.resume = true 면 저장된 판을 이어서 */
-  init(data) { this.resume = !!data?.resume; }
+  /** data.resume = true 면 저장된 판을 이어서, data.tier = 난이도 티어 */
+  init(data) {
+    this.resume = !!data?.resume;
+    this.tierId = data?.tier;
+  }
 
   create() {
     fadeIn(this);
@@ -49,7 +53,10 @@ export class GameScene extends Phaser.Scene {
 
     this.bus = new GameEvents();
     this.saveData = getProfile();
-    this.startBest = this.saveData.bestStage; // 신기록 판정용
+    const run = this.resume ? loadRun() : null;
+    this.tier = getTier(run?.tier ?? this.tierId ?? 'bronze');
+    setStageMods(this.tier); // 티어별 블록 체력·개수
+    this.startBest = this.saveData.tierBest?.[this.tier.id] ?? 0; // 신기록 판정용 (티어별)
     const meta = setupRun(balance); // 영구 강화 반영
     this.state = {
       stage: 0,
@@ -72,6 +79,7 @@ export class GameScene extends Phaser.Scene {
     this.balls = new BallSystem(this, { ...deps, grid: this.grid, fx: this.fx });
     this.leveling = new Leveling(this.bus, levelsCfg, this.state, meta.bonus);
     this.wallet = new RunWallet(this.bus, balance.currency);
+    this.wallet.tierMul = this.tier.currencyMul;
     this.wallet.bonusPct = meta.bonus.currencyPct; // 개척 보너스는 레벨 1 선택 때 더함
     const cores = [...this.augments.defs.values()].filter((d) => d.tier === 'core').map((d) => d.id);
     this.pioneer = new Pioneer(this.bus, this.saveData, cores, balance.pioneer);
@@ -87,7 +95,6 @@ export class GameScene extends Phaser.Scene {
 
     this.acc = 0;
     this.fpsTimer = 0;
-    const run = this.resume ? loadRun() : null;
     if (run) {
       restoreRun(this, run);
       this.grid.setRefHp(stageHp(run.stage) * balance.blocks.doubleMultiplier);
@@ -175,29 +182,8 @@ export class GameScene extends Phaser.Scene {
       this.saveData.bestStage = s.stage;
       commitProfile(); // 저장은 턴 끝에 한 번
     }
+    if (this.isTierEnd()) { this.victory(); return; } // 티어 마지막 스테이지까지 버팀 = 클리어
     this.nextTurn();
-  }
-
-  gameOver() {
-    const s = this.state;
-    s.phase = 'over';
-    clearRun();
-    this.aim.disable();
-    this.placeLauncher(false);
-    this.hud.showHint(false);
-    const best = Math.max(this.saveData.bestStage, s.stage);
-    this.saveData.bestStage = best;
-    commitProfile();
-    const w = this.wallet;
-    const info = { stage: s.stage, best, newBest: s.stage > this.startBest, total: w.total, bonusPct: w.bonusPct };
-    this.saveData.currency += info.total; // 재화는 연출 전에 바로 저장
-    this.pioneer.settle();
-    commitProfile();
-    this.bus.emit(EV.GAME_OVER, info);
-    showResult(this, info, {
-      onRetry: () => goTo(this, 'Game', { resume: false }),
-      onMenu: () => goTo(this, 'Menu'),
-    });
   }
 
   placeLauncher(visible) {
@@ -215,8 +201,9 @@ export class GameScene extends Phaser.Scene {
     this.hudDirty = false;
     this.hud.setInfo({
       stage: s.stage,
+      tier: this.tier,
       damage: s.damage,
-      best: Math.max(this.saveData.bestStage, s.stage),
+      best: Math.max(this.startBest, s.stage),
     });
     const lv = this.leveling;
     const color = s.ballFx ? s.ballFx.color : undefined;
@@ -278,4 +265,4 @@ export class GameScene extends Phaser.Scene {
   }
 }
 
-Object.assign(GameScene.prototype, pickFlow); // openPick · ballPos
+Object.assign(GameScene.prototype, pickFlow, runEnd); // openPick · ballPos · gameOver · victory

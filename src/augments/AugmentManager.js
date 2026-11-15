@@ -5,6 +5,7 @@ import balance from '../data/balance.json';
 import { fxCfg } from '../fx/config.js';
 import { EV } from '../core/events.js';
 import { hex } from '../core/color.js';
+import { isAugUnlocked } from '../meta/tiers.js';
 import * as fire from './fire.js';
 import * as lightning from './lightning.js';
 
@@ -48,7 +49,7 @@ export class AugmentManager {
 
   /** 아직 게임에 없는 기능(재화·특수 블록)이 필요한 증강은 선택지에서 제외 */
   isAvailable(def) {
-    return !def.feature || draftCfg.features[def.feature] === true;
+    return (!def.feature || draftCfg.features[def.feature] === true) && isAugUnlocked(def); // 티어 클리어 해금
   }
 
   elementStatus(element) {

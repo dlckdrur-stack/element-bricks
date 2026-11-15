@@ -1,0 +1,53 @@
+import { EV } from '../core/events.js';
+import { commitProfile } from '../meta/save.js';
+import { clearRun } from '../meta/runSave.js';
+import { markCleared, tierOrder, isInfinite } from '../meta/tiers.js';
+import { showResult } from './ResultView.js';
+import { goTo } from './widgets.js';
+import { t } from './i18n.js';
+
+/**
+ * 판 끝내기 (GameScene 에 붙는 메서드). 게임오버와 티어 클리어(승리) 둘 다 여기서.
+ * 재화는 연출 전에 바로 저장한다.
+ */
+export const runEnd = {
+  /** 티어 마지막 스테이지까지 버텼는가 (무한 티어는 없음) */
+  isTierEnd() {
+    return !isInfinite(this.tier) && this.state.stage >= this.tier.stages;
+  },
+
+  gameOver() { this.finishRun(false); },
+
+  victory() { this.finishRun(true); },
+
+  finishRun(won) {
+    const s = this.state;
+    const p = this.saveData;
+    s.phase = 'over';
+    clearRun();
+    this.aim.disable();
+    this.placeLauncher(false);
+    this.hud.showHint(false);
+
+    p.bestStage = Math.max(p.bestStage, s.stage);
+    p.tierBest = { ...p.tierBest, [this.tier.id]: Math.max(p.tierBest?.[this.tier.id] ?? 0, s.stage) };
+    const clear = won ? markCleared(this.tier.id) : { first: false, reward: null, bonus: 0 };
+    const w = this.wallet;
+    const info = {
+      stage: s.stage, best: p.tierBest[this.tier.id], newBest: s.stage > this.startBest,
+      total: w.total + clear.bonus, bonusPct: w.bonusPct, won,
+      clearBonus: clear.bonus, unlocked: clear.reward ? t(`tier.unlocked.${clear.reward}`) : null,
+    };
+    p.currency += info.total;
+    this.pioneer.settle();
+    commitProfile();
+    this.bus.emit(EV.GAME_OVER, info);
+
+    const next = tierOrder[this.tier.index + 1];
+    showResult(this, info, {
+      onRetry: () => goTo(this, 'Game', { resume: false, tier: this.tier.id }),
+      onMenu: () => goTo(this, 'Menu'),
+      onNext: won && next ? () => goTo(this, 'Game', { resume: false, tier: next }) : null,
+    });
+  },
+};

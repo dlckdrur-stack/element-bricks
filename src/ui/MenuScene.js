@@ -5,7 +5,7 @@ import screens from '../data/screens.json';
 import { fxCfg } from '../fx/config.js';
 import { Fx } from '../fx/Fx.js';
 import { getProfile } from '../meta/save.js';
-import { hasRun, clearRun } from '../meta/runSave.js';
+import { hasRun } from '../meta/runSave.js';
 import { applyFxSettings } from '../meta/settings.js';
 import { MenuBall } from './MenuBall.js';
 import { makeButton, makeCorner, goTo, fadeIn, style } from './widgets.js';
@@ -38,7 +38,7 @@ export class MenuScene extends Phaser.Scene {
       items.push({ key: 'menu.continue', color: theme.buttonPrimary, go: () => goTo(this, 'Game', { resume: true }) });
     }
     items.push(
-      { key: 'menu.start', go: () => { clearRun(); goTo(this, 'Game', { resume: false }); } },
+      { key: 'menu.start', go: () => goTo(this, 'Tier') },
       { key: 'menu.upgrade', go: () => goTo(this, 'Upgrade') },
       { key: 'menu.shop', go: () => goTo(this, 'Shop') },
       { key: 'menu.settings', color: theme.hudText, go: () => goTo(this, 'Settings') },

@@ -10,6 +10,7 @@ import { applyFxSettings } from '../meta/settings.js';
 import { upgradeList, level, isMaxed, nextCost, effect, buy } from '../meta/upgrades.js';
 import { makeButton, makePanel, makeCorner, fadeIn, style, fmtNum } from './widgets.js';
 import { t } from './i18n.js';
+import { isFeatureUnlocked } from '../meta/tiers.js';
 
 const C = upgData.screen;
 
@@ -79,7 +80,7 @@ export class UpgradeScene extends Phaser.Scene {
     return this.add.container(0, 0, [
       this.add.text(W / 2, C.lockY - 70, '🔒', style(fs.title * 1.4)).setOrigin(0.5),
       this.add.text(W / 2, C.lockY + 20, t('upgrade.resonance.title'), style(fs.body, theme.text, true)).setOrigin(0.5),
-      this.add.text(W / 2, C.lockY + 66, t('upgrade.resonance.lock'), style(fs.cardDesc, theme.hudText)).setOrigin(0.5),
+      this.add.text(W / 2, C.lockY + 66, t(isFeatureUnlocked('resonance') ? 'upgrade.resonance.ready' : 'upgrade.resonance.lock2'), style(fs.cardDesc, theme.hudText)).setOrigin(0.5),
     ]);
   }
 

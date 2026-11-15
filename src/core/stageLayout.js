@@ -10,9 +10,13 @@ export function hpMultiplier(stage, s = balance.hpScale) {
   return s.rampTarget * Math.pow(s.lateGrowth, stage - s.rampUntil);
 }
 
-/** 스테이지 기본 체력 (재화 계산에는 배율 없는 stage 를 쓸 것) */
+/** 판의 티어 난이도 (GameScene 이 판 시작 때 설정) */
+let mods = { hpMul: 1, extraBlocks: 0 };
+export function setStageMods(m) { mods = { hpMul: m.hpMul ?? 1, extraBlocks: m.extraBlocks ?? 0 }; }
+
+/** 스테이지 기본 체력 × 티어 체력 배율 (재화 계산에는 배율 없는 stage 를 쓸 것) */
 export function stageHp(stage) {
-  return Math.max(1, Math.round(stage * hpMultiplier(stage)));
+  return Math.max(1, Math.round(stage * hpMultiplier(stage) * mods.hpMul));
 }
 
 function tierFor(stage, tiers) {
@@ -43,7 +47,7 @@ function shuffled(n, rng) {
 export function buildStageRow(stage, cols, rng = Math.random) {
   const cfg = balance.blocks;
   const tier = tierFor(stage, cfg.countByStage);
-  const count = Math.min(cols - 1, randInt(tier.min, tier.max, rng)); // 구슬 자리 1칸은 남김
+  const count = Math.min(cols - 1, randInt(tier.min, tier.max, rng) + mods.extraBlocks); // 구슬 자리 1칸은 남김
   const order = shuffled(cols, rng);
   const hp = stageHp(stage);
   const row = new Array(cols).fill(null);
