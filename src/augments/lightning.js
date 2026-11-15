@@ -23,7 +23,7 @@ function bolt(api, cell, pct, source) {
 }
 
 export const handlers = {
-  /** 각성 필살기 「뇌신의 심판」: cooldown 턴마다 체력이 가장 높은 블록들에 심판의 낙뢰 + 주변 연쇄 */
+  /** 각성 필살기 「뇌신」: cooldown 턴마다 체력이 가장 높은 블록들에 심판의 낙뢰 + 주변 연쇄 */
   lightning_judgment(api, aug) {
     ultimate(api, aug, () => {
       const c = api.fx.cfg.ult.judgment;

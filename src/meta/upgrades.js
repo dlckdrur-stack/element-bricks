@@ -42,7 +42,6 @@ export function buy(id) {
  */
 export function runBonuses() {
   return {
-    aimMul: 1 + effect('aim'),
     speedMul: 1 + effect('ballSpeed'),
     critDamage: effect('critDamage'),
     damageMul: 1 + effect('damage'),

@@ -77,7 +77,7 @@ export const ultimate = {
     this.juice.shake(this.cfg.ult.purgatory.waveShake);
   },
 
-  // ---------- ⚡ 뇌신의 심판 ----------
+  // ---------- ⚡ 뇌신 ----------
   judgmentStart(title, sub) {
     const c = this.cfg.ult.judgment;
     this.ultStart(c, title, sub, col(c.color));
