@@ -1,0 +1,33 @@
+{
+  "unlockTier": "diamond",
+  "cost": 5000,
+  "slots": 3,
+  "elements": ["fire", "lightning", "dark", "ice", "earth", "grass"],
+  "grades": ["rare", "epic", "unique", "legendary"],
+  "gradeColors": { "rare": "#5fb8ff", "epic": "#b45cff", "unique": "#ffd54a", "legendary": "#5dff7a" },
+  "upgrade": [
+    { "from": "rare", "rate": 0.18, "pity": 8 },
+    { "from": "epic", "rate": 0.05, "pity": 30 },
+    { "from": "unique", "rate": 0.02, "pity": 70 }
+  ],
+  "lineSameGrade": [1.0, 0.25, 0.08],
+  "options": [
+    { "id": "ballDmg",   "values": { "rare": 0.03, "epic": 0.06, "unique": 0.09, "legendary": 0.12 }, "weight": 15 },
+    { "id": "allDmg",    "values": { "rare": 0.02, "epic": 0.04, "unique": 0.07, "legendary": 0.09 }, "weight": 10 },
+    { "id": "critChance","values": { "rare": 0.03, "epic": 0.05, "unique": 0.07, "legendary": 0.09 }, "weight": 10 },
+    { "id": "xp",        "values": { "rare": 0.03, "epic": 0.06, "unique": 0.09, "legendary": 0.12 }, "weight": 10 },
+    { "id": "elemEffect","values": { "rare": 0.04, "epic": 0.08, "unique": 0.12, "legendary": 0.16 }, "weight": 12 },
+    { "id": "eliteDmg",  "values": { "epic": 0.1, "unique": 0.2, "legendary": 0.3 }, "weight": 10, "maxLines": 2 },
+    { "id": "ignoreDef", "values": { "epic": 0.1, "unique": 0.2, "legendary": 0.3 }, "weight": 10, "maxLines": 2 },
+    { "id": "critDmg",   "values": { "unique": 0.06, "legendary": 0.1 }, "weight": 8, "maxLines": 2 },
+    { "id": "orbEff",    "values": { "legendary": 0.1 }, "weight": 5, "maxLines": 1 },
+    { "id": "currency",  "values": { "legendary": 0.2 }, "weight": 5, "maxLines": 2 }
+  ],
+  "estimate": { "baseCritChance": 0.05, "baseCritDmg": 1.5, "elemShare": 0.5, "eliteShare": 0.15, "defShare": 0.05 },
+  "screen": {
+    "listTop": 214, "rowH": 46, "nameX": 24, "equipX": 470, "equipW": 110, "equipH": 36,
+    "detailY": 510, "lineGap": 30, "rollY": 700, "rollW": 300, "rollH": 64,
+    "compareY": 520, "keepX": 160, "changeX": 380, "choiceY": 820, "choiceW": 190, "choiceH": 60,
+    "probY": 760
+  }
+}

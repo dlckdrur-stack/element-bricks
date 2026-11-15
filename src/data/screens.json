@@ -40,5 +40,5 @@
     "valueH": 52,
     "resetY": 800
   },
-  "dialog": { "w": 440, "h": 260, "buttonW": 170, "buttonH": 64, "buttonGapX": 200, "dim": 0.75 }
+  "dialog": { "w": 440, "h": 260, "buttonW": 170, "buttonH": 64, "buttonGapX": 200, "dim": 0.75, "info": { "w": 490, "h": 640 } }
 }

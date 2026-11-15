@@ -28,6 +28,7 @@ import { applyFxSettings, getSettings, settingsCfg } from '../meta/settings.js';
 import { AutoQuality } from '../fx/AutoQuality.js';
 import { setupRun } from '../meta/runSetup.js';
 import { Pioneer } from '../meta/pioneer.js';
+import { hookResonance } from '../meta/resonanceHooks.js';
 
 const STEP_MS = 1000 / balance.physics.stepHz;
 
@@ -80,6 +81,7 @@ export class GameScene extends Phaser.Scene {
     this.grid = new Grid(this, deps);
     this.augments = new AugmentManager({ ...deps, grid: this.grid, fx: this.fx });
     this.balls = new BallSystem(this, { ...deps, grid: this.grid, fx: this.fx });
+    hookResonance(this.bus, this.state, meta.res); // 각인: 모든 피해·속성 효과·엘리트·방어 무시·구슬
     this.elites = new Elites({ ...deps, grid: this.grid, fx: this.fx, mgr: this.augments }); // Leveling 보다 먼저 (처치 경험치)
     this.leveling = new Leveling(this.bus, levelsCfg, this.state, meta.bonus);
     this.wallet = new RunWallet(this.bus, balance.currency);

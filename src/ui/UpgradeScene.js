@@ -11,6 +11,7 @@ import { upgradeList, level, isMaxed, nextCost, effect, buy } from '../meta/upgr
 import { makeButton, makePanel, makeCorner, fadeIn, style, fmtNum } from './widgets.js';
 import { t } from './i18n.js';
 import { EnhancePage } from './EnhancePage.js';
+import { ResonancePage } from './ResonancePage.js';
 import { isFeatureUnlocked } from '../meta/tiers.js';
 
 const C = upgData.screen;
@@ -37,7 +38,8 @@ export class UpgradeScene extends Phaser.Scene {
     this.corner = makeCorner(this, this.profile);
 
     this.enhance = new EnhancePage(this, { onChange: () => this.refresh() });
-    this.pages = { upgrade: this.makeUpgradePage(), enhance: this.enhance, resonance: this.makeLockPage() };
+    this.resonance = new ResonancePage(this, { onChange: () => this.refresh() });
+    this.pages = { upgrade: this.makeUpgradePage(), enhance: this.enhance, resonance: this.resonance };
     const W = layout.width;
     this.tabs = TABS.map((key, i) => makeButton(this, W / 2 + (i - (TABS.length - 1) / 2) * C.tabGap, C.tabY,
       t(`upgrade.tab.${key}`), { w: C.tabW, h: C.tabH, size: layout.fontSize.cardDesc + 2, onClick: () => this.showTab(key) }));
@@ -77,19 +79,10 @@ export class UpgradeScene extends Phaser.Scene {
     return page;
   }
 
-  makeLockPage() {
-    const W = layout.width;
-    const fs = layout.fontSize;
-    return this.add.container(0, 0, [
-      this.add.text(W / 2, C.lockY - 70, '🔒', style(fs.title * 1.4)).setOrigin(0.5),
-      this.add.text(W / 2, C.lockY + 20, t('upgrade.resonance.title'), style(fs.body, theme.text, true)).setOrigin(0.5),
-      this.add.text(W / 2, C.lockY + 66, t(isFeatureUnlocked('resonance') ? 'upgrade.resonance.ready' : 'upgrade.resonance.lock2'), style(fs.cardDesc, theme.hudText)).setOrigin(0.5),
-    ]);
-  }
-
   refresh() {
     this.corner.refresh(this.profile);
     this.enhance?.refresh();
+    this.resonance?.refresh();
     for (const r of this.rows ?? []) {
       const { u } = r;
       const lv = level(u.id);

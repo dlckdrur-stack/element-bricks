@@ -20,13 +20,13 @@ export class Elites {
     bus.on(EV.HIT, (ctx) => {
       if (ctx.cell.elite !== 'steel') return;
       if (ctx.source?.type === 'lightning' && mgr.has('lightning_conductive')) return;
-      ctx.damage *= cfg.types.steel.dmgMul;
+      ctx.damage *= 1 - (1 - cfg.types.steel.dmgMul) * (1 - (state.ignoreDef ?? 0)); // 각인 방어 무시
     });
     bus.on(EV.HIT, (ctx) => {
       const sp = ctx.cell.special;
       if (sp !== 'guard' || !(ctx.source?.ny > 0.5)) return; // 아래쪽 면
       if (ctx.source?.type === 'lightning' && mgr.has('lightning_conductive')) return;
-      ctx.damage *= cfg.specials.guard.dmgMul;
+      ctx.damage *= 1 - (1 - cfg.specials.guard.dmgMul) * (1 - (state.ignoreDef ?? 0));
     });
     bus.on(EV.KILL, (ctx) => {
       if (ctx.cell.special === 'treasure') ctx.currencyBonus += cfg.specials.treasure.currencyMul - 1;

@@ -83,9 +83,9 @@ export function makeCorner(scene, profile) {
   return { money, best, refresh: (p) => money.setText(t('meta.currency', { n: fmtNum(p.currency) })) };
 }
 
-/** 확인 창. onYes/onNo 후 스스로 닫힘 */
-export function confirmDialog(scene, msgKey, onYes) {
-  const d = screens.dialog;
+/** 확인 창. onYes/onNo 후 스스로 닫힘. opts.raw = 문구 키 대신 글 그대로, opts.okOnly = 확인 버튼 하나(긴 안내용) */
+export function confirmDialog(scene, msgKey, onYes, opts = {}) {
+  const d = opts.okOnly ? { ...screens.dialog, ...screens.dialog.info } : screens.dialog;
   const W = layout.width;
   const H = layout.height;
   const D = 200;
@@ -94,10 +94,15 @@ export function confirmDialog(scene, msgKey, onYes) {
   const dim = scene.add.rectangle(W / 2, H / 2, W, H, hex(theme.overlay), d.dim).setDepth(D).setInteractive();
   const box = scene.add.rectangle(W / 2, H / 2, d.w, d.h, hex(theme.cardBackground))
     .setStrokeStyle(3, hex(theme.danger)).setDepth(D);
-  const msg = scene.add.text(W / 2, H / 2 - d.h * 0.2, t(msgKey), {
-    ...style(layout.fontSize.cardDesc + 2), align: 'center', wordWrap: { width: d.w - 40 },
+  const msg = scene.add.text(W / 2, H / 2 - d.h * 0.12, opts.raw ? msgKey : t(msgKey), {
+    ...style(opts.okOnly ? layout.fontSize.small : layout.fontSize.cardDesc + 2), align: 'center', wordWrap: { width: d.w - 40 },
   }).setOrigin(0.5).setDepth(D);
-  const by = H / 2 + d.h * 0.25;
+  const by = H / 2 + d.h * (opts.okOnly ? 0.42 : 0.25);
+  if (opts.okOnly) {
+    const ok = makeButton(scene, W / 2, by, t('common.ok'), { w: d.buttonW, h: d.buttonH, color: theme.button, depth: D, onClick: () => { close(); onYes(); } });
+    parts.push(dim, box, msg, ok);
+    return;
+  }
   const yes = makeButton(scene, W / 2 - d.buttonGapX / 2, by, t('common.yes'), {
     w: d.buttonW, h: d.buttonH, color: theme.danger, depth: D, onClick: () => { close(); onYes(); },
   });
