@@ -452,7 +452,7 @@
   "aug.grass_seed.name": "씨앗",
   "aug.grass_seed.desc": "공으로 깬 자리에 씨앗, {bloomTurns}턴 뒤 꽃: 꽃에 닿은 공은 그 발사 동안 +{bonusPct}% ({lifeTurns}턴 유지)",
   "aug.grass_tree.name": "생명의 나무",
-  "aug.grass_tree.desc": "매 턴 공 데미지 +{perPct}% 누적 (최대 +{maxPct}%)",
+  "aug.grass_tree.desc": "매 턴 공 데미지 +{perPct}% 누적 (최대 +{maxPct}%, 풀의 공 데미지 보너스끼리는 더해서 적용)",
   "aug.grass_deepRoots.name": "뿌리 깊은",
   "aug.grass_deepRoots.desc": "묶는 블록 +{extra}개",
   "aug.grass_bloom.name": "개화",

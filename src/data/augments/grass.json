@@ -4,29 +4,29 @@
   "auraColor": "#7dff8f",
   "augments": [
     { "id": "grass_vine", "tier": "core", "values": { "hitsPerStage": 4, "minHits": 20, "count": 3, "turns": 2, "maxHpPct": 0.3 }, "bonusKeys": ["maxHpPct"] },
-    { "id": "grass_seed", "tier": "core", "values": { "bonusPct": 0.4, "bloomTurns": 1, "lifeTurns": 3 }, "bonusKeys": ["bonusPct"] },
-    { "id": "grass_tree", "tier": "core", "values": { "perPct": 0.02, "maxPct": 1.5 }, "bonusKeys": ["perPct"] },
+    { "id": "grass_seed", "tier": "core", "values": { "bonusPct": 0.25, "bloomTurns": 1, "lifeTurns": 3 }, "bonusKeys": ["bonusPct"] },
+    { "id": "grass_tree", "tier": "core", "values": { "perPct": 0.01, "maxPct": 0.6 }, "bonusKeys": ["perPct"] },
 
     { "id": "grass_deepRoots", "tier": "exclusive", "requires": "grass_vine", "values": { "extra": 2 } },
     { "id": "grass_bloom", "tier": "exclusive", "requires": "grass_seed", "values": { "reduce": 1 } },
-    { "id": "grass_ancient", "tier": "exclusive", "requires": "grass_tree", "values": { "perPct": 0.03, "maxPct": 2.0 } },
+    { "id": "grass_ancient", "tier": "exclusive", "requires": "grass_tree", "values": { "perPct": 0.015, "maxPct": 1.0 } },
     { "id": "grass_wildGrowth", "tier": "exclusive", "requires": "grass_vine", "values": { "dmgPct": 0.5 }, "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
     { "id": "grass_pollen", "tier": "exclusive", "requires": "grass_seed", "values": { "count": 3, "dmgPct": 0.3 }, "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
-    { "id": "grass_canopy", "tier": "exclusive", "requires": "grass_tree", "values": { "sharePct": 0.5 }, "gradeKeys": ["sharePct"] },
+    { "id": "grass_canopy", "tier": "exclusive", "requires": "grass_tree", "values": { "sharePct": 0.3 }, "gradeKeys": ["sharePct"] },
 
-    { "id": "grass_symbiosis", "tier": "common", "values": { "dmgPct": 0.2 }, "gradeKeys": ["dmgPct"] },
-    { "id": "grass_sprout", "tier": "common", "values": { "perLevelPct": 0.05 }, "gradeKeys": ["perLevelPct"] },
-    { "id": "grass_photosynthesis", "tier": "common", "values": { "perKillPct": 0.01, "maxPct": 0.3 }, "gradeKeys": ["maxPct"] },
+    { "id": "grass_symbiosis", "tier": "common", "values": { "dmgPct": 0.12 }, "gradeKeys": ["dmgPct"] },
+    { "id": "grass_sprout", "tier": "common", "values": { "perLevelPct": 0.03 }, "gradeKeys": ["perLevelPct"] },
+    { "id": "grass_photosynthesis", "tier": "common", "values": { "perKillPct": 0.01, "maxPct": 0.2 }, "gradeKeys": ["maxPct"] },
     { "id": "grass_abundance", "tier": "common", "values": { "currencyPct": 0.2, "xpPct": 0.1 }, "gradeKeys": ["currencyPct"] },
-    { "id": "grass_growth", "tier": "common", "values": { "perHitPct": 0.01, "maxPct": 0.6 }, "gradeKeys": ["maxPct"] },
+    { "id": "grass_growth", "tier": "common", "values": { "perHitPct": 0.01, "maxPct": 0.6, "dmgShare": 0.25 }, "gradeKeys": ["maxPct"] },
     { "id": "grass_thorns", "tier": "common", "values": { "dmgPct": 0.3 }, "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
     { "id": "grass_overgrowth", "tier": "common", "values": { "every": 3, "dmgPct": 0.5 }, "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
     { "id": "grass_leech", "tier": "common", "values": { "every": 30, "gain": 1 } },
     { "id": "grass_fruit", "tier": "common", "values": { "kills": 15 } },
-    { "id": "grass_dew", "tier": "common", "values": { "count": 3, "dmgPct": 1.0 }, "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
+    { "id": "grass_dew", "tier": "common", "values": { "count": 3, "dmgPct": 0.6 }, "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
     { "id": "grass_spore", "tier": "common", "values": { "dmgPct": 0.15 }, "gradeKeys": ["dmgPct"], "bonusKeys": ["dmgPct"] },
 
     { "id": "grass_worldTree", "tier": "awaken", "ult": "worldTree",
-      "values": { "need": 5, "buffPct": 0.5, "buffTurns": 3, "holdTurns": 1, "dmgPct": 0.5 } }
+      "values": { "need": 5, "buffPct": 0.3, "buffTurns": 3, "holdTurns": 1, "dmgPct": 0.4 } }
   ]
 }

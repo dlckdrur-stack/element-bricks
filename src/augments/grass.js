@@ -15,8 +15,25 @@ const OTHER = ['fire', 'lightning', 'dark', 'ice', 'earth'];
 export function stats(aug, s) {
   if (aug.def.id === 'grass_growth' && aug.state.grow) {
     s.ballScale += aug.state.grow;
-    s.ballDamageMul *= 1 + aug.state.grow * 0.5;
+    s.ballDamageMul *= 1 + aug.state.grow * aug.v.dmgShare; // 커진 만큼 데미지 (절반 이하)
   }
+}
+
+/**
+ * 풀의 공 데미지 보너스(나무·새싹·광합성·무럭무럭)는 곱하지 않고 더한 뒤 한 번만 곱한다.
+ * (곱으로 겹치면 풀 빌드만 수 배가 되어 밸런스가 무너짐)
+ */
+function ballBonus(api, key, fn) {
+  if (!api.grassBonus) {
+    api.grassBonus = new Map();
+    api.bus.on(EV.HIT, (ctx) => {
+      if (!isBallHit(ctx.source)) return;
+      let sum = 0;
+      for (const f of api.grassBonus.values()) sum += f();
+      if (sum) ctx.damage *= 1 + sum;
+    });
+  }
+  api.grassBonus.set(key, fn);
 }
 
 /** 묶기: 그 블록의 열을 turns 턴 멈춤 + 최대 체력 비율 피해 */
@@ -134,9 +151,9 @@ export const handlers = {
       const old = api.mgr.owned.get('grass_ancient')?.v;
       aug.state.stack = Math.min(old?.maxPct ?? aug.v.maxPct, aug.state.stack + (old?.perPct ?? aug.v.perPct));
     });
+    ballBonus(api, 'tree', () => aug.state.stack);
     api.bus.on(EV.HIT, (ctx) => {
-      if (isBallHit(ctx.source)) ctx.damage *= 1 + aug.state.stack;
-      else ctx.damage *= 1 + aug.state.stack * api.mgr.val('grass_canopy', 'sharePct', 0);
+      if (!isBallHit(ctx.source)) ctx.damage *= 1 + aug.state.stack * api.mgr.val('grass_canopy', 'sharePct', 0);
     });
   },
 
@@ -149,7 +166,7 @@ export const handlers = {
   grass_sprout(api, aug) {
     aug.state.n = 0;
     api.bus.on(EV.LEVEL_UP, () => { aug.state.n++; });
-    api.bus.on(EV.HIT, (ctx) => { if (isBallHit(ctx.source)) ctx.damage *= 1 + aug.v.perLevelPct * aug.state.n; });
+    ballBonus(api, 'sprout', () => aug.v.perLevelPct * aug.state.n);
   },
 
   /** 광합성: 이번 턴 깬 블록 1개당 다음 턴 공 데미지 +perKillPct (최대 maxPct) */
@@ -158,7 +175,7 @@ export const handlers = {
     let bonus = 0;
     api.bus.on(EV.KILL, () => { kills++; });
     api.bus.on(EV.TURN_START, () => { bonus = Math.min(aug.v.maxPct, kills * aug.v.perKillPct); kills = 0; });
-    api.bus.on(EV.HIT, (ctx) => { if (isBallHit(ctx.source)) ctx.damage *= 1 + bonus; });
+    ballBonus(api, 'photo', () => bonus);
   },
 
   /** 풍요: 재화 +currencyPct, 경험치 +xpPct */
